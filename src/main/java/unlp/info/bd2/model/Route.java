@@ -3,8 +3,18 @@ package unlp.info.bd2.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+
+@Entity
 public class Route {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -15,10 +25,13 @@ public class Route {
 
     private int maxNumberUsers;
 
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Stop> stops;
 
+    @ManyToMany(mappedBy = "routes")
     private List<DriverUser> driverList;
 
+    @ManyToMany(mappedBy = "routes")
     private List<TourGuideUser> tourGuideList;
 
     public Long getId() {
