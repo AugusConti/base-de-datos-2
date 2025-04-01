@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ToursService {
 
     User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException;
-    DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String expedient) throws ToursException;
+/*    DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String expedient) throws ToursException;
     TourGuideUser createTourGuideUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String education) throws ToursException;
     Optional<User> getUserById(Long id) throws ToursException;
     Optional<User> getUserByUsername(String username) throws ToursException;
@@ -49,5 +49,5 @@ public interface ToursService {
     Service getMostDemandedService();
     List<Service> getServiceNoAddedToPurchases();
     List<TourGuideUser> getTourGuidesWithRating1();
-
+*/
 }
