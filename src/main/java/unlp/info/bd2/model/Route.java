@@ -25,14 +25,14 @@ public class Route {
 
     private int maxNumberUsers;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "routes")
     private List<Stop> stops;
 
     @ManyToMany(mappedBy = "routes")
-    private List<DriverUser> driverList;
+    private List<DriverUser> drivers;
 
     @ManyToMany(mappedBy = "routes")
-    private List<TourGuideUser> tourGuideList;
+    private List<TourGuideUser> tourGuides;
 
     public Long getId() {
         return id;
@@ -82,20 +82,20 @@ public class Route {
         this.stops = stops;
     }
 
-    public List<DriverUser> getDriverList() {
-        return driverList;
+    public List<DriverUser> getDrivers() {
+        return drivers;
     }
 
-    public void setDriverList(List<DriverUser> driverList) {
-        this.driverList = driverList;
+    public void setDrivers(List<DriverUser> drivers) {
+        this.drivers = drivers;
     }
 
-    public List<TourGuideUser> getTourGuideList() {
-        return tourGuideList;
+    public List<TourGuideUser> getTourGuides() {
+        return tourGuides;
     }
 
-    public void setTourGuideList(List<TourGuideUser> tourGuideList) {
-        this.tourGuideList = tourGuideList;
+    public void setTourGuides(List<TourGuideUser> tourGuides) {
+        this.tourGuides = tourGuides;
     }
 
 }

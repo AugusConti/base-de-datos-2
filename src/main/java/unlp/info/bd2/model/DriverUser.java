@@ -3,15 +3,19 @@ package unlp.info.bd2.model;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class DriverUser extends User {
 
     private String expedient;
 
-    @ManyToMany(mappedBy = "driverList")
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "drivers_routes",
+            joinColumns = { @JoinColumn(name = "driver_id") },
+            inverseJoinColumns = { @JoinColumn(name = "route_id") }
+    )
     private List<Route> routes;
 
     public String getExpedient() {
@@ -26,7 +30,7 @@ public class DriverUser extends User {
         return routes;
     }
 
-    public void setRouts(List<Route> routs) {
-        this.routes = routs;
+    public void setRoutes(List<Route> routes) {
+        this.routes = routes;
     }
 }

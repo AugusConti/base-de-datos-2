@@ -47,7 +47,7 @@ public class ToursQuerysTests {
     }
     @Test
     void init() {
-        assertEquals(1,1);
+        //assertEquals(1,1);
     }
 /*
 

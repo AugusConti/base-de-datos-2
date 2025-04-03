@@ -24,7 +24,7 @@ public class Service {
     private String description;
 
     @OneToMany(mappedBy = "service")
-    private List<ItemService> itemServiceList;
+    private List<ItemService> itemServices;
 
     @ManyToOne(optional = false)
     private Supplier supplier;
@@ -62,12 +62,12 @@ public class Service {
         this.description = description;
     }
 
-    public List<ItemService> getItemServiceList() {
-        return itemServiceList;
+    public List<ItemService> getItemServices() {
+        return itemServices;
     }
 
-    public void setItemServiceList(List<ItemService> itemServiceList) {
-        this.itemServiceList = itemServiceList;
+    public void setItemServices(List<ItemService> itemServices) {
+        this.itemServices = itemServices;
     }
 
     public Supplier getSupplier() {

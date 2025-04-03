@@ -17,7 +17,7 @@ public class Review {
 
     private String comment;
 
-    @OneToOne(optional = false, mappedBy = "review")
+    @OneToOne(optional = false)
     private Purchase purchase;
 
 

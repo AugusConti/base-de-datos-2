@@ -34,8 +34,7 @@ public class User {
     private boolean active;
 
     @OneToMany(mappedBy = "user")
-    private List<Purchase> purchaseList;
-
+    private List<Purchase> purchases;
 
     public Long getId() {
         return id;
@@ -93,12 +92,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Purchase> getPurchaseList() {
-        return purchaseList;
+    public List<Purchase> getPurchases() {
+        return purchases;
     }
 
-    public void setPurchaseList(List<Purchase> purchaseList) {
-        this.purchaseList = purchaseList;
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
     }
 
     public boolean isActive() {

@@ -1,9 +1,8 @@
 package unlp.info.bd2.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Stop {
@@ -16,6 +15,14 @@ public class Stop {
 
     private String description;
 
+
+    @ManyToMany(cascade = { CascadeType.PERSIST })
+    @JoinTable(
+            name = "stops_routes",
+            joinColumns = { @JoinColumn(name = "stop_id") },
+            inverseJoinColumns = { @JoinColumn(name = "route_id") }
+    )
+    private List<Route> routes;
 
     public Long getId() {
         return id;
@@ -39,5 +46,13 @@ public class Stop {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Route> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(List<Route> routeList) {
+        routes = routeList;
     }
 }

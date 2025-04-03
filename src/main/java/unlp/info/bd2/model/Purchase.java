@@ -31,12 +31,11 @@ public class Purchase {
     @OneToOne(optional = false)
     private Route route;
 
-    @OneToOne(optional = true, mappedBy = "purchase")
+    @OneToOne(optional = true)
     private Review review;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchase")
-    private List<ItemService> itemServiceList;
-
+    private List<ItemService> itemServices;
 
 
     public Long getId() {
@@ -95,11 +94,11 @@ public class Purchase {
         this.review = review;
     }
 
-    public List<ItemService> getItemServiceList() {
-        return itemServiceList;
+    public List<ItemService> getItemServices() {
+        return itemServices;
     }
 
-    public void setItemServiceList(List<ItemService> itemServiceList) {
-        this.itemServiceList = itemServiceList;
+    public void setItemServices(List<ItemService> itemServices) {
+        this.itemServices = itemServices;
     }
 }
