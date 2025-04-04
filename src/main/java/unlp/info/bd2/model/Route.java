@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 @Entity
@@ -25,7 +27,12 @@ public class Route {
 
     private int maxNumberUsers;
 
-    @ManyToMany(mappedBy = "routes")
+    @ManyToMany
+    @JoinTable(
+            name = "routes_stops",
+            joinColumns = { @JoinColumn(name = "route_id") },
+            inverseJoinColumns = { @JoinColumn(name = "stop_id") }
+    )
     private List<Stop> stops;
 
     @ManyToMany(mappedBy = "routes")
@@ -96,6 +103,14 @@ public class Route {
 
     public void setTourGuides(List<TourGuideUser> tourGuides) {
         this.tourGuides = tourGuides;
+    }
+
+    public void addDriver(DriverUser d) {
+        this.drivers.add(d);
+    }
+
+    public void addTourGuide(TourGuideUser t) {
+        this.tourGuides.add(t);
     }
 
 }

@@ -54,4 +54,8 @@ public class Supplier {
         this.services = services;
     }
 
+    public void addService(Service s) {
+        this.services.add(s);
+    }
+
 }

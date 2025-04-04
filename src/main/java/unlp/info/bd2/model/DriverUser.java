@@ -33,4 +33,12 @@ public class DriverUser extends User {
     public void setRoutes(List<Route> routes) {
         this.routes = routes;
     }
+
+    public void addRoute(Route r) {
+        this.routes.add(r);
+    }
+
+    public boolean canBeDesactive() {
+        return this.routes.isEmpty();
+    }
 }

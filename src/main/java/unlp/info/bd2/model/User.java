@@ -107,4 +107,12 @@ public class User {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public void addPurchase(Purchase p) {
+        this.purchases.add(p);
+    }
+
+    public boolean canBeDesactive() {
+        return this.purchases.isEmpty();
+    }
 }

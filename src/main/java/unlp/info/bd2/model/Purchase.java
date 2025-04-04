@@ -101,4 +101,18 @@ public class Purchase {
     public void setItemServices(List<ItemService> itemServices) {
         this.itemServices = itemServices;
     }
+
+    // El precio debería ser el del service
+    public void addItem(ItemService item, float price) {
+        this.itemServices.add(item);
+        this.totalPrice += price;
+    }
+
+    public Review addReview(int rating, String comment) {
+        this.review = new Review();
+        this.review.setPurchase(this);
+        this.review.setRating(rating);
+        this.review.setComment(comment);
+        return this.review;
+    }
 }

@@ -15,13 +15,7 @@ public class Stop {
 
     private String description;
 
-
-    @ManyToMany(cascade = { CascadeType.PERSIST })
-    @JoinTable(
-            name = "stops_routes",
-            joinColumns = { @JoinColumn(name = "stop_id") },
-            inverseJoinColumns = { @JoinColumn(name = "route_id") }
-    )
+    @ManyToMany(mappedBy = "stops")
     private List<Route> routes;
 
     public Long getId() {
