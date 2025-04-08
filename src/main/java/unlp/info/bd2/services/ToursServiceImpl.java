@@ -7,8 +7,10 @@ import unlp.info.bd2.utils.ToursException;
 import java.util.Date;
 
 public class ToursServiceImpl implements ToursService{
+    ToursRepository repository;
+    
     public ToursServiceImpl(ToursRepository tr){
-
+        this.repository = tr;
     }
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
         User u = new User();
