@@ -35,7 +35,7 @@ public class Purchase {
     private Review review;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchase")
-    private List<ItemService> itemServices;
+    private List<ItemService> itemServiceList;
 
 
     public Long getId() {
@@ -94,17 +94,17 @@ public class Purchase {
         this.review = review;
     }
 
-    public List<ItemService> getItemServices() {
-        return itemServices;
+    public List<ItemService> getItemServiceList() {
+        return itemServiceList;
     }
 
-    public void setItemServices(List<ItemService> itemServices) {
-        this.itemServices = itemServices;
+    public void setItemServiceList(List<ItemService> itemServiceList) {
+        this.itemServiceList = itemServiceList;
     }
 
     // El precio debería ser el del service
     public void addItem(ItemService item, float price) {
-        this.itemServices.add(item);
+        this.itemServiceList.add(item);
         this.totalPrice += price;
     }
 
