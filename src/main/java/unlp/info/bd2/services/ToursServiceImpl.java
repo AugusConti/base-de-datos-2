@@ -20,6 +20,7 @@ public class ToursServiceImpl implements ToursService{
         u.setEmail(email);
         u.setBirthdate(birthdate);
         u.setPhoneNumber(phoneNumber);
+        this.repository.save(u);
         return u;
     }
 }

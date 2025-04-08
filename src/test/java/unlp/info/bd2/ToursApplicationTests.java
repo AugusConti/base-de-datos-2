@@ -48,18 +48,18 @@ class ToursApplicationTests {
 		this.dyes = cal1.getTime();
 	}
 
-	/*
 	@Test
 	void createAndGetUserTest()  throws ToursException {
 
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
 		assertNotNull(user1.getId());
-	}
 
 		assertEquals("user1", user1.getUsername());
 		assertEquals("Usuario Uno", user1.getName());
 		assertEquals("user1@gmail.com", user1.getEmail());
 		assertEquals(dob1, user1.getBirthdate());
+	}
+/*
 		DriverUser driverUser1 = this.toursService.createDriverUser("userD", "1234", "Usuario Driver", "userd@gmail.com", dob2, "000111222444", "exp...");
 		assertNotNull(driverUser1.getId());
 		TourGuideUser tourGuideUser1 = this.toursService.createTourGuideUser("userG", "1234", "Usuario TourGuide", "userg@gmail.com", dob2, "000111222555", "edu...");
@@ -72,7 +72,7 @@ class ToursApplicationTests {
 		assertEquals("user1", user.getUsername());
 		assertEquals("Usuario Uno", user.getName());
 		assertEquals("user1@gmail.com", user.getEmail());
-		assertTrue(user.getPurchaseList().isEmpty());
+		assertTrue(user.getPurchases().isEmpty());
 
 		Optional<User> opUserFromDB2 = this.toursService.getUserByUsername("userD");
 		assertTrue(opUserFromDB2.isPresent());
@@ -83,6 +83,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.createUser("userD", "1234", "Otro usuario", "otromail@gmail.com", dob1, "000111222999"), "Constraint Violation");
 	}
 
+	/*
 	@Test
 	void updateUserTest()  throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
