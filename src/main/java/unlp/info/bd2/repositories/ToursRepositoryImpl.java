@@ -8,9 +8,10 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import unlp.info.bd2.model.User;
 
-public class ToursRepositoryImpl implements ToursRepository{
+public class ToursRepositoryImpl implements ToursRepository {
 
-    @Autowired LocalSessionFactoryBean sessionFactoryBean;
+    @Autowired
+    LocalSessionFactoryBean sessionFactoryBean;
 
     public void save(Object o) {
         Session session = sessionFactoryBean.getObject().openSession();
@@ -43,5 +44,15 @@ public class ToursRepositoryImpl implements ToursRepository{
         session.remove(o);
         session.getTransaction().begin();
         session.close();
+    }
+
+    public Optional<User> findUserByUsername(String username) {
+        Session session = sessionFactoryBean.getObject().openSession();
+        session.getTransaction().begin();
+        Optional<User> user = session
+                .createQuery(String.format("from User where username = '%s'", username), User.class)
+                .uniqueResultOptional();
+        session.getTransaction().commit();
+        return user;
     }
 }

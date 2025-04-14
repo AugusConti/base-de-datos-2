@@ -9,11 +9,12 @@ import java.util.Optional;
 public interface ToursService {
 
     User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException;
-/*    DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String expedient) throws ToursException;
+    DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String expedient) throws ToursException;
     TourGuideUser createTourGuideUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String education) throws ToursException;
     Optional<User> getUserById(Long id) throws ToursException;
     Optional<User> getUserByUsername(String username) throws ToursException;
     User updateUser(User user) throws ToursException;
+    /*
     void deleteUser(User user) throws ToursException;
     Stop createStop(String name, String description) throws ToursException;
     List<Stop> getStopByNameStart(String name);

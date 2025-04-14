@@ -11,4 +11,6 @@ public interface ToursRepository {
     <T> Optional<T> findById(long id, Class<T> _class);
     void update(Object o);
     void delete(Object o);
+
+    Optional<User> findUserByUsername(String username);
 }
