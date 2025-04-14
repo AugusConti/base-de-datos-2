@@ -179,11 +179,12 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.assignDriverByUsername(driverUser1.getUsername(), 1000000L) , "No pudo realizarse la asignación");
 	}
 	//Augusto
+
 	@Test
 	void createAndGetSupplierAndService() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");
 		assertNotNull(supplier1.getId());
-		assertEquals("Supplier1" , supplier1.getBusinessName());
+		assertEquals("Supplier1", supplier1.getBusinessName());
 		Service service1 = this.toursService.addServiceToSupplier("Servicio1", 500f, "primer servicio", supplier1);
 		assertNotNull(service1.getId());
 		assertEquals("Servicio1", service1.getName());
@@ -195,13 +196,13 @@ class ToursApplicationTests {
 		Supplier supplier2 = optionalSupplier1.get();
 		assertEquals(supplier1.getId(), supplier2.getId());
 		assertEquals("000111", supplier2.getAuthorizationNumber());
+
 		Optional<Supplier> optionalSupplier2 = this.toursService.getSupplierByAuthorizationNumber("000111");
 		assertTrue(optionalSupplier2.isPresent());
 		Supplier supplier3 = optionalSupplier2.get();
 		assertEquals(supplier1.getId(), supplier3.getId());
 		Optional<Supplier> optionalSupplier3 = this.toursService.getSupplierByAuthorizationNumber("001111");
 		assertFalse(optionalSupplier3.isPresent());
-
 		Optional<Service> optionalService1 = this.toursService.getServiceByNameAndSupplierId("Servicio1", supplier1.getId());
 		assertTrue(optionalService1.isPresent());
 		Service service2 = optionalService1.get();
@@ -211,8 +212,11 @@ class ToursApplicationTests {
 		assertFalse(optionalService2.isPresent());
 
 		assertThrows(ToursException.class, () -> this.toursService.createSupplier("Supplier2", "000111"), "Constraint Violation");
+
 	}
+	*/
 	//Augusto
+
 	@Test
 	void updateServicePriceTest() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");
@@ -224,6 +228,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(100000L, 500f), "No existe el producto");
 	}
+	/*
 	//Sofi
 	@Test
 	void createAndGetPurchaseTest() throws ToursException {

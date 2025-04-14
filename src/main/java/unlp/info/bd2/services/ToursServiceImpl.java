@@ -1,8 +1,6 @@
 package unlp.info.bd2.services;
 
-import unlp.info.bd2.model.Route;
-import unlp.info.bd2.model.Stop;
-import unlp.info.bd2.model.User;
+import unlp.info.bd2.model.*;
 import unlp.info.bd2.repositories.ToursRepository;
 import unlp.info.bd2.utils.ToursException;
 
@@ -55,5 +53,42 @@ public class ToursServiceImpl implements ToursService{
     }
     public List<Route> getRoutesBelowPrice(float price){
         return this.repository.getRoutesBelowPrice(price);
+    }
+    public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException{
+        Supplier s = new Supplier();
+        s.setBusinessName(businessName);
+        s.setAuthorizationNumber(authorizationNumber);
+        s.setServices(new ArrayList<Service>());
+        this.repository.createSupplier(s);
+        return s;
+    }
+    public Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException{
+        Service s = new Service();
+        s.setName(name);
+        s.setPrice(price);
+        s.setDescription(description);
+        s.setSupplier(supplier);
+        this.repository.addServiceToSupplier(s, supplier);
+        return s;
+    }
+    public Optional<Supplier> getSupplierById(Long id){
+        return this.repository.findById(id, Supplier.class);
+    }
+    public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber){
+        return this.repository.findOneByAtribute(Supplier.class, "authorizationNumber", authorizationNumber);
+    }
+    public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException{
+        return this.repository.getServiceByNameAndSupplierId(name, id);
+    }
+    public Service updateServicePriceById(Long id, float newPrice) throws ToursException{
+        Optional<Service> s = this.repository.findById(id,Service.class);
+        if(s.isEmpty()){
+            throw new ToursException("No existe un servicio con ID: " + id);
+        }
+        else{
+            s.get().setPrice(newPrice);
+            this.repository.update(s.get());
+        }
+        return s.get();
     }
 }

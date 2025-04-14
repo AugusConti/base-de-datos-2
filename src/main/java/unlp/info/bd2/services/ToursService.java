@@ -24,12 +24,14 @@ public interface ToursService {
     /*
     void assignDriverByUsername(String username, Long idRoute) throws ToursException;
     void assignTourGuideByUsername(String username, Long idRoute) throws ToursException;
+    */
     Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException;
     Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException;
     Service updateServicePriceById(Long id, float newPrice) throws ToursException;
     Optional<Supplier> getSupplierById(Long id);
     Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber);
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
+    /*
     Purchase createPurchase(String code, Route route, User user) throws ToursException;
     Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException;
     ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException;
