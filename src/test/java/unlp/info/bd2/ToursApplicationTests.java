@@ -1,8 +1,11 @@
 package unlp.info.bd2;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -110,7 +113,9 @@ class ToursApplicationTests {
 		User unmodifiedUserFromDB = opUnmodifiedUserFromDB.get();
 		assertEquals(unmodifiedUserFromDB.getId(), user1.getId());
 	}
-	/Augusto
+	//Augusto
+
+ */
 	@Test
 	void createAndGetRoutesAndStopsTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
@@ -144,14 +149,18 @@ class ToursApplicationTests {
 		Route routeFromList = listRoutes2.get(0);
 		assertEquals("Estadios 2", routeFromList.getName());
 	}
+
 	//Augusto
+
+	/*
 	@Test
 	void assignWorkersToRoutesTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
 		Stop stop2 = this.toursService.createStop("Estadio La Bombonera", "Estadio de Boca Junions");
 		Stop stop3 = this.toursService.createStop("Estadio Libertadores de America", "Estadio de Independiente");
-		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1,stop2, stop3));
+		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1, stop2, stop3));
 		Route route1 = this.toursService.createRoute("Estadios", 20000, 55.5f, 3, stops1);
+	}
 		DriverUser driverUser1 = this.toursService.createDriverUser("userD1", "1234", "Usuario Driver", "userd1@gmail.com", dob2, "000111222444", "exp...");
 		DriverUser driverUser2 = this.toursService.createDriverUser("userD2", "1234", "Usuario Driver", "userd2@gmail.com", dob2, "000111222444", "exp...");
 		TourGuideUser tourGuideUser1 = this.toursService.createTourGuideUser("userG1", "1234", "Usuario TourGuide", "userg1@gmail.com", dob2, "000111222555", "edu...");

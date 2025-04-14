@@ -1,11 +1,14 @@
 package unlp.info.bd2.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
+import unlp.info.bd2.model.Route;
+import unlp.info.bd2.model.Stop;
 import unlp.info.bd2.model.User;
 
 public class ToursRepositoryImpl implements ToursRepository{
@@ -41,7 +44,28 @@ public class ToursRepositoryImpl implements ToursRepository{
         Session session = sessionFactoryBean.getObject().openSession();
         session.getTransaction().begin();
         session.remove(o);
-        session.getTransaction().begin();
+        session.getTransaction().commit();
         session.close();
+    }
+    public <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue){
+        Session session = sessionFactoryBean.getObject().openSession();
+        session.getTransaction().begin();
+        List<T> result = session.createQuery(
+                String.format("FROM %s WHERE %s LIKE :value", resultClass.getSimpleName(), atributeName), resultClass)
+                .setParameter("value", atributeValue + "%")
+                .getResultList();
+        session.getTransaction().commit();
+        session.close();
+        return result;
+    }
+    public List<Route> getRoutesBelowPrice(float price){
+        Session session = sessionFactoryBean.getObject().openSession();
+        session.getTransaction().begin();
+        List<Route> result = session.createQuery(
+                        String.format("FROM %s WHERE price < %f", Route.class.getSimpleName(), price), Route.class)
+                .getResultList();
+        session.getTransaction().commit();
+        session.close();
+        return result;
     }
 }

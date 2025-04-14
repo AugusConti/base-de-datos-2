@@ -15,11 +15,13 @@ public interface ToursService {
     Optional<User> getUserByUsername(String username) throws ToursException;
     User updateUser(User user) throws ToursException;
     void deleteUser(User user) throws ToursException;
+    */
     Stop createStop(String name, String description) throws ToursException;
     List<Stop> getStopByNameStart(String name);
     Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException;
     Optional<Route> getRouteById(Long id);
     List<Route> getRoutesBelowPrice(float price);
+    /*
     void assignDriverByUsername(String username, Long idRoute) throws ToursException;
     void assignTourGuideByUsername(String username, Long idRoute) throws ToursException;
     Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException;
