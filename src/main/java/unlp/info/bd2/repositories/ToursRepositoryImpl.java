@@ -142,4 +142,16 @@ public class ToursRepositoryImpl implements ToursRepository {
             session.close();
         }
     }
+    public List<Supplier> getTopNSuppliersInPurchases(int n){
+        Session session = sessionFactoryBean.getObject().openSession();
+        session.getTransaction().begin();
+        List<Supplier> result = session.createQuery(
+                "FROM Supplier s JOIN s.services ser JOIN ser.itemServices is JOIN is.purchase p" +
+                        "GROUP BY s.id" +
+                        "ORDER BY SUM(p.totalPrice) DESC", Supplier.class)
+                .getResultList();
+        session.getTransaction().commit();
+        session.close();
+        return result;
+    }
 }

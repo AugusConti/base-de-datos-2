@@ -156,4 +156,7 @@ public class ToursServiceImpl implements ToursService{
         }
         return s.get();
     }
+    public List<Supplier> getTopNSuppliersInPurchases(int n){
+        return this.repository.getTopNSuppliersInPurchases(n);
+    }
 }

@@ -39,7 +39,9 @@ public interface ToursService {
     // CONSULTAS HQL
     List<Purchase> getAllPurchasesOfUsername(String username);
     List<User> getUserSpendingMoreThan(float mount);
+    */
     List<Supplier> getTopNSuppliersInPurchases(int n);
+    /*
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
