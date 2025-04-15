@@ -89,21 +89,17 @@ public class ToursRepositoryImpl implements ToursRepository {
 
     @Transactional(readOnly = true)
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException{
-        //Optional<Supplier> s = findById(id, Supplier.class);
-        //if(s == null){
-        //    throw new ToursException("No existe un Supplier con id: "+id);
-        //}
+        Optional<Supplier> s = findById(id, Supplier.class);
+        if(s.isEmpty()){
+            throw new ToursException("No existe un Supplier con id: "+id);
+        }
         Session session = sessionFactory.getCurrentSession();
-            Optional<Service> result = session.createQuery(
-                            "FROM Service WHERE name LIKE :name AND supplier.id = :supplierId", Service.class)
-                    .setParameter("name", name)
-                    .setParameter("supplierId", id)
-                    .uniqueResultOptional();
-            if //(result.isEmpty()) {
-            (false){
-                throw new ToursException("No existe un Supplier con id: " + id + " Y/o un Service con nombre: " + name);
-            }
-            return result;
+        Optional<Service> result = session.createQuery(
+                    "FROM Service WHERE name LIKE :name AND supplier.id = :supplierId", Service.class)
+                .setParameter("name", name)
+                .setParameter("supplierId", id)
+                .uniqueResultOptional();
+        return result;
     }
 
     @Transactional
@@ -126,6 +122,15 @@ public class ToursRepositoryImpl implements ToursRepository {
                 "FROM Supplier s JOIN s.services ser JOIN ser.itemServices is JOIN is.purchase p" +
                         "GROUP BY s.id" +
                         "ORDER BY SUM(p.totalPrice) DESC", Supplier.class)
+                .getResultList();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
+        Session session = sessionFactory.getCurrentSession();
+        List<Purchase> result = session.createQuery(
+                        "FROM purchase p ORDER BY p.totalPrice DESC LIMIT 10", Purchase.class)
                 .getResultList();
         return result;
     }

@@ -4,10 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import unlp.info.bd2.model.Route;
-import unlp.info.bd2.model.Service;
-import unlp.info.bd2.model.Supplier;
-import unlp.info.bd2.model.User;
+import unlp.info.bd2.model.*;
 import unlp.info.bd2.utils.ToursException;
 
 public interface ToursRepository {
@@ -24,4 +21,5 @@ public interface ToursRepository {
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
     void createSupplier(Supplier s) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
+    List<Purchase> getTop10MoreExpensivePurchasesInServices();
 }

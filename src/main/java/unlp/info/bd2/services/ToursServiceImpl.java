@@ -159,4 +159,7 @@ public class ToursServiceImpl implements ToursService{
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         return this.repository.getTopNSuppliersInPurchases(n);
     }
+    public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
+        return this.repository.getTop10MoreExpensivePurchasesInServices();
+    }
 }

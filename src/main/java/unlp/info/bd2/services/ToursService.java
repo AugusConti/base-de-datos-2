@@ -40,8 +40,8 @@ public interface ToursService {
     List<User> getUserSpendingMoreThan(float mount);
     */
     List<Supplier> getTopNSuppliersInPurchases(int n);
-    /*
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
+    /*
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Route> getRoutesWithStop(Stop stop);
