@@ -9,6 +9,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
 public class ToursServiceImpl implements ToursService{
     ToursRepository repository;
     
@@ -23,6 +28,7 @@ public class ToursServiceImpl implements ToursService{
         u.setEmail(email);
         u.setBirthdate(birthdate);
         u.setPhoneNumber(phoneNumber);
+        u.setPurchases(new ArrayList<Purchase>());
         this.repository.save(u);
         return u;
     }
@@ -91,4 +97,36 @@ public class ToursServiceImpl implements ToursService{
         }
         return s.get();
     }
+ 
+    public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
+            Purchase p = new Purchase();//revisar
+            p.setCode(code);
+            p.setDate(date);
+            p.setRoute(route);
+            p.setUser(user); 
+            p.setItemServiceList((new ArrayList<ItemService>())); 
+            p.setTotalPrice(route.getPrice()); 
+            System.out.println("EEEEEEEEEEEE:"+p.toString());
+            this.repository.createPurchase(p);
+            return p;
+    }
+
+    public Purchase createPurchase(String code,Route route,User user)throws ToursException{
+        Purchase p = createPurchase(code,  new Date() ,route, user);
+        return p;
+}
+    public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
+        ItemService i= new ItemService();//revisar
+        i.setPurchase(purchase);
+        i.setQuantity(quantity);
+        i.setService(service);
+        this.repository.addItemToPurchase(i);
+        return i;
+    }
+
+    public Optional<Purchase> getPurchaseByCode(String code){//revisar
+        return this.repository.findOneByAtribute(Purchase.class, "code", code);
+   
+    }
+    
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import unlp.info.bd2.model.ItemService;
+import unlp.info.bd2.model.Purchase;
 import unlp.info.bd2.model.Route;
 import unlp.info.bd2.model.Service;
 import unlp.info.bd2.model.Supplier;
@@ -21,4 +23,6 @@ public interface ToursRepository {
     void addServiceToSupplier(Service s, Supplier supplier);
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
     void createSupplier(Supplier s) throws ToursException;
+    void addItemToPurchase(ItemService i);
+    void createPurchase(Purchase p);
     }

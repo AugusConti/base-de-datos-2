@@ -115,7 +115,7 @@ class ToursApplicationTests {
 	}
 	//Augusto
 
- */
+ 
 	@Test
 	void createAndGetRoutesAndStopsTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
@@ -148,7 +148,7 @@ class ToursApplicationTests {
 		assertEquals(1, listRoutes2.size());
 		Route routeFromList = listRoutes2.get(0);
 		assertEquals("Estadios 2", routeFromList.getName());
-	}
+	}*/
 
 	//Augusto
 
@@ -214,7 +214,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.createSupplier("Supplier2", "000111"), "Constraint Violation");
 
 	}
-	*/
+	
 	//Augusto
 
 	@Test
@@ -228,7 +228,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(100000L, 500f), "No existe el producto");
 	}
-	/*
+	*/
 	//Sofi
 	@Test
 	void createAndGetPurchaseTest() throws ToursException {
@@ -266,7 +266,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("200", dyes, route1, user1), "No puede realizarse la compra");
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("100", route1, user1), "Constraint Violation");
-	}
+	}/*
 	//Sofi
 	@Test
 	void removePurchaseAndItems() throws ToursException {

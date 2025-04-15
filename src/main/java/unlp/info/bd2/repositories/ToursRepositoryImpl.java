@@ -131,4 +131,27 @@ public class ToursRepositoryImpl implements ToursRepository{
             session.close();
         }
     }
+
+    public void addItemToPurchase(ItemService item){//revisar
+        Session session = sessionFactoryBean.getObject().openSession();
+        session.getTransaction().begin();
+        session.persist(item);
+        item.getPurchase().getItemServiceList().add(item);
+        session.merge(item.getPurchase());
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void createPurchase(Purchase p){
+        Session session = sessionFactoryBean.getObject().openSession();
+        session.getTransaction().begin();
+        session.persist(p);
+        Long id= p.getUser().getId();
+        User u= session.get(User.class, id);
+        u.addPurchase(p);
+        System.out.println("AAAAAAAAAAAAAAAAAAA: "+u.getPurchaseList());
+        session.merge(u);
+        session.getTransaction().commit();
+        session.close();
+    }
 }
