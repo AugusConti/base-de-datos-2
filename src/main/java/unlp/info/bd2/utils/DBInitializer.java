@@ -25,6 +25,7 @@ public class DBInitializer {
         LocalDate today = LocalDate.now();
 
         // Suppliers
+        /*
         Supplier supplier1 = this.toursService.createSupplier("ABC Tours", "12345");
         Supplier supplier2 = this.toursService.createSupplier("XYZ Travel Agency", "67890");
         Supplier supplier3 = this.toursService.createSupplier("Adventure Explorers", "54321");
@@ -179,5 +180,5 @@ public class DBInitializer {
         Review review14 = this.toursService.addReviewToPurchase(3, "Me encantó el tour, pero el guía no era ductil con el portugués.", purchase16);
         Review review15 = this.toursService.addReviewToPurchase(3, "Estuvo bien, aunque esperaba más.", purchase17);
         Review review16 = this.toursService.addReviewToPurchase(1, "Muy caro para lo que se brinda.", purchase18);
-    }
+    */}
 }

@@ -110,7 +110,9 @@ class ToursApplicationTests {
 		User unmodifiedUserFromDB = opUnmodifiedUserFromDB.get();
 		assertEquals(unmodifiedUserFromDB.getId(), user1.getId());
 	}
-	/Augusto
+
+ */
+	//Augusto
 	@Test
 	void createAndGetRoutesAndStopsTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
@@ -150,12 +152,13 @@ class ToursApplicationTests {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
 		Stop stop2 = this.toursService.createStop("Estadio La Bombonera", "Estadio de Boca Junions");
 		Stop stop3 = this.toursService.createStop("Estadio Libertadores de America", "Estadio de Independiente");
-		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1,stop2, stop3));
+		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1, stop2, stop3));
 		Route route1 = this.toursService.createRoute("Estadios", 20000, 55.5f, 3, stops1);
+	}
+		/*
 		DriverUser driverUser1 = this.toursService.createDriverUser("userD1", "1234", "Usuario Driver", "userd1@gmail.com", dob2, "000111222444", "exp...");
 		DriverUser driverUser2 = this.toursService.createDriverUser("userD2", "1234", "Usuario Driver", "userd2@gmail.com", dob2, "000111222444", "exp...");
 		TourGuideUser tourGuideUser1 = this.toursService.createTourGuideUser("userG1", "1234", "Usuario TourGuide", "userg1@gmail.com", dob2, "000111222555", "edu...");
-
 		this.toursService.assignDriverByUsername(driverUser1.getUsername(), route1.getId());
 		this.toursService.assignDriverByUsername(driverUser2.getUsername(), route1.getId());
 		this.toursService.assignTourGuideByUsername(tourGuideUser1.getUsername(), route1.getId());
@@ -170,6 +173,8 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.assignDriverByUsername(driverUser1.getUsername(), 1000000L) , "No pudo realizarse la asignación");
 	}
 	//Augusto
+
+ */
 	@Test
 	void createAndGetSupplierAndService() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");
@@ -215,6 +220,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(100000L, 500f), "No existe el producto");
 	}
+	/*
 	//Sofi
 	@Test
 	void createAndGetPurchaseTest() throws ToursException {

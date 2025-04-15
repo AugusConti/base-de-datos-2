@@ -24,4 +24,4 @@ public interface ToursRepository {
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
     void createSupplier(Supplier s) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
-    }
+}
