@@ -28,26 +28,28 @@ public interface ToursService {
     Optional<Supplier> getSupplierById(Long id);
     Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber);
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
-    //Purchase createPurchase(String code, Route route, User user) throws ToursException;
-    //Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException;
-    //ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException;
-    //Optional<Purchase> getPurchaseByCode(String code);
-    //void deletePurchase(Purchase purchase) throws ToursException;
-    //Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException;
+    
+    Purchase createPurchase(String code, Route route, User user) throws ToursException;
+    Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException;
+    ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException;
+    Optional<Purchase> getPurchaseByCode(String code);
+    void deletePurchase(Purchase purchase) throws ToursException;
+    Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException;
 /*
     // CONSULTAS HQL
     List<Purchase> getAllPurchasesOfUsername(String username);
     */
     List<User> getUserSpendingMoreThan(float mount);
     List<Supplier> getTopNSuppliersInPurchases(int n);
-    /*
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
+    /*
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
+    */
     List<Route> getRoutesWithStop(Stop stop);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
-    */
+    /*
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
     /*

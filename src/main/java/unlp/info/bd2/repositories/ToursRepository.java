@@ -4,11 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import unlp.info.bd2.model.Route;
-import unlp.info.bd2.model.Service;
-import unlp.info.bd2.model.Supplier;
-import unlp.info.bd2.model.TourGuideUser;
-import unlp.info.bd2.model.User;
+import unlp.info.bd2.model.*;
 import unlp.info.bd2.utils.ToursException;
 
 public interface ToursRepository {
@@ -29,4 +25,11 @@ public interface ToursRepository {
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
     List<TourGuideUser> getTourGuidesWithRating1();
+    List<Purchase> getTop10MoreExpensivePurchasesInServices();
+    void addItemToPurchase(ItemService i);
+    void createPurchase(Purchase p);
+    void addReviewToPurchase(Review r);
+    Long getMaxStopOfRoutes();
+    List<Route> getRoutsNotSell();
+    List<Route> getRoutesWithStop(Stop stop);
 }
