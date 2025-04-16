@@ -154,8 +154,6 @@ class ToursApplicationTests {
 		Stop stop3 = this.toursService.createStop("Estadio Libertadores de America", "Estadio de Independiente");
 		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1, stop2, stop3));
 		Route route1 = this.toursService.createRoute("Estadios", 20000, 55.5f, 3, stops1);
-	}
-		/*
 		DriverUser driverUser1 = this.toursService.createDriverUser("userD1", "1234", "Usuario Driver", "userd1@gmail.com", dob2, "000111222444", "exp...");
 		DriverUser driverUser2 = this.toursService.createDriverUser("userD2", "1234", "Usuario Driver", "userd2@gmail.com", dob2, "000111222444", "exp...");
 		TourGuideUser tourGuideUser1 = this.toursService.createTourGuideUser("userG1", "1234", "Usuario TourGuide", "userg1@gmail.com", dob2, "000111222555", "edu...");
@@ -174,7 +172,6 @@ class ToursApplicationTests {
 	}
 	//Augusto
 
- */
 	@Test
 	void createAndGetSupplierAndService() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");

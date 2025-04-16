@@ -32,4 +32,6 @@ public interface ToursRepository {
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
     List<Route> getRoutesWithStop(Stop stop);
+    void setDriverToRoute(DriverUser d, Route r);
+    void setTourGuideToRoute(TourGuideUser t, Route r);
 }

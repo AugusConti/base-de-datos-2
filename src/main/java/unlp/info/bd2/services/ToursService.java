@@ -20,8 +20,8 @@ public interface ToursService {
     Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException;
     Optional<Route> getRouteById(Long id);
     List<Route> getRoutesBelowPrice(float price);
-    //void assignDriverByUsername(String username, Long idRoute) throws ToursException;
-    //void assignTourGuideByUsername(String username, Long idRoute) throws ToursException;
+    void assignDriverByUsername(String username, Long idRoute) throws ToursException;
+    void assignTourGuideByUsername(String username, Long idRoute) throws ToursException;
     Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException;
     Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException;
     Service updateServicePriceById(Long id, float newPrice) throws ToursException;

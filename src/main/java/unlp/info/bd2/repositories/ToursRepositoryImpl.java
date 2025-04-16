@@ -242,4 +242,14 @@ public class ToursRepositoryImpl implements ToursRepository {
             TourGuideUser.class).getResultList();
         return result;
     }
+    @Transactional
+    public void setDriverToRoute(DriverUser d, Route r){
+        update(r);
+        update(d);
+    }
+    @Transactional
+    public void setTourGuideToRoute(TourGuideUser t, Route r){
+        update(t);
+        update(r);
+    }
 }

@@ -93,11 +93,19 @@ public class Route {
         return drivers;
     }
 
+    public List<DriverUser> getDriverList() {
+        return drivers;
+    }
+
     public void setDrivers(List<DriverUser> drivers) {
         this.drivers = drivers;
     }
 
     public List<TourGuideUser> getTourGuides() {
+        return tourGuides;
+    }
+
+    public List<TourGuideUser> getTourGuideList() {
         return tourGuides;
     }
 
@@ -112,5 +120,6 @@ public class Route {
     public void addTourGuide(TourGuideUser t) {
         this.tourGuides.add(t);
     }
+
 
 }

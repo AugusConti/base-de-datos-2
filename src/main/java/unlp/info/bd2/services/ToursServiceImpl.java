@@ -4,6 +4,7 @@ import unlp.info.bd2.model.*;
 import unlp.info.bd2.repositories.ToursRepository;
 import unlp.info.bd2.utils.ToursException;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ToursServiceImpl implements ToursService{
             du.setBirthdate(birthdate);
             du.setPhoneNumber(phoneNumber);
             du.setExpedient(expedient);
+            du.setRoutes(new ArrayList<Route>());
             this.repository.save(du);
             return du;
         } catch (Exception e) {
@@ -67,6 +69,7 @@ public class ToursServiceImpl implements ToursService{
             tgu.setBirthdate(birthdate);
             tgu.setPhoneNumber(phoneNumber);
             tgu.setEducation(education);
+            tgu.setRoutes(new ArrayList<Route>());
             this.repository.save(tgu);
             return tgu;
         } catch (Exception e) {
@@ -243,5 +246,33 @@ public class ToursServiceImpl implements ToursService{
     }
     public List<Route> getRoutesWithStop(Stop stop){
         return this.repository.getRoutesWithStop(stop);
+    }
+    public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
+        Optional<Route> r = this.repository.findById(idRoute, Route.class);
+        if (r.isEmpty()) {
+            throw new ToursException("No existe una ruta con ese id");
+        }
+        Optional<User> u = this.repository.findUserByUsername(username);
+        if (u.isEmpty() || !(u.get() instanceof DriverUser)) {
+            throw new ToursException("Ese user no existe o no es un driver");
+        }
+        DriverUser d = (DriverUser) u.get();
+        r.get().getDrivers().add(d);
+        d.getRoutes().add(r.get());
+        this.repository.setDriverToRoute(d,r.get());
+    }
+    public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException{
+        Optional<Route> r = this.repository.findById(idRoute, Route.class);
+        if (r.isEmpty()) {
+            throw new ToursException("No existe una ruta con ese id");
+        }
+        Optional<User> u = this.repository.findUserByUsername(username);
+        if (u.isEmpty() || !(u.get() instanceof TourGuideUser)) {
+            throw new ToursException("Ese user no existe o no es un TourGuide");
+        }
+        TourGuideUser t = (TourGuideUser) u.get();
+        r.get().getTourGuides().add(t);
+        t.getRoutes().add(r.get());
+        this.repository.setTourGuideToRoute(t,r.get());
     }
 }
