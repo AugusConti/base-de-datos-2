@@ -199,7 +199,7 @@ public class ToursServiceImpl implements ToursService{
         if(r.isEmpty()  ){//necesario?
             throw new ToursException("No existe una ruta con ID: " + route.getId());
         }
-        
+
         //logica de negocio
         if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
             throw new ToursException("Ya existe una compra con code: " + code);
@@ -231,8 +231,7 @@ public class ToursServiceImpl implements ToursService{
             ItemService i= new ItemService();//revisar la exception 
             i.setPurchase(purchase);
             i.setQuantity(quantity);
-            i.setService(service);
-            p.get().getItemServiceList().add(i);
+            i.setService(service); 
             float totalPrice= p.get().getTotalPrice() + i.getQuantity()* i.getService().getPrice();
             this.repository.addItemToPurchase(i, totalPrice); 
             return i;

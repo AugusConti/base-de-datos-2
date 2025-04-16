@@ -137,7 +137,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 //
     @Transactional
-    public void addItemToPurchase(ItemService item, float totalPrice){//revisar, si funciona ya lo del service borrar este
+    public void addItemToPurchase(ItemService item, float totalPrice){
+        //revisar, si funciona ya lo del service borrar este
         Session session = sessionFactory.getCurrentSession();
         session.persist(item);
         Purchase p =item.getPurchase();
@@ -148,11 +149,19 @@ public class ToursRepositoryImpl implements ToursRepository {
     }  
 
     @Transactional
-    public void createPurchase(Purchase p){//REVISAR
+    public void createPurchase(Purchase p)throws ToursException{//REVISAR
         //ver cupos y ver except
+        //purchases relacionadas a esa si 
         Session session = sessionFactory.getCurrentSession();
+        String hql= "FROM Purchase p WHERE p.route = :ruta";
+        List<Purchase> result = session.createQuery(hql, Purchase.class)
+                .setParameter("ruta", p.getRoute())
+                .getResultList();
+        if (result.size() >= p.getRoute().getMaxNumberUsers()) {
+            throw new ToursException("No hay mas cupos para la ruta con ID "+ p.getRoute().getId());
+        }
         Long id= p.getUser().getId();
-        User u= session.get(User.class, id);
+        User u= session.get(User.class, id); 
         session.persist(p);
         u.addPurchase(p);
         session.merge(u);

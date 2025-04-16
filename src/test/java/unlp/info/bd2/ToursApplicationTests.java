@@ -255,7 +255,6 @@ class ToursApplicationTests {
 		assertEquals(22500, purchase3.getTotalPrice());
 
 		this.toursService.createPurchase("101", dyes, route1, user1);
-		//falla por cupo en route
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("200", dyes, route1, user1), "No puede realizarse la compra");
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("100", route1, user1), "Constraint Violation");
 	}
