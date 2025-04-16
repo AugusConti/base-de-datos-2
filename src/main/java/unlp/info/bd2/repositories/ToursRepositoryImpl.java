@@ -45,7 +45,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     public Optional<User> findUserByUsername(String username) {
         Session session = sessionFactory.getCurrentSession();
         Optional<User> user = session
-                .createQuery(String.format("from User where username = '%s'", username), User.class)
+                .createQuery(String.format("select distinct u from User u left join u.purchases p " +
+                        "where u.username = '%s' and (u.active = true or p is not null)", username), User.class)
                 .uniqueResultOptional();
         return user;
     }
@@ -84,7 +85,7 @@ public class ToursRepositoryImpl implements ToursRepository {
         Session session = sessionFactory.getCurrentSession();
         session.persist(s);
         supplier.getServices().add(s);
-        session.merge(supplier);
+        update(s);
     }
 
     @Transactional(readOnly = true)
@@ -137,7 +138,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 //
     @Transactional
-    public void addItemToPurchase(ItemService item){//revisar
+    public void addItemToPurchase(ItemService item, Service s){//revisar
         Session session = sessionFactory.getCurrentSession();
         session.persist(item);
         Purchase p =item.getPurchase();
@@ -145,7 +146,9 @@ public class ToursRepositoryImpl implements ToursRepository {
         //actualiza el precio del purchase con el item nuevo
         float totalPrice= p.getTotalPrice() + item.getQuantity()* item.getService().getPrice();
         p.setTotalPrice(totalPrice);
-        session.merge(p);
+        update(p);
+        s.addItem(item);
+        update(s);
     }
 
     @Transactional
@@ -251,5 +254,16 @@ public class ToursRepositoryImpl implements ToursRepository {
     public void setTourGuideToRoute(TourGuideUser t, Route r){
         update(t);
         update(r);
+    }
+    @Transactional
+    public void createUser(User u) throws ToursException{
+        Session session = sessionFactory.getCurrentSession();
+        Optional<User> us = findUserByUsername(u.getUsername());
+        if (us.isPresent()){
+            throw new ToursException("Ya existe un usuario con ese username");
+        }
+        else{
+            save(u);
+        }
     }
 }

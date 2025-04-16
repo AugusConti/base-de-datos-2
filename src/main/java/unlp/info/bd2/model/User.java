@@ -98,6 +98,10 @@ public class User {
         return purchases;
     }
 
+    public List<Purchase> getPurchases(){
+        return purchases;
+    }
+
     public void setPurchases(List<Purchase> purchases) {
         this.purchases = purchases;
     }

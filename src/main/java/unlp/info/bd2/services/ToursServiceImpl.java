@@ -22,21 +22,19 @@ public class ToursServiceImpl implements ToursService{
     public ToursServiceImpl(ToursRepository tr){
         this.repository = tr;
     }
+
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
-        try {
-            User u = new User();
-            u.setUsername(username);
-            u.setPassword(password);
-            u.setName(fullName);
-            u.setEmail(email);
-            u.setBirthdate(birthdate);
-            u.setPhoneNumber(phoneNumber);
-            u.setPurchases(new ArrayList<Purchase>());
-            this.repository.save(u);
-            return u;
-        } catch (Exception e) {
-            throw new ToursException(e.getMessage());
-        }
+        User u = new User();
+        u.setUsername(username);
+        u.setPassword(password);
+        u.setName(fullName);
+        u.setEmail(email);
+        u.setBirthdate(birthdate);
+        u.setPhoneNumber(phoneNumber);
+        u.setPurchases(new ArrayList<Purchase>());
+        u.setActive(true);
+        this.repository.createUser(u);
+        return u;
     }
 
     public DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate,
@@ -51,6 +49,7 @@ public class ToursServiceImpl implements ToursService{
             du.setPhoneNumber(phoneNumber);
             du.setExpedient(expedient);
             du.setRoutes(new ArrayList<Route>());
+            du.setActive(true);
             this.repository.save(du);
             return du;
         } catch (Exception e) {
@@ -71,6 +70,7 @@ public class ToursServiceImpl implements ToursService{
             tgu.setEducation(education);
             tgu.setRoutes(new ArrayList<Route>());
             this.repository.save(tgu);
+            tgu.setActive(true);
             return tgu;
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
@@ -210,7 +210,7 @@ public class ToursServiceImpl implements ToursService{
         i.setPurchase(purchase);
         i.setQuantity(quantity);
         i.setService(service);
-        this.repository.addItemToPurchase(i);
+        this.repository.addItemToPurchase(i, service);
         return i;
     }
 
@@ -274,5 +274,22 @@ public class ToursServiceImpl implements ToursService{
         r.get().getTourGuides().add(t);
         t.getRoutes().add(r.get());
         this.repository.setTourGuideToRoute(t,r.get());
+    }
+    public void deleteUser(User user) throws ToursException{
+        if(!user.isActive()){
+            throw new ToursException("Ese usuario ya fue borrado");
+        }
+        else{
+            if(user instanceof TourGuideUser){
+                TourGuideUser tgu = (TourGuideUser) user;
+                if(!tgu.canBeDesactive()){
+                    throw new ToursException("Este tourguide no puede ser borrado porque tiene routes asociadas");
+                }
+            }
+            else{
+                user.setActive(false);
+                this.repository.save(user);
+            }
+        }
     }
 }
