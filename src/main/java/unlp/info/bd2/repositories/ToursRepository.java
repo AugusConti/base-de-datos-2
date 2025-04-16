@@ -22,6 +22,9 @@ public interface ToursRepository {
     void createSupplier(Supplier s) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
+    void addItemToPurchase(ItemService i);
+    void createPurchase(Purchase p);
+    void addReviewToPurchase(Review r);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
     List<Route> getRoutesWithStop(Stop stop);

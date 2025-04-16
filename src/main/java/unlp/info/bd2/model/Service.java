@@ -62,7 +62,7 @@ public class Service {
         this.description = description;
     }
 
-    public List<ItemService> getItemServices() {
+    public List<ItemService> getItemServiceList() {
         return itemServices;
     }
 

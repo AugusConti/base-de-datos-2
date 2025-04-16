@@ -94,7 +94,7 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Purchase> getPurchases() {
+    public List<Purchase> getPurchaseList(){
         return purchases;
     }
 

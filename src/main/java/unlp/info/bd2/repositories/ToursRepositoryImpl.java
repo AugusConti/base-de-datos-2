@@ -134,6 +134,38 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
+//
+    @Transactional
+    public void addItemToPurchase(ItemService item){//revisar
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(item);
+        Purchase p =item.getPurchase();
+        p.getItemServiceList().add(item);
+        //actualiza el precio del purchase con el item nuevo
+        float totalPrice= p.getTotalPrice() + item.getQuantity()* item.getService().getPrice();
+        p.setTotalPrice(totalPrice);
+        session.merge(p);
+    }
+
+    @Transactional
+    public void createPurchase(Purchase p){//REVISAR
+        Session session = sessionFactory.getCurrentSession();
+        Long id= p.getUser().getId();
+        User u= session.get(User.class, id);
+        session.persist(p);
+        u.addPurchase(p);
+        session.merge(u);
+
+    }
+
+    @Transactional
+    public  void addReviewToPurchase(Review review){ //Revisar
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(review);
+        Purchase p =review.getPurchase();
+        p.setReview(review);
+        session.merge(p);
+    }
 
     @Transactional(readOnly = true)
     public Long getMaxStopOfRoutes(){

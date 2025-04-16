@@ -220,7 +220,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(100000L, 500f), "No existe el producto");
 	}
-	/*
+	
 	//Sofi
 	@Test
 	void createAndGetPurchaseTest() throws ToursException {
@@ -281,6 +281,7 @@ class ToursApplicationTests {
 		assertFalse(purchase.isPresent());
 	}
 	//Sofi
+	
 	@Test
 	void addReviewToPurchaseTest() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -329,5 +330,5 @@ class ToursApplicationTests {
 		assertTrue(tourGuideUser.isActive());
 		assertThrows(ToursException.class, () -> this.toursService.deleteUser(tourGuideUser), "El usuario no puede ser desactivado");
 	}
-*/
+
 }
