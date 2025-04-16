@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@org.springframework.stereotype.Service
 public class ToursServiceImpl implements ToursService{
     ToursRepository repository;
     
@@ -161,5 +162,14 @@ public class ToursServiceImpl implements ToursService{
     }
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         return this.repository.getTop10MoreExpensivePurchasesInServices();
+    }
+    public Long getMaxStopOfRoutes(){
+        return this.repository.getMaxStopOfRoutes();
+    }
+    public List<Route> getRoutsNotSell(){
+        return this.repository.getRoutsNotSell();
+    }
+    public List<Route> getRoutesWithStop(Stop stop){
+        return this.repository.getRoutesWithStop(stop);
     }
 }

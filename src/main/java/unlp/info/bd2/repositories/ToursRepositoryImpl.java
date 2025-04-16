@@ -134,4 +134,32 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
+
+    @Transactional(readOnly = true)
+    public Long getMaxStopOfRoutes(){
+        Session session = sessionFactory.getCurrentSession();
+        Long result = session.createQuery(
+                        "SELECT MAX(COUNT(*)) FROM route r JOIN r.stops s GROUP BY r.id", Long.class)
+                    .getSingleResult();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Route> getRoutsNotSell(){
+        Session session = sessionFactory.getCurrentSession();
+        List<Route> result = session.createQuery(
+                        "FROM route r WHERE r NOT IN (SELECT p.route FROM purchase p WHERE p.route IS NOT NULL)", Route.class)
+                .getResultList();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Route> getRoutesWithStop(Stop stop){
+        Session session = sessionFactory.getCurrentSession();
+        List<Route> result = session.createQuery(
+                        "SELECT r FROM route r JOIN r.stops s WHERE s.id = :stopId", Route.class)
+                .setParameter("stopId", stop.getId())
+                .getResultList();
+        return result;
+    }
 }

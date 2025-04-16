@@ -44,9 +44,11 @@ public interface ToursService {
     /*
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
+    */
     List<Route> getRoutesWithStop(Stop stop);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
+    /*
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
     List<Service> getServiceNoAddedToPurchases();

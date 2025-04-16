@@ -22,4 +22,7 @@ public interface ToursRepository {
     void createSupplier(Supplier s) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
+    Long getMaxStopOfRoutes();
+    List<Route> getRoutsNotSell();
+    List<Route> getRoutesWithStop(Stop stop);
 }
