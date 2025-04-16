@@ -141,7 +141,6 @@ public class ToursQuerysTests {
         assertEquals(1, routsNotSell.size());
         this.assertListEquality(routsNotSell.stream().map(Route::getName).collect(Collectors.toList()), List.of("Ruta vacia"));
     }
-    /*
     //Tomi
     @Test
     void getTop3RoutesWithMaxRatingTest() throws ToursException {
@@ -156,6 +155,7 @@ public class ToursQuerysTests {
         assertEquals("souvenir t-shirt", mostDemandedService.getName());
         assertEquals("I love Buenos Aires t-shirt", mostDemandedService.getDescription());
     }
+    /*
     //Sofi
     @Test
     void getServiceNoAddedToPurchasesTest() throws ToursException {
@@ -163,14 +163,16 @@ public class ToursQuerysTests {
         assertEquals(2, serviceNoAddedToPurchases.size());
         this.assertListEquality(serviceNoAddedToPurchases.stream().map(Service::getName).collect(Collectors.toList()), List.of("Architectural Expedition Book", "souvenir retrato"));
     }
+    */
     //Tomi
+    /*
     @Test
     void getTourGuidesWithRating1Test() throws ToursException {
         List<TourGuideUser> tourGuidesWithRating1 = this.service.getTourGuidesWithRating1();
         assertEquals(3, tourGuidesWithRating1.size());
         this.assertListEquality(tourGuidesWithRating1.stream().map(TourGuideUser::getUsername).collect(Collectors.toList()), List.of("userG1", "userG3", "userG4"));
     }
-    */
+     */
     private <T> void assertListEquality(List<T> list1, List<T> list2) {
         if (list1.size() != list2.size()) {
             Assert.fail("Lists have different size");
