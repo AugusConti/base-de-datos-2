@@ -159,4 +159,16 @@ public class ToursServiceImpl implements ToursService{
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         return this.repository.getTopNSuppliersInPurchases(n);
     }
+    public List<User> getUserSpendingMoreThan(float mount) {
+        return this.repository.getUserSpendingMoreThan(mount);
+    }
+    public List<Route> getTop3RoutesWithMaxRating() {
+        return this.repository.getTop3RoutesWithMaxRating();
+    }
+    public Service getMostDemandedService() {
+        return this.repository.getMostDemandedService();
+    }
+    public List<TourGuideUser> getTourGuidesWithRating1() {
+        return this.repository.getTourGuidesWithRating1();
+    }
 }
