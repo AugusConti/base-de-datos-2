@@ -29,6 +29,7 @@ public class ToursServiceImpl implements ToursService{
             u.setEmail(email);
             u.setBirthdate(birthdate);
             u.setPhoneNumber(phoneNumber);
+            u.setPurchases(new ArrayList<Purchase>());
             this.repository.save(u);
             return u;
         } catch (Exception e) {
@@ -170,16 +171,16 @@ public class ToursServiceImpl implements ToursService{
     }
  
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
-            Purchase p = new Purchase();//revisar
-            p.setCode(code);
-            p.setDate(date);
-            p.setRoute(route);
-            p.setUser(user); 
-            p.setItemServiceList((new ArrayList<ItemService>())); 
-            p.setTotalPrice(route.getPrice()); 
-            System.out.println("EEEEEEEEEEEE:"+p.toString());
-            this.repository.createPurchase(p);
-            return p;
+         Purchase p = new Purchase();//revisar
+         p.setCode(code);
+         p.setDate(date);
+         p.setRoute(route);
+         p.setUser(user); 
+         p.setItemServiceList((new ArrayList<ItemService>())); 
+         p.setTotalPrice(route.getPrice()); 
+         System.out.println("EEEEEEEEEEEE:"+p.toString());
+         this.repository.createPurchase(p);
+         return p; 
     }
 
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
@@ -187,7 +188,7 @@ public class ToursServiceImpl implements ToursService{
         return p;
 }
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
-        ItemService i= new ItemService();//revisar
+        ItemService i= new ItemService();//revisar la exception 
         i.setPurchase(purchase);
         i.setQuantity(quantity);
         i.setService(service);
@@ -198,6 +199,25 @@ public class ToursServiceImpl implements ToursService{
     public Optional<Purchase> getPurchaseByCode(String code){//revisar
         return this.repository.findOneByAtribute(Purchase.class, "code", code);
    
+    }
+
+    public void deletePurchase(Purchase purchase) throws ToursException{
+        //borra la compra y ver que se borre de la lista de compras del usuario 
+        try{
+        this.repository.delete(purchase);
+        } catch (Exception e) {
+            throw new ToursException(e.getMessage());
+        }
+    }
+
+    public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException{
+        Review r= new Review();//revisar que el purchase exista?
+        r.setPurchase(purchase);
+        r.setComment(comment);
+        r.setRating(rating);
+        this.repository.addReviewToPurchase(r);
+        return r;
+
     }
     
 }

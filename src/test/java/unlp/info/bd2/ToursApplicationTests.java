@@ -258,7 +258,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("200", dyes, route1, user1), "No puede realizarse la compra");
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("100", route1, user1), "Constraint Violation");
-	}/*
+	}
 	//Sofi
 	@Test
 	void removePurchaseAndItems() throws ToursException {
@@ -281,6 +281,7 @@ class ToursApplicationTests {
 		assertFalse(purchase.isPresent());
 	}
 	//Sofi
+	
 	@Test
 	void addReviewToPurchaseTest() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -329,5 +330,5 @@ class ToursApplicationTests {
 		assertTrue(tourGuideUser.isActive());
 		assertThrows(ToursException.class, () -> this.toursService.deleteUser(tourGuideUser), "El usuario no puede ser desactivado");
 	}
-*/
+
 }

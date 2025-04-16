@@ -134,27 +134,36 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
-
+//
+    @Transactional 
     public void addItemToPurchase(ItemService item){//revisar
-        Session session = sessionFactoryBean.getObject().openSession();
-        session.getTransaction().begin();
+        Session session = sessionFactory.getCurrentSession(); 
         session.persist(item);
-        item.getPurchase().getItemServiceList().add(item);
-        session.merge(item.getPurchase());
-        session.getTransaction().commit();
-        session.close();
+        Purchase p =item.getPurchase();
+        p.getItemServiceList().add(item);
+        //actualiza el precio del purchase con el item nuevo 
+        float totalPrice= p.getTotalPrice() + item.getQuantity()* item.getService().getPrice();
+        p.setTotalPrice(totalPrice);
+        session.merge(p); 
     }
 
-    public void createPurchase(Purchase p){
-        Session session = sessionFactoryBean.getObject().openSession();
-        session.getTransaction().begin();
-        session.persist(p);
+    @Transactional
+    public void createPurchase(Purchase p){//REVISAR
+        Session session = sessionFactory.getCurrentSession(); 
         Long id= p.getUser().getId();
         User u= session.get(User.class, id);
+        session.persist(p);              
         u.addPurchase(p);
-        System.out.println("AAAAAAAAAAAAAAAAAAA: "+u.getPurchaseList());
         session.merge(u);
-        session.getTransaction().commit();
-        session.close();
+         
+    }
+     
+    @Transactional
+    public  void addReviewToPurchase(Review review){ //Revisar
+        Session session = sessionFactory.getCurrentSession(); 
+        session.persist(review);
+        Purchase p =review.getPurchase();
+        p.setReview(review); 
+        session.merge(p); 
     }
 }

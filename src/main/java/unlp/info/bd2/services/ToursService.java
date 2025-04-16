@@ -33,9 +33,9 @@ public interface ToursService {
     Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException;
     ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException;
     Optional<Purchase> getPurchaseByCode(String code);
-    /* void deletePurchase(Purchase purchase) throws ToursException;
+    void deletePurchase(Purchase purchase) throws ToursException;
     Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException;
-
+/*
     // CONSULTAS HQL
     List<Purchase> getAllPurchasesOfUsername(String username);
     List<User> getUserSpendingMoreThan(float mount);

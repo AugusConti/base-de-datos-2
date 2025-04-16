@@ -24,5 +24,6 @@ public interface ToursRepository {
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
     void addItemToPurchase(ItemService i);
     void createPurchase(Purchase p);
+    void addReviewToPurchase(Review r); 
         
 }
