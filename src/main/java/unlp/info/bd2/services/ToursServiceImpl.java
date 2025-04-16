@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -187,54 +190,91 @@ public class ToursServiceImpl implements ToursService{
     }
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         return this.repository.getTop10MoreExpensivePurchasesInServices();
-    }
+    } 
+ //
 
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
-         Purchase p = new Purchase();//revisar
+        Optional<User> u = this.repository.findById(user.getId(),User.class); 
+        if(u.isEmpty()){//necesario?
+            throw new ToursException("No existe un usuario con ID: " + user.getId());
+        }
+        Optional<Route> r = this.repository.findById(route.getId(),Route.class);
+        if(r.isEmpty()  ){//necesario?
+            throw new ToursException("No existe una ruta con ID: " + route.getId());
+        } 
+        if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
+            throw new ToursException("Ya existe una compra con code: " + code);
+        }
+        
+        Purchase p = new Purchase();//revisar
          p.setCode(code);
          p.setDate(date);
          p.setRoute(route);
-         p.setUser(user);
-         p.setItemServiceList((new ArrayList<ItemService>()));
-         p.setTotalPrice(route.getPrice());
+         p.setUser(user); 
+         p.setItemServiceList((new ArrayList<ItemService>())); 
+         p.setTotalPrice(route.getPrice());  
          this.repository.createPurchase(p);
-         return p;
+         return p; 
     }
 
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
         Purchase p = createPurchase(code,  new Date() ,route, user);
-        return p;
-}
+        return p; 
+    } 
+    
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
-        ItemService i= new ItemService();//revisar la exception
-        i.setPurchase(purchase);
-        i.setQuantity(quantity);
-        i.setService(service);
-        this.repository.addItemToPurchase(i, service);
-        return i;
+        Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
+        if(p.isEmpty()){//necesario?
+            throw new ToursException("No existe una compra con ID: " + purchase.getId());
+        }
+        else{
+            ItemService i= new ItemService();//revisar la exception 
+            i.setPurchase(purchase);
+            i.setQuantity(quantity);
+            i.setService(service); 
+            float totalPrice= p.get().getTotalPrice() + i.getQuantity()* i.getService().getPrice();
+            this.repository.addItemToPurchase(i, totalPrice); 
+            return i;
+        }
     }
-
-    public Optional<Purchase> getPurchaseByCode(String code){//revisar
+     
+        
+    public Optional<Purchase> getPurchaseByCode(String code){//revisar si no existe ninguno
         return this.repository.findOneByAtribute(Purchase.class, "code", code);
 
     }
 
-    public void deletePurchase(Purchase purchase) throws ToursException{
-        //borra la compra y ver que se borre de la lista de compras del usuario
-        try{
-        this.repository.delete(purchase);
-        } catch (Exception e) {
-            throw new ToursException(e.getMessage());
+    @Transactional //aca o en service 
+    public void deletePurchase(Purchase purchase) throws ToursException{//Revisar
+        //borra la compra y ver que se borre de la lista de compras del usuario 
+        Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
+        if(p.isEmpty()){//es necesaio?
+            throw new ToursException("No existe una compra con ID: " + purchase.getId());
+        }else{
+            User u= purchase.getUser();
+            u.getPurchaseList().remove(purchase);//modificar una collection ajena?
+            this.repository.update(u);
+            this.repository.delete(purchase);//delete purchase y en la lista
+            // o se le agrega el orphan en user las purchases
+            //yse borra de la lista 
         }
     }
 
+    @Transactional //aca o en repo?
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException{
+        Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
+        if(p.isEmpty()){
+            throw new ToursException("No existe una compra con ID: " + purchase.getId());
+        }
+        else{
         Review r= new Review();//revisar que el purchase exista?
         r.setPurchase(purchase);
         r.setComment(comment);
         r.setRating(rating);
+        this.repository.save(r);
         this.repository.addReviewToPurchase(r);
         return r;
+        }
 
     }
 
@@ -247,6 +287,7 @@ public class ToursServiceImpl implements ToursService{
     public List<Route> getRoutesWithStop(Stop stop){
         return this.repository.getRoutesWithStop(stop);
     }
+
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
         Optional<Route> r = this.repository.findById(idRoute, Route.class);
         if (r.isEmpty()) {
@@ -292,4 +333,20 @@ public class ToursServiceImpl implements ToursService{
             }
         }
     }
+
+
+    public List<Purchase> getAllPurchasesOfUsername(String username){
+        return this.repository.findUserByUsername(username).get().getPurchaseList();
+    }
+    
+    public  List<User> getTop5UsersMorePurchases(){
+        return this.repository.getTop5UsersMorePurchases();
+    }
+
+    public long getCountOfPurchasesBetweenDates(Date start, Date end){
+        return this.repository.getCountOfPurchasesBetweenDates(start, end);
+
+    }
+
+
 }

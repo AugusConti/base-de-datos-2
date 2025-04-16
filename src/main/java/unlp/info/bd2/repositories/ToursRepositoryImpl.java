@@ -1,5 +1,6 @@
 package unlp.info.bd2.repositories;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,32 +139,41 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 //
     @Transactional
-    public void addItemToPurchase(ItemService item, Service s){//revisar
+    public void addItemToPurchase(ItemService item, float totalPrice){
+        //revisar, si funciona ya lo del service borrar este
         Session session = sessionFactory.getCurrentSession();
         session.persist(item);
         Purchase p =item.getPurchase();
         p.getItemServiceList().add(item);
         //actualiza el precio del purchase con el item nuevo
-        float totalPrice= p.getTotalPrice() + item.getQuantity()* item.getService().getPrice();
         p.setTotalPrice(totalPrice);
-        update(p);
-        s.addItem(item);
-        update(s);
-    }
+        session.merge(p);
+    }  
 
     @Transactional
-    public void createPurchase(Purchase p){//REVISAR
+    public void createPurchase(Purchase p)throws ToursException{//REVISAR
+        //ver cupos y ver except
+        //purchases relacionadas a esa si 
         Session session = sessionFactory.getCurrentSession();
+        String hql= "FROM Purchase p WHERE p.route = :ruta";
+        List<Purchase> result = session.createQuery(hql, Purchase.class)
+                .setParameter("ruta", p.getRoute())
+                .getResultList();
+        if (result.size() >= p.getRoute().getMaxNumberUsers()) {
+            throw new ToursException("No hay mas cupos para la ruta con ID "+ p.getRoute().getId());
+        }
         Long id= p.getUser().getId();
-        User u= session.get(User.class, id);
+        User u= session.get(User.class, id); 
         session.persist(p);
         u.addPurchase(p);
         session.merge(u);
 
     }
+    
 
     @Transactional
     public  void addReviewToPurchase(Review review){ //Revisar
+         //ver si solo add al purchase o si hacer todo junto aca, porque hace save en service de review, uno u otro
         Session session = sessionFactory.getCurrentSession();
         session.persist(review);
         Purchase p =review.getPurchase();
@@ -245,6 +255,7 @@ public class ToursRepositoryImpl implements ToursRepository {
             TourGuideUser.class).getResultList();
         return result;
     }
+
     @Transactional
     public void setDriverToRoute(DriverUser d, Route r){
         update(r);
@@ -266,4 +277,35 @@ public class ToursRepositoryImpl implements ToursRepository {
             save(u);
         }
     }
+
+
+    @Transactional
+    public List<User> getTop5UsersMorePurchases(){
+        Session session = sessionFactory.getCurrentSession();
+        List<User> result = session.createQuery(
+                "FROM User u JOIN u.purchases p " +
+                        "GROUP BY u " +
+                        "ORDER BY count(p) DESC ",
+                User.class)
+                .setMaxResults(5)
+                .getResultList();
+        return result;
+    }
+
+    @Transactional
+    public long getCountOfPurchasesBetweenDates(Date start, Date end){
+        Session session = sessionFactory.getCurrentSession();
+        Long result = session.createQuery(
+                "SELECT COUNT(p)"+
+                "FROM Purchase p "+
+                "WHERE p.date BETWEEN :start AND :end", 
+                Long.class)
+                .setParameter("start", start)
+                .setParameter("end", end)
+                .getSingleResult();  
+        return result;
+
+    }
+
+
 }

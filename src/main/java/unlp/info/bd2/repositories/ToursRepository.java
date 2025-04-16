@@ -25,9 +25,9 @@ public interface ToursRepository {
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
     List<TourGuideUser> getTourGuidesWithRating1();
-    List<Purchase> getTop10MoreExpensivePurchasesInServices();
-    void addItemToPurchase(ItemService i, Service s);
-    void createPurchase(Purchase p);
+    List<Purchase> getTop10MoreExpensivePurchasesInServices(); 
+    void addItemToPurchase(ItemService i,float totalPrice);
+    void createPurchase(Purchase p)throws ToursException;
     void addReviewToPurchase(Review r);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
@@ -35,4 +35,7 @@ public interface ToursRepository {
     void setDriverToRoute(DriverUser d, Route r);
     void setTourGuideToRoute(TourGuideUser t, Route r);
     void createUser(User u) throws ToursException;
+    List<User> getTop5UsersMorePurchases();
+    long getCountOfPurchasesBetweenDates(Date start, Date end);
+
 }
