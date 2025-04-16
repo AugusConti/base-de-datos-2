@@ -92,7 +92,7 @@ public class ToursQuerysTests {
         assertEquals(10, purchases.size());
         this.assertListEquality(purchases.stream().map(Purchase::getCode).collect(Collectors.toList()), Arrays.asList("P004", "P007", "P008", "P010", "P012", "P013", "P014", "P017", "P018", "P020"));
     }
-   
+
     //Sofi
     @Test
     void getTop5UsersMorePurchasesTest() throws ToursException {
@@ -112,7 +112,6 @@ public class ToursQuerysTests {
         assertEquals(0, countOfPurchasesBetweenDates3);
     }
     //Augusto
-     /**/
     @Test
     void getRoutesWithStopTest() throws ToursException {
         Stop stop1 = this.service.getStopByNameStart("Diagonal Norte").get(0);
@@ -141,7 +140,6 @@ public class ToursQuerysTests {
         assertEquals(1, routsNotSell.size());
         this.assertListEquality(routsNotSell.stream().map(Route::getName).collect(Collectors.toList()), List.of("Ruta vacia"));
     }
-    /*
     //Tomi
     @Test
     void getTop3RoutesWithMaxRatingTest() throws ToursException {
@@ -150,6 +148,7 @@ public class ToursQuerysTests {
         this.assertListEquality(routesWithMaxRating.stream().map(Route::getName).collect(Collectors.toList()), List.of("City Tour", "Historical Adventure", "Architectural Expedition"));
     }
     //Tomi
+    /*
     @Test
     void getMostDemandedServiceTest() throws ToursException {
         Service mostDemandedService = this.service.getMostDemandedService();
@@ -163,7 +162,6 @@ public class ToursQuerysTests {
         assertEquals(2, serviceNoAddedToPurchases.size());
         this.assertListEquality(serviceNoAddedToPurchases.stream().map(Service::getName).collect(Collectors.toList()), List.of("Architectural Expedition Book", "souvenir retrato"));
     }
-    /*
     //Tomi
     @Test
     void getTourGuidesWithRating1Test() throws ToursException {
@@ -171,7 +169,6 @@ public class ToursQuerysTests {
         assertEquals(3, tourGuidesWithRating1.size());
         this.assertListEquality(tourGuidesWithRating1.stream().map(TourGuideUser::getUsername).collect(Collectors.toList()), List.of("userG1", "userG3", "userG4"));
     }
-    */
     private <T> void assertListEquality(List<T> list1, List<T> list2) {
         if (list1.size() != list2.size()) {
             Assert.fail("Lists have different size");

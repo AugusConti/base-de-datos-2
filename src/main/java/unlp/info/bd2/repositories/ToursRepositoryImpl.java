@@ -178,7 +178,7 @@ public class ToursRepositoryImpl implements ToursRepository {
         session.persist(review);
         Purchase p =review.getPurchase();
         p.setReview(review);
-        session.merge(p);
+        update(p);
     }
 
     @Transactional(readOnly = true)
@@ -226,8 +226,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<Route> getTop3RoutesWithMaxRating() {
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
-                "FROM Purchase p JOIN p.route rte JOIN p.review rev" +
-                        "GROUP BY rte.id" +
+                "SELECT rte FROM Purchase p JOIN p.route rte JOIN p.review rev " +
+                        "GROUP BY rte.id " +
                         "ORDER BY AVG(rev.rating) DESC",
                 Route.class)
                 .setMaxResults(3)
@@ -239,10 +239,12 @@ public class ToursRepositoryImpl implements ToursRepository {
     public Service getMostDemandedService() {
         Session session = sessionFactory.getCurrentSession();
         Service result = session.createQuery(
-                "FROM Service s JOIN s.itemServices item" +
-                        "GROUP BY s.id" +
+                "FROM Service s JOIN s.itemServices item " +
+                        "GROUP BY s.id " +
                         "ORDER BY SUM(item.quantity) DESC",
-                Service.class).uniqueResult();
+                Service.class)
+                .setMaxResults(1)
+                .uniqueResult();
         return result;
     }
 
@@ -250,8 +252,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<TourGuideUser> getTourGuidesWithRating1() {
         Session session = sessionFactory.getCurrentSession();
         List<TourGuideUser> result = session.createQuery(
-            "FROM User u JOIN u.route" +
-            "WHERE u.DTYPE = 'TourGuideUser'",
+            "SELECT distinct u FROM Review r JOIN r.purchase p JOIN p.route rou JOIN rou.tourGuides u " +
+            "WHERE r.rating = 1",
             TourGuideUser.class).getResultList();
         return result;
     }
