@@ -199,11 +199,12 @@ public class ToursServiceImpl implements ToursService{
         if(r.isEmpty()  ){//necesario?
             throw new ToursException("No existe una ruta con ID: " + route.getId());
         }
+        
         //logica de negocio
         if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
             throw new ToursException("Ya existe una compra con code: " + code);
         }
-        else{ 
+        
         Purchase p = new Purchase();//revisar
          p.setCode(code);
          p.setDate(date);
@@ -212,7 +213,7 @@ public class ToursServiceImpl implements ToursService{
          p.setItemServiceList((new ArrayList<ItemService>())); 
          p.setTotalPrice(route.getPrice());  
          this.repository.createPurchase(p);
-         return p; }
+         return p; 
     }
 
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
@@ -220,7 +221,7 @@ public class ToursServiceImpl implements ToursService{
         return p;
     } 
 
-    @Transactional 
+    
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
         Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
         if(p.isEmpty()){//necesario?
@@ -231,12 +232,9 @@ public class ToursServiceImpl implements ToursService{
             i.setPurchase(purchase);
             i.setQuantity(quantity);
             i.setService(service);
-            this.repository.save(i);//guardoel item
             p.get().getItemServiceList().add(i);
-            //actualiza el precio del purchase con el item nuevo 
             float totalPrice= p.get().getTotalPrice() + i.getQuantity()* i.getService().getPrice();
-            p.get().setTotalPrice(totalPrice);
-            this.repository.update(p); 
+            this.repository.addItemToPurchase(i, totalPrice); 
             return i;
         }
     }
