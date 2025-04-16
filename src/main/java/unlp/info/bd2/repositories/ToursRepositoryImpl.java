@@ -125,12 +125,12 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
-
     @Transactional(readOnly = true)
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         Session session = sessionFactory.getCurrentSession();
         List<Purchase> result = session.createQuery(
-                        "FROM purchase p ORDER BY p.totalPrice DESC LIMIT 10", Purchase.class)
+                        "SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList is ORDER BY p.totalPrice DESC", Purchase.class)
+                .setMaxResults(10)
                 .getResultList();
         return result;
     }
@@ -171,7 +171,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     public Long getMaxStopOfRoutes(){
         Session session = sessionFactory.getCurrentSession();
         Long result = session.createQuery(
-                        "SELECT MAX(COUNT(*)) FROM route r JOIN r.stops s GROUP BY r.id", Long.class)
+                        "SELECT MAX(COUNT(*)) FROM Route r JOIN r.stops s GROUP BY r.id", Long.class)
                     .getSingleResult();
         return result;
     }
@@ -180,7 +180,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<Route> getRoutsNotSell(){
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
-                        "FROM route r WHERE r NOT IN (SELECT p.route FROM purchase p WHERE p.route IS NOT NULL)", Route.class)
+                        "FROM Route r WHERE r NOT IN (SELECT p.route FROM Purchase p WHERE p.route IS NOT NULL)", Route.class)
                 .getResultList();
         return result;
     }
@@ -189,7 +189,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<Route> getRoutesWithStop(Stop stop){
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
-                        "SELECT r FROM route r JOIN r.stops s WHERE s.id = :stopId", Route.class)
+                        "SELECT r FROM Route r JOIN r.stops s WHERE s.id = :stopId", Route.class)
                 .setParameter("stopId", stop.getId())
                 .getResultList();
         return result;

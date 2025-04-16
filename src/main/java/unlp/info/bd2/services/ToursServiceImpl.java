@@ -117,6 +117,8 @@ public class ToursServiceImpl implements ToursService{
         r.setTotalKm(totalKm);
         r.setMaxNumberUsers(maxNumberOfUsers);
         r.setStops(stops);
+        r.setDrivers(new ArrayList<DriverUser>());
+        r.setTourGuides(new ArrayList<TourGuideUser>());
         this.repository.save(r);
         return r;
     }
@@ -140,6 +142,7 @@ public class ToursServiceImpl implements ToursService{
         s.setPrice(price);
         s.setDescription(description);
         s.setSupplier(supplier);
+        s.setItemServices(new ArrayList<ItemService>());
         this.repository.addServiceToSupplier(s, supplier);
         return s;
     }
@@ -179,7 +182,6 @@ public class ToursServiceImpl implements ToursService{
          p.setUser(user);
          p.setItemServiceList((new ArrayList<ItemService>()));
          p.setTotalPrice(route.getPrice());
-         System.out.println("EEEEEEEEEEEE:"+p.toString());
          this.repository.createPurchase(p);
          return p;
     }
