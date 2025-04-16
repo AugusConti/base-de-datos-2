@@ -74,6 +74,7 @@ public class ToursQuerysTests {
         List<User> users3 = this.service.getUserSpendingMoreThan(1000);
         assertEquals(0, users3.size());
     }
+    */
     //Augusto
     @Test
     void getTopNSuppliersInPurchasesTest() throws ToursException {
@@ -84,7 +85,6 @@ public class ToursQuerysTests {
         assertEquals(1, suppliers2.size());
         this.assertListEquality(suppliers2.stream().map(Supplier::getAuthorizationNumber).collect(Collectors.toList()), Arrays.asList("12345"));
     }
-    */
     //Augusto
     @Test
     void getTop10MoreExpensivePurchasesInServicesTest() throws ToursException {

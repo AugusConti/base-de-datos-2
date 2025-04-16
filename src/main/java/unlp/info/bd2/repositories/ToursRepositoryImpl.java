@@ -119,9 +119,10 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         Session session = sessionFactory.getCurrentSession();
         List<Supplier> result = session.createQuery(
-                "FROM Supplier s JOIN s.services ser JOIN ser.itemServices is JOIN is.purchase p" +
-                        "GROUP BY s.id" +
+                "SELECT s FROM Supplier s JOIN s.services ser JOIN ser.itemServices is JOIN is.purchase p " +
+                        "GROUP BY s.id " +
                         "ORDER BY SUM(p.totalPrice) DESC", Supplier.class)
+                .setMaxResults(n)
                 .getResultList();
         return result;
     }
