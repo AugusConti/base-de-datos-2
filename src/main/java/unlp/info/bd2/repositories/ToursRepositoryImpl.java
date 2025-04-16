@@ -172,7 +172,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     public Long getMaxStopOfRoutes(){
         Session session = sessionFactory.getCurrentSession();
         Long result = session.createQuery(
-                        "SELECT MAX(COUNT(*)) FROM Route r JOIN r.stops s GROUP BY r.id", Long.class)
+                        "SELECT MAX(c) FROM (SELECT COUNT(s) as c FROM Route r JOIN r.stops s GROUP BY r.id)", Long.class)
                     .getSingleResult();
         return result;
     }

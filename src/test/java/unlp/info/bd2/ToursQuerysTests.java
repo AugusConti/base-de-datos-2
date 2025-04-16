@@ -129,13 +129,11 @@ public class ToursQuerysTests {
         assertEquals(0, routes3.size());
     }
     //Augusto
-    /*
     @Test
     void getMaxStopOfRoutesTest() throws ToursException {
         Long maxStopOfRoutes = this.service.getMaxStopOfRoutes();
         assertEquals(9, maxStopOfRoutes);
     }
-     */
     //Augusto
     @Test
     void getRoutsNotSellTest() throws ToursException {
