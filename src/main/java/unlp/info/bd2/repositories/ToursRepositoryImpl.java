@@ -136,7 +136,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 //
     @Transactional 
-    public void addItemToPurchase(ItemService item){//revisar
+    public void addItemToPurchase(ItemService item){//revisar, si funciona ya lo del service borrar este
         Session session = sessionFactory.getCurrentSession(); 
         session.persist(item);
         Purchase p =item.getPurchase();
@@ -160,6 +160,7 @@ public class ToursRepositoryImpl implements ToursRepository {
      
     @Transactional
     public  void addReviewToPurchase(Review review){ //Revisar
+        //ver si solo add al purchase o si hacer todo junto aca, porque hace save en service de review, uno u otro
         Session session = sessionFactory.getCurrentSession(); 
         session.persist(review);
         Purchase p =review.getPurchase();
