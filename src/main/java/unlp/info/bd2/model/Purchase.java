@@ -28,7 +28,7 @@ public class Purchase {
     @ManyToOne(optional = false)
     private User user;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Route route;
 
     @OneToOne(optional = true)

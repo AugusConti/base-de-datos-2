@@ -119,52 +119,84 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         Session session = sessionFactory.getCurrentSession();
         List<Supplier> result = session.createQuery(
-                "FROM Supplier s JOIN s.services ser JOIN ser.itemServices is JOIN is.purchase p" +
-                        "GROUP BY s.id" +
+                "SELECT s FROM Supplier s JOIN s.services ser JOIN ser.itemServices is JOIN is.purchase p " +
+                        "GROUP BY s.id " +
                         "ORDER BY SUM(p.totalPrice) DESC", Supplier.class)
+                .setMaxResults(n)
+                .getResultList();
+        return result;
+    }
+    @Transactional(readOnly = true)
+    public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
+        Session session = sessionFactory.getCurrentSession();
+        List<Purchase> result = session.createQuery(
+                        "SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList is ORDER BY p.totalPrice DESC", Purchase.class)
+                .setMaxResults(10)
+                .getResultList();
+        return result;
+    }
+//
+    @Transactional
+    public void addItemToPurchase(ItemService item){//revisar, si funciona ya lo del service borrar este
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(item);
+        Purchase p =item.getPurchase();
+        p.getItemServiceList().add(item);
+        //actualiza el precio del purchase con el item nuevo
+        float totalPrice= p.getTotalPrice() + item.getQuantity()* item.getService().getPrice();
+        p.setTotalPrice(totalPrice);
+        session.merge(p);
+    }  
+
+    @Transactional
+    public void createPurchase(Purchase p){//REVISAR
+        Session session = sessionFactory.getCurrentSession();
+        Long id= p.getUser().getId();
+        User u= session.get(User.class, id);
+        session.persist(p);
+        u.addPurchase(p);
+        session.merge(u);
+
+    }
+    
+
+    @Transactional
+    public  void addReviewToPurchase(Review review){ //Revisar
+         //ver si solo add al purchase o si hacer todo junto aca, porque hace save en service de review, uno u otro
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(review);
+        Purchase p =review.getPurchase();
+        p.setReview(review);
+        session.merge(p);
+    }
+
+    @Transactional(readOnly = true)
+    public Long getMaxStopOfRoutes(){
+        Session session = sessionFactory.getCurrentSession();
+        Long result = session.createQuery(
+                        "SELECT MAX(c) FROM (SELECT COUNT(s) as c FROM Route r JOIN r.stops s GROUP BY r.id)", Long.class)
+                    .getSingleResult();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Route> getRoutsNotSell(){
+        Session session = sessionFactory.getCurrentSession();
+        List<Route> result = session.createQuery(
+                        "FROM Route r WHERE r NOT IN (SELECT p.route FROM Purchase p WHERE p.route IS NOT NULL)", Route.class)
                 .getResultList();
         return result;
     }
 
     @Transactional(readOnly = true)
-    public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
+    public List<Route> getRoutesWithStop(Stop stop){
         Session session = sessionFactory.getCurrentSession();
-        List<Purchase> result = session.createQuery(
-                        "FROM purchase p ORDER BY p.totalPrice DESC LIMIT 10", Purchase.class)
+        List<Route> result = session.createQuery(
+                        "SELECT r FROM Route r JOIN r.stops s WHERE s.id = :stopId", Route.class)
+                .setParameter("stopId", stop.getId())
                 .getResultList();
         return result;
     }
-//
-    @Transactional 
-    public void addItemToPurchase(ItemService item){//revisar, si funciona ya lo del service borrar este
-        Session session = sessionFactory.getCurrentSession(); 
-        session.persist(item);
-        Purchase p =item.getPurchase();
-        p.getItemServiceList().add(item);
-        //actualiza el precio del purchase con el item nuevo 
-        float totalPrice= p.getTotalPrice() + item.getQuantity()* item.getService().getPrice();
-        p.setTotalPrice(totalPrice);
-        session.merge(p); 
-    }
-
-    @Transactional
-    public void createPurchase(Purchase p){//REVISAR
-        Session session = sessionFactory.getCurrentSession(); 
-        Long id= p.getUser().getId();
-        User u= session.get(User.class, id);
-        session.persist(p);              
-        u.addPurchase(p);
-        session.merge(u);
-         
-    }
+ 
      
-    @Transactional
-    public  void addReviewToPurchase(Review review){ //Revisar
-        //ver si solo add al purchase o si hacer todo junto aca, porque hace save en service de review, uno u otro
-        Session session = sessionFactory.getCurrentSession(); 
-        session.persist(review);
-        Purchase p =review.getPurchase();
-        p.setReview(review); 
-        session.merge(p); 
-    }
 }

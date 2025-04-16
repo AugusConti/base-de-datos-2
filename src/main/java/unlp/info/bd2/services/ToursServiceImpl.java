@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
+@org.springframework.stereotype.Service
 public class ToursServiceImpl implements ToursService{
     ToursRepository repository;
     
@@ -119,6 +120,8 @@ public class ToursServiceImpl implements ToursService{
         r.setTotalKm(totalKm);
         r.setMaxNumberUsers(maxNumberOfUsers);
         r.setStops(stops);
+        r.setDrivers(new ArrayList<DriverUser>());
+        r.setTourGuides(new ArrayList<TourGuideUser>());
         this.repository.save(r);
         return r;
     }
@@ -142,6 +145,7 @@ public class ToursServiceImpl implements ToursService{
         s.setPrice(price);
         s.setDescription(description);
         s.setSupplier(supplier);
+        s.setItemServices(new ArrayList<ItemService>());
         this.repository.addServiceToSupplier(s, supplier);
         return s;
     }
@@ -165,14 +169,15 @@ public class ToursServiceImpl implements ToursService{
         }
         return s.get();
     }
-    
+
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         return this.repository.getTopNSuppliersInPurchases(n);
     }
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         return this.repository.getTop10MoreExpensivePurchasesInServices();
-    }
+    } 
  //
+
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
         Optional<User> u = this.repository.findById(user.getId(),User.class); 
         if(u.isEmpty()){//necesario?
@@ -201,7 +206,7 @@ public class ToursServiceImpl implements ToursService{
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
         Purchase p = createPurchase(code,  new Date() ,route, user);
         return p;
-    }
+    } 
 
     @Transactional 
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
@@ -227,7 +232,7 @@ public class ToursServiceImpl implements ToursService{
         
     public Optional<Purchase> getPurchaseByCode(String code){//revisar si no existe ninguno
         return this.repository.findOneByAtribute(Purchase.class, "code", code);
-   
+
     }
 
     @Transactional //aca o en service 
@@ -263,5 +268,14 @@ public class ToursServiceImpl implements ToursService{
         }
 
     }
-    
+
+    public Long getMaxStopOfRoutes(){
+        return this.repository.getMaxStopOfRoutes();
+    }
+    public List<Route> getRoutsNotSell(){
+        return this.repository.getRoutsNotSell();
+    }
+    public List<Route> getRoutesWithStop(Stop stop){
+        return this.repository.getRoutesWithStop(stop);
+    }
 }

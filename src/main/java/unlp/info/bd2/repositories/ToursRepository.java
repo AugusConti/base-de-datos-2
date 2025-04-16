@@ -24,6 +24,8 @@ public interface ToursRepository {
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
     void addItemToPurchase(ItemService i);
     void createPurchase(Purchase p);
-    void addReviewToPurchase(Review r); 
-        
+    void addReviewToPurchase(Review r);
+    Long getMaxStopOfRoutes();
+    List<Route> getRoutsNotSell();
+    List<Route> getRoutesWithStop(Stop stop);
 }
