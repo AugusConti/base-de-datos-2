@@ -49,7 +49,7 @@ public class ToursQuerysTests {
     void init() {
         //assertEquals(1,1);
     }
-/*
+
     //Sofi
     @Test
     void getAllPurchasesOfUsernameTest() throws ToursException {
@@ -62,7 +62,7 @@ public class ToursQuerysTests {
         List<Purchase> purchases3 = this.service.getAllPurchasesOfUsername("user5");
         assertEquals(0, purchases3.size());
     }
-    //Tomi
+  /*  //Tomi
     @Test
     void getUserSpendingMoreThanTest() throws ToursException {
         List<User> users1 = this.service.getUserSpendingMoreThan(500);
@@ -92,7 +92,7 @@ public class ToursQuerysTests {
         assertEquals(10, purchases.size());
         this.assertListEquality(purchases.stream().map(Purchase::getCode).collect(Collectors.toList()), Arrays.asList("P004", "P007", "P008", "P010", "P012", "P013", "P014", "P017", "P018", "P020"));
     }
-    /*
+   
     //Sofi
     @Test
     void getTop5UsersMorePurchasesTest() throws ToursException {
@@ -112,7 +112,7 @@ public class ToursQuerysTests {
         assertEquals(0, countOfPurchasesBetweenDates3);
     }
     //Augusto
-    */
+     /**/
     @Test
     void getRoutesWithStopTest() throws ToursException {
         Stop stop1 = this.service.getStopByNameStart("Diagonal Norte").get(0);
@@ -155,7 +155,7 @@ public class ToursQuerysTests {
         Service mostDemandedService = this.service.getMostDemandedService();
         assertEquals("souvenir t-shirt", mostDemandedService.getName());
         assertEquals("I love Buenos Aires t-shirt", mostDemandedService.getDescription());
-    }
+    }*/
     //Sofi
     @Test
     void getServiceNoAddedToPurchasesTest() throws ToursException {
@@ -163,6 +163,7 @@ public class ToursQuerysTests {
         assertEquals(2, serviceNoAddedToPurchases.size());
         this.assertListEquality(serviceNoAddedToPurchases.stream().map(Service::getName).collect(Collectors.toList()), List.of("Architectural Expedition Book", "souvenir retrato"));
     }
+    /*
     //Tomi
     @Test
     void getTourGuidesWithRating1Test() throws ToursException {

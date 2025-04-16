@@ -198,9 +198,7 @@ public class ToursServiceImpl implements ToursService{
         Optional<Route> r = this.repository.findById(route.getId(),Route.class);
         if(r.isEmpty()  ){//necesario?
             throw new ToursException("No existe una ruta con ID: " + route.getId());
-        }
-
-        //logica de negocio
+        } 
         if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
             throw new ToursException("Ya existe una compra con code: " + code);
         }
@@ -287,4 +285,18 @@ public class ToursServiceImpl implements ToursService{
     public List<Route> getRoutesWithStop(Stop stop){
         return this.repository.getRoutesWithStop(stop);
     }
+
+    public List<Purchase> getAllPurchasesOfUsername(String username){
+        return this.repository.findUserByUsername(username).get().getPurchaseList();
+    }
+    
+    public  List<User> getTop5UsersMorePurchases(){
+        return this.repository.getTop5UsersMorePurchases();
+    }
+
+    public long getCountOfPurchasesBetweenDates(Date start, Date end){
+        return this.repository.getCountOfPurchasesBetweenDates(start, end);
+
+    }
+
 }

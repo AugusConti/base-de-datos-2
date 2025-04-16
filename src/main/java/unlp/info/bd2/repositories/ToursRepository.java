@@ -32,4 +32,6 @@ public interface ToursRepository {
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
     List<Route> getRoutesWithStop(Stop stop);
+    List<User> getTop5UsersMorePurchases();
+    long getCountOfPurchasesBetweenDates(Date start, Date end);
 }

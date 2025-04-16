@@ -1,5 +1,6 @@
 package unlp.info.bd2.repositories;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -253,4 +254,33 @@ public class ToursRepositoryImpl implements ToursRepository {
             TourGuideUser.class).getResultList();
         return result;
     }
+
+    @Transactional
+    public List<User> getTop5UsersMorePurchases(){
+        Session session = sessionFactory.getCurrentSession();
+        List<User> result = session.createQuery(
+                "FROM User u JOIN u.purchases p " +
+                        "GROUP BY u " +
+                        "ORDER BY count(p) DESC ",
+                User.class)
+                .setMaxResults(5)
+                .getResultList();
+        return result;
+    }
+
+    @Transactional
+    public long getCountOfPurchasesBetweenDates(Date start, Date end){
+        Session session = sessionFactory.getCurrentSession();
+        Long result = session.createQuery(
+                "SELECT COUNT(p)"+
+                "FROM Purchase p "+
+                "WHERE p.date BETWEEN :start AND :end", 
+                Long.class)
+                .setParameter("start", start)
+                .setParameter("end", end)
+                .getSingleResult();  
+        return result;
+
+    }
+
 }
