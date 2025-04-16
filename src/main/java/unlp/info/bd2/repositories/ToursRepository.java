@@ -21,6 +21,10 @@ public interface ToursRepository {
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
     void createSupplier(Supplier s) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
+    List<User> getUserSpendingMoreThan(float mount);
+    List<Route> getTop3RoutesWithMaxRating();
+    Service getMostDemandedService();
+    List<TourGuideUser> getTourGuidesWithRating1();
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
     void addItemToPurchase(ItemService i);
     void createPurchase(Purchase p);

@@ -38,8 +38,8 @@ public interface ToursService {
 /*
     // CONSULTAS HQL
     List<Purchase> getAllPurchasesOfUsername(String username);
-    List<User> getUserSpendingMoreThan(float mount);
     */
+    List<User> getUserSpendingMoreThan(float mount);
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<Purchase> getTop10MoreExpensivePurchasesInServices();
     /*
@@ -52,7 +52,8 @@ public interface ToursService {
     /*
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
+    /*
     List<Service> getServiceNoAddedToPurchases();
+    */
     List<TourGuideUser> getTourGuidesWithRating1();
-*/
 }

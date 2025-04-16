@@ -197,6 +197,51 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
- 
-     
+
+    @Transactional(readOnly = true)
+    public List<User> getUserSpendingMoreThan(float mount) {
+        Session session = sessionFactory.getCurrentSession();
+        List<User> result = session.createQuery(
+                "FROM User u JOIN u.purchases p" +
+                        "GROUP BY u.id" +
+                        "HAVING SUM(p.totalPrice) > :mount",
+                User.class)
+                .setParameter("mount", mount)
+                .getResultList();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Route> getTop3RoutesWithMaxRating() {
+        Session session = sessionFactory.getCurrentSession();
+        List<Route> result = session.createQuery(
+                "FROM Purchase p JOIN p.route rte JOIN p.review rev" +
+                        "GROUP BY rte.id" +
+                        "ORDER BY AVG(rev.rating) DESC",
+                Route.class)
+                .setMaxResults(3)
+                .getResultList();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public Service getMostDemandedService() {
+        Session session = sessionFactory.getCurrentSession();
+        Service result = session.createQuery(
+                "FROM Service s JOIN s.itemServices item" +
+                        "GROUP BY s.id" +
+                        "ORDER BY SUM(item.quantity) DESC",
+                Service.class).uniqueResult();
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    public List<TourGuideUser> getTourGuidesWithRating1() {
+        Session session = sessionFactory.getCurrentSession();
+        List<TourGuideUser> result = session.createQuery(
+            "FROM User u JOIN u.route" +
+            "WHERE u.DTYPE = 'TourGuideUser'",
+            TourGuideUser.class).getResultList();
+        return result;
+    }
 }
