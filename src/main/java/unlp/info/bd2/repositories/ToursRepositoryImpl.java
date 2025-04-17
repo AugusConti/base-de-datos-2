@@ -143,11 +143,11 @@ public class ToursRepositoryImpl implements ToursRepository {
         //revisar, si funciona ya lo del service borrar este
         Session session = sessionFactory.getCurrentSession();
         session.persist(item);
-        Service s = item.getService();
         p.getItemServiceList().add(item);
         //actualiza el precio del purchase con el item nuevo
         p.setTotalPrice(totalPrice);
         update(p);
+        Service s = item.getService();
         s.addItem(item);
         update(s);
     }  
@@ -166,9 +166,9 @@ public class ToursRepositoryImpl implements ToursRepository {
         }
         Long id= p.getUser().getId();
         User u= session.get(User.class, id); 
-        session.persist(p);
+        save(p);
         u.addPurchase(p);
-        session.merge(u);
+        update(u);
 
     }
     
@@ -187,7 +187,9 @@ public class ToursRepositoryImpl implements ToursRepository {
     public Long getMaxStopOfRoutes(){
         Session session = sessionFactory.getCurrentSession();
         Long result = session.createQuery(
-                        "SELECT MAX(c) FROM (SELECT COUNT(s) as c FROM Route r JOIN r.stops s GROUP BY r.id)", Long.class)
+                        "SELECT COUNT(s) FROM Route r JOIN r.stops s GROUP BY r.id ORDER BY COUNT(s) DESC", Long.class)
+
+                    .setMaxResults(1)
                     .getSingleResult();
         return result;
     }
@@ -196,7 +198,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<Route> getRoutsNotSell(){
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
-                        "FROM Route r WHERE r NOT IN (SELECT p.route FROM Purchase p WHERE p.route IS NOT NULL)", Route.class)
+                        "SELECT r FROM Route r LEFT JOIN Purchase p ON p.route = r WHERE p.id IS NULL", Route.class)
                 .getResultList();
         return result;
     }
@@ -218,8 +220,6 @@ public class ToursRepositoryImpl implements ToursRepository {
                 "SELECT DISTINCT u "+
                 "FROM User u JOIN u.purchases p " +
                 "WHERE p.totalPrice >= :mount",
-                        //"GROUP BY u.id " +
-                        //"HAVING SUM(p.totalPrice) >= :mount",
                 User.class)
                 .setParameter("mount", mount)
                 .getResultList();
@@ -258,7 +258,8 @@ public class ToursRepositoryImpl implements ToursRepository {
         List<TourGuideUser> result = session.createQuery(
             "SELECT distinct u FROM Review r JOIN r.purchase p JOIN p.route rou JOIN rou.tourGuides u " +
             "WHERE r.rating = 1",
-            TourGuideUser.class).getResultList();
+            TourGuideUser.class)
+                .getResultList();
         return result;
     }
 
