@@ -215,9 +215,11 @@ public class ToursRepositoryImpl implements ToursRepository {
     public List<User> getUserSpendingMoreThan(float mount) {
         Session session = sessionFactory.getCurrentSession();
         List<User> result = session.createQuery(
-                "FROM User u JOIN u.purchases p" +
-                        "GROUP BY u.id" +
-                        "HAVING SUM(p.totalPrice) > :mount",
+                "SELECT DISTINCT u "+
+                "FROM User u JOIN u.purchases p " +
+                "WHERE p.totalPrice >= :mount",
+                        //"GROUP BY u.id " +
+                        //"HAVING SUM(p.totalPrice) >= :mount",
                 User.class)
                 .setParameter("mount", mount)
                 .getResultList();

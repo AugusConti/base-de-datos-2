@@ -62,7 +62,7 @@ public class ToursQuerysTests {
         List<Purchase> purchases3 = this.service.getAllPurchasesOfUsername("user5");
         assertEquals(0, purchases3.size());
     }
-  /*  //Tomi
+   //Tomi
     @Test
     void getUserSpendingMoreThanTest() throws ToursException {
         List<User> users1 = this.service.getUserSpendingMoreThan(500);
@@ -74,7 +74,7 @@ public class ToursQuerysTests {
         List<User> users3 = this.service.getUserSpendingMoreThan(1000);
         assertEquals(0, users3.size());
     }
-    */
+   /*  */
     //Augusto
     @Test
     void getTopNSuppliersInPurchasesTest() throws ToursException {
