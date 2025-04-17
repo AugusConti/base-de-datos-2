@@ -233,7 +233,7 @@ public class ToursServiceImpl implements ToursService{
             i.setQuantity(quantity);
             i.setService(service); 
             float totalPrice= p.get().getTotalPrice() + i.getQuantity()* i.getService().getPrice();
-            this.repository.addItemToPurchase(i, totalPrice); 
+            this.repository.addItemToPurchase(i, totalPrice, purchase);
             return i;
         }
     }

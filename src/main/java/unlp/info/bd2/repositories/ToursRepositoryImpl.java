@@ -139,15 +139,17 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 //
     @Transactional
-    public void addItemToPurchase(ItemService item, float totalPrice){
+    public void addItemToPurchase(ItemService item, float totalPrice, Purchase p){
         //revisar, si funciona ya lo del service borrar este
         Session session = sessionFactory.getCurrentSession();
         session.persist(item);
-        Purchase p =item.getPurchase();
+        Service s = item.getService();
         p.getItemServiceList().add(item);
         //actualiza el precio del purchase con el item nuevo
         p.setTotalPrice(totalPrice);
-        session.merge(p);
+        update(p);
+        s.addItem(item);
+        update(s);
     }  
 
     @Transactional
