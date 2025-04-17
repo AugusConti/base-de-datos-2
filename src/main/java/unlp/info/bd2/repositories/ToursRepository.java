@@ -37,5 +37,5 @@ public interface ToursRepository {
     void createUser(User u) throws ToursException;
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
-
+    List<Service> getServiceNoAddedToPurchases();
 }

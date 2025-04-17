@@ -311,5 +311,16 @@ public class ToursRepositoryImpl implements ToursRepository {
 
     }
 
-
+    @Transactional
+    public List<Service> getServiceNoAddedToPurchases(){
+        Session session = sessionFactory.getCurrentSession();
+        List<Service> result = session.createQuery(
+                "SELECT s "+
+                "FROM Service s "+
+                "LEFT JOIN ItemService i ON i.service = s " +
+                "WHERE i.id IS NULL" ,
+                Service.class)
+                .getResultList();
+        return result;
+    }
 }
