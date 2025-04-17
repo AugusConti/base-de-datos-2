@@ -164,7 +164,6 @@ public class ToursQuerysTests {
     }
      
     //Tomi
-    /*
     @Test
     void getTourGuidesWithRating1Test() throws ToursException {
         List<TourGuideUser> tourGuidesWithRating1 = this.service.getTourGuidesWithRating1();
@@ -172,7 +171,6 @@ public class ToursQuerysTests {
         this.assertListEquality(tourGuidesWithRating1.stream().map(TourGuideUser::getUsername).collect(Collectors.toList()), List.of("userG1", "userG3", "userG4"));
     }
 
-     */
     private <T> void assertListEquality(List<T> list1, List<T> list2) {
         if (list1.size() != list2.size()) {
             Assert.fail("Lists have different size");

@@ -115,11 +115,11 @@ public class Route {
 
     public void addDriver(DriverUser d) {
         this.drivers.add(d);
+        d.addRoute(this);
     }
 
     public void addTourGuide(TourGuideUser t) {
         this.tourGuides.add(t);
+        t.addRoute(this);
     }
-
-
 }
