@@ -299,4 +299,8 @@ public class ToursServiceImpl implements ToursService{
 
     }
 
+    public List<Service> getServiceNoAddedToPurchases(){
+        return this.repository.getServiceNoAddedToPurchases();
+    }
+
 }

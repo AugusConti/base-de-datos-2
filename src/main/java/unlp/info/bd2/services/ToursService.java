@@ -50,8 +50,8 @@ public interface ToursService {
     /*
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
-    /*
+    /**/
     List<Service> getServiceNoAddedToPurchases();
-    */
+    
     List<TourGuideUser> getTourGuidesWithRating1();
 }
