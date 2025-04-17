@@ -155,14 +155,14 @@ public class ToursQuerysTests {
         assertEquals("I love Buenos Aires t-shirt", mostDemandedService.getDescription());
     }
     //Sofi
-    /*
+    
     @Test
     void getServiceNoAddedToPurchasesTest() throws ToursException {
         List<Service> serviceNoAddedToPurchases = this.service.getServiceNoAddedToPurchases();
         assertEquals(2, serviceNoAddedToPurchases.size());
         this.assertListEquality(serviceNoAddedToPurchases.stream().map(Service::getName).collect(Collectors.toList()), List.of("Architectural Expedition Book", "souvenir retrato"));
     }
-     */
+     
     //Tomi
     /*
     @Test
