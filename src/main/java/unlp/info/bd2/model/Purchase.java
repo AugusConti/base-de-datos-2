@@ -3,20 +3,8 @@ package unlp.info.bd2.model;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-
-@Entity
 public class Purchase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     private String code;
@@ -25,17 +13,14 @@ public class Purchase {
 
     private Date date;
 
-    @ManyToOne(optional = false)
     private User user;
 
-    @ManyToOne(optional = false)
     private Route route;
 
-    @OneToOne(optional = true)
     private Review review;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchase")
     private List<ItemService> itemServiceList;
+
 
 
     public Long getId() {
@@ -100,19 +85,5 @@ public class Purchase {
 
     public void setItemServiceList(List<ItemService> itemServiceList) {
         this.itemServiceList = itemServiceList;
-    }
-
-    // El precio debería ser el del service
-    public void addItem(ItemService item, float price) {
-        this.itemServiceList.add(item);
-        this.totalPrice += price;
-    }
-
-    public Review addReview(int rating, String comment) {
-        this.review = new Review();
-        this.review.setPurchase(this);
-        this.review.setRating(rating);
-        this.review.setComment(comment);
-        return this.review;
     }
 }

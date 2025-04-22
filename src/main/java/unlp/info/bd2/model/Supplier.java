@@ -2,24 +2,14 @@ package unlp.info.bd2.model;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-@Entity
 public class Supplier {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String businessName;
 
     private String authorizationNumber;
 
-    @OneToMany(mappedBy = "supplier")
     private List<Service> services;
 
     public Long getId() {
@@ -52,10 +42,6 @@ public class Supplier {
 
     public void setServices(List<Service> services) {
         this.services = services;
-    }
-
-    public void addService(Service s) {
-        this.services.add(s);
     }
 
 }

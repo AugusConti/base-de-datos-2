@@ -3,20 +3,8 @@ package unlp.info.bd2.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-
-@Entity
 public class Route {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -27,19 +15,11 @@ public class Route {
 
     private int maxNumberUsers;
 
-    @ManyToMany
-    @JoinTable(
-            name = "routes_stops",
-            joinColumns = { @JoinColumn(name = "route_id") },
-            inverseJoinColumns = { @JoinColumn(name = "stop_id") }
-    )
     private List<Stop> stops;
 
-    @ManyToMany(mappedBy = "routes")
-    private List<DriverUser> drivers;
+    private List<DriverUser> driverList;
 
-    @ManyToMany(mappedBy = "routes")
-    private List<TourGuideUser> tourGuides;
+    private List<TourGuideUser> tourGuideList;
 
     public Long getId() {
         return id;
@@ -89,37 +69,20 @@ public class Route {
         this.stops = stops;
     }
 
-    public List<DriverUser> getDrivers() {
-        return drivers;
-    }
-
     public List<DriverUser> getDriverList() {
-        return drivers;
+        return driverList;
     }
 
-    public void setDrivers(List<DriverUser> drivers) {
-        this.drivers = drivers;
-    }
-
-    public List<TourGuideUser> getTourGuides() {
-        return tourGuides;
+    public void setDriverList(List<DriverUser> driverList) {
+        this.driverList = driverList;
     }
 
     public List<TourGuideUser> getTourGuideList() {
-        return tourGuides;
+        return tourGuideList;
     }
 
-    public void setTourGuides(List<TourGuideUser> tourGuides) {
-        this.tourGuides = tourGuides;
+    public void setTourGuideList(List<TourGuideUser> tourGuideList) {
+        this.tourGuideList = tourGuideList;
     }
 
-    public void addDriver(DriverUser d) {
-        this.drivers.add(d);
-        d.addRoute(this);
-    }
-
-    public void addTourGuide(TourGuideUser t) {
-        this.tourGuides.add(t);
-        t.addRoute(this);
-    }
 }

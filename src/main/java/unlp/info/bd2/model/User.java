@@ -4,23 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.OneToMany;
-
-@Entity
-@Inheritance
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, updatable = false)
     private String username;
 
     private String password;
@@ -35,8 +22,8 @@ public class User {
 
     private boolean active;
 
-    @OneToMany(mappedBy = "user")
-    private List<Purchase> purchases;
+    private List<Purchase> purchaseList;
+
 
     public Long getId() {
         return id;
@@ -94,16 +81,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Purchase> getPurchaseList(){
-        return purchases;
+    public List<Purchase> getPurchaseList() {
+        return purchaseList;
     }
 
-    public List<Purchase> getPurchases(){
-        return purchases;
-    }
-
-    public void setPurchases(List<Purchase> purchases) {
-        this.purchases = purchases;
+    public void setPurchaseList(List<Purchase> purchaseList) {
+        this.purchaseList = purchaseList;
     }
 
     public boolean isActive() {
@@ -112,13 +95,5 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public void addPurchase(Purchase p) {
-        this.purchases.add(p);
-    }
-
-    public boolean canBeDesactive() {
-        return this.purchases.isEmpty();
     }
 }

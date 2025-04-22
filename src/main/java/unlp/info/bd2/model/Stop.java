@@ -1,22 +1,14 @@
 package unlp.info.bd2.model;
 
-import jakarta.persistence.*;
 
-import java.util.List;
-
-@Entity
 public class Stop {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
 
     private String description;
 
-    @ManyToMany(mappedBy = "stops")
-    private List<Route> routes;
 
     public Long getId() {
         return id;
@@ -40,13 +32,5 @@ public class Stop {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Route> getRoutes() {
-        return routes;
-    }
-
-    public void setRoutes(List<Route> routeList) {
-        routes = routeList;
     }
 }
