@@ -3,8 +3,13 @@ package unlp.info.bd2.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Route {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -15,10 +20,18 @@ public class Route {
 
     private int maxNumberUsers;
 
+    @ManyToMany
+    @JoinTable(
+            name = "routes_stops", 
+            joinColumns = {@JoinColumn(name = "route_id") }, 
+            inverseJoinColumns = { @JoinColumn(name = "stop_id") }
+    )
     private List<Stop> stops;
 
+    @ManyToMany(mappedBy = "routes")
     private List<DriverUser> driverList;
 
+    @ManyToMany(mappedBy = "routes")
     private List<TourGuideUser> tourGuideList;
 
     public Long getId() {
@@ -85,4 +98,13 @@ public class Route {
         this.tourGuideList = tourGuideList;
     }
 
+    public void addDriver(DriverUser d) {
+        this.driverList.add(d);
+        d.addRoute(this);
+    }
+
+    public void addTourGuide(TourGuideUser t) {
+        this.tourGuideList.add(t);
+        t.addRoute(this);
+    }
 }

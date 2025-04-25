@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true, updatable = false)
     private String username;
 
     private String password;
@@ -22,6 +29,7 @@ public class User {
 
     private boolean active;
 
+    @OneToMany(mappedBy = "user")
     private List<Purchase> purchaseList;
 
 
@@ -95,5 +103,13 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void addPurchase(Purchase p) {
+        this.purchaseList.add(p);
+    }
+
+    public boolean canBeDesactive() {
+        return this.purchaseList.isEmpty();
     }
 }

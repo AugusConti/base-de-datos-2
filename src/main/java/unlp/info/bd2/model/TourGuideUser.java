@@ -5,10 +5,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.*;
+
+@Entity
 public class TourGuideUser extends User {
 
     private String education;
 
+    @ManyToMany()
+    @JoinTable(
+            name = "tour_guides_routes",
+            joinColumns = { @JoinColumn(name = "tour_guide_id") },
+            inverseJoinColumns = { @JoinColumn(name = "route_id") }
+    )
     private List<Route> routes;
 
 
@@ -28,4 +37,11 @@ public class TourGuideUser extends User {
         this.routes = routes;
     }
 
+    public void addRoute(Route r) {
+        this.routes.add(r);
+    }
+
+    public boolean canBeDesactive() {
+        return this.routes.isEmpty();
+    }
 }

@@ -1,14 +1,20 @@
 package unlp.info.bd2.model;
 
+import jakarta.persistence.*;
 
+@Entity
 public class ItemService {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     private int quantity;
 
+    @ManyToOne(optional = false)
     private Purchase purchase;
 
+    @ManyToOne(optional = false)
     private Service service;
 
     public Long getId() {
@@ -18,7 +24,6 @@ public class ItemService {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public int getQuantity() {
         return quantity;

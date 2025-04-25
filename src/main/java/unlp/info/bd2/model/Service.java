@@ -3,8 +3,13 @@ package unlp.info.bd2.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Service {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
@@ -13,8 +18,10 @@ public class Service {
 
     private String description;
 
+    @OneToMany(mappedBy = "service")
     private List<ItemService> itemServiceList;
 
+    @ManyToOne(optional = false)
     private Supplier supplier;
 
 
@@ -64,5 +71,9 @@ public class Service {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public void addItem(ItemService item) {
+        this.itemServiceList.add(item);
     }
 }
