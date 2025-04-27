@@ -51,7 +51,7 @@ class ToursApplicationTests {
 		this.dyes = cal1.getTime();
 	}
 
-
+	// Tomi
 	@Test
 	void createAndGetUserTest()  throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -85,6 +85,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.createUser("userD", "1234", "Otro usuario", "otromail@gmail.com", dob1, "000111222999"), "Constraint Violation");
 	}
 
+	// Tomi
 	@Test
 	void updateUserTest()  throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -112,6 +113,7 @@ class ToursApplicationTests {
 		assertEquals(unmodifiedUserFromDB.getId(), user1.getId());
 	}
 
+	// Augusto
 	@Test
 	void createAndGetRoutesAndStopsTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
@@ -146,6 +148,7 @@ class ToursApplicationTests {
 		assertEquals("Estadios 2", routeFromList.getName());
 	}
 
+	// Augusto
 	@Test
 	void assignWorkersToRoutesTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
@@ -171,6 +174,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.assignDriverByUsername(driverUser1.getUsername(), 1000000L) , "No pudo realizarse la asignación");
 	}
 
+	// Augusto
 	@Test
 	void createAndGetSupplierAndService() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");
@@ -205,6 +209,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.createSupplier("Supplier2", "000111"), "Constraint Violation");
 	}
 
+	// Augusto
 	@Test
 	void updateServicePriceTest() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");
@@ -217,6 +222,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(100000L, 500f), "No existe el producto");
 	}
 
+	// Sofi
 	@Test
 	void createAndGetPurchaseTest() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -255,6 +261,7 @@ class ToursApplicationTests {
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("100", route1, user1), "Constraint Violation");
 	}
 
+	// Sofi
 	@Test
 	void removePurchaseAndItems() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -276,6 +283,7 @@ class ToursApplicationTests {
 		assertFalse(purchase.isPresent());
 	}
 
+	// Sofi
 	@Test
 	void addReviewToPurchaseTest() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -295,6 +303,7 @@ class ToursApplicationTests {
 		assertEquals(purchase.getId(), review.getPurchase().getId());
 	}
 
+	// Tomi
 	@Test
 	void deleteUserTest() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
