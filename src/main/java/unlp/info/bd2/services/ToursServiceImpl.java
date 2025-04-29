@@ -380,8 +380,13 @@ public class ToursServiceImpl implements ToursService{
                 throw new ToursException("Este usuario no puede ser borrado");
             }
             else{
-                user.setActive(false);
-                this.repository.save(user);
+                if(user.canBeDeleted()){
+                    this.repository.delete(user);
+                }
+                else{
+                    user.setActive(false);
+                    this.repository.save(user);
+                }
             }
         }
     }

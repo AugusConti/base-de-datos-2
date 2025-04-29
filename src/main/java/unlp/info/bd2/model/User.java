@@ -121,4 +121,7 @@ public class User {
     public boolean canBeDesactive() {
         return true;
     }
+    public boolean canBeDeleted() {
+        return this.getPurchases().isEmpty();
+    }
 }
