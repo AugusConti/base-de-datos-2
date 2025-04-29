@@ -338,18 +338,19 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
-        Optional<Route> r = this.repository.findById(idRoute, Route.class);
-        if (r.isEmpty()) {
-            throw new ToursException("No existe una ruta con ese id");
+        //Consultar esto
+        try{
+            Optional<Route> ro = this.repository.findById(idRoute, Route.class);
+            Optional<User> u = this.repository.findUserByUsername(username);
+            DriverUser d = (DriverUser) u.get();
+            Route r = ro.get();
+            r.addDriver(d);
+            d.addRoute(r);
+            this.repository.setDriverToRoute(d,r);
         }
-        Optional<User> u = this.repository.findUserByUsername(username);
-        if (u.isEmpty() || !(u.get() instanceof DriverUser)) {
-            throw new ToursException("Ese user no existe o no es un driver");
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
         }
-        DriverUser d = (DriverUser) u.get();
-        r.get().getDrivers().add(d);
-        d.getRoutes().add(r.get());
-        this.repository.setDriverToRoute(d,r.get());
     }
 
     @Override
