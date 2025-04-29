@@ -338,34 +338,36 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
-        Optional<Route> r = this.repository.findById(idRoute, Route.class);
-        if (r.isEmpty()) {
-            throw new ToursException("No existe una ruta con ese id");
+        //Consultar esto
+        try{
+            Optional<Route> ro = this.repository.findById(idRoute, Route.class);
+            Optional<User> u = this.repository.findUserByUsername(username);
+            DriverUser d = (DriverUser) u.get();
+            Route r = ro.get();
+            r.addDriver(d);
+            d.addRoute(r);
+            this.repository.setDriverToRoute(d,r);
         }
-        Optional<User> u = this.repository.findUserByUsername(username);
-        if (u.isEmpty() || !(u.get() instanceof DriverUser)) {
-            throw new ToursException("Ese user no existe o no es un driver");
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
         }
-        DriverUser d = (DriverUser) u.get();
-        r.get().getDrivers().add(d);
-        d.getRoutes().add(r.get());
-        this.repository.setDriverToRoute(d,r.get());
     }
 
     @Override
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException{
-        Optional<Route> r = this.repository.findById(idRoute, Route.class);
-        if (r.isEmpty()) {
-            throw new ToursException("No existe una ruta con ese id");
+        //Consultar PUEDO HACER DOS UPDATES Y PONERLE TRANSACTIONAL?
+        try{
+            Optional<Route> ro = this.repository.findById(idRoute, Route.class);
+            Optional<User> u = this.repository.findUserByUsername(username);
+            TourGuideUser t = (TourGuideUser) u.get();
+            Route r = ro.get();
+            r.addTourGuide(t);
+            t.addRoute(r);
+            this.repository.setTourGuideToRoute(t,r);
         }
-        Optional<User> u = this.repository.findUserByUsername(username);
-        if (u.isEmpty() || !(u.get() instanceof TourGuideUser)) {
-            throw new ToursException("Ese user no existe o no es un TourGuide");
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
         }
-        TourGuideUser t = (TourGuideUser) u.get();
-        r.get().getTourGuides().add(t);
-        t.getRoutes().add(r.get());
-        this.repository.setTourGuideToRoute(t,r.get());
     }
 
     @Override
@@ -374,15 +376,17 @@ public class ToursServiceImpl implements ToursService{
             throw new ToursException("Ese usuario ya fue borrado");
         }
         else{
-            if(user instanceof TourGuideUser){
-                TourGuideUser tgu = (TourGuideUser) user;
-                if(!tgu.canBeDesactive()){
-                    throw new ToursException("Este tourguide no puede ser borrado porque tiene routes asociadas");
-                }
+            if(!user.canBeDesactive()){
+                throw new ToursException("Este usuario no puede ser borrado");
             }
             else{
-                user.setActive(false);
-                this.repository.save(user);
+                if(user.canBeDeleted()){
+                    this.repository.delete(user);
+                }
+                else{
+                    user.setActive(false);
+                    this.repository.save(user);
+                }
             }
         }
     }

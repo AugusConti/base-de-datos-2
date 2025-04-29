@@ -20,13 +20,11 @@ public class ToursRepositoryImpl implements ToursRepository {
     private org.hibernate.SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public void save(Object o) {
         sessionFactory.getCurrentSession().persist(o);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public <T> Optional<T> findById(long id, Class<T> resultClass) {
         Session session = sessionFactory.getCurrentSession();
         Optional<T> object = session.createQuery(
@@ -36,30 +34,26 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional
     public void update(Object o) {
         sessionFactory.getCurrentSession().merge(o);
     }
 
     @Override
-    @Transactional
     public void delete(Object o) {
         sessionFactory.getCurrentSession().remove(o);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<User> findUserByUsername(String username) {
         Session session = sessionFactory.getCurrentSession();
         Optional<User> user = session
                 .createQuery(String.format("select distinct u from User u left join u.purchases p " +
-                        "where u.username = '%s' and (u.active = true or p is not null)", username), User.class)
+                        "where u.username = '%s'", username), User.class)
                 .uniqueResultOptional();
         return user;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue){
         Session session = sessionFactory.getCurrentSession();
         List<T> result = session.createQuery(
@@ -70,7 +64,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public <T> Optional<T> findOneByAtribute(Class<T> resultClass, String atributeName, String atributeValue){
         Session session = sessionFactory.getCurrentSession();
         Optional<T> result = session.createQuery(
@@ -81,7 +74,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
     
     @Override
-    @Transactional(readOnly = true)
     public List<Route> getRoutesBelowPrice(float price){
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
@@ -93,6 +85,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void addServiceToSupplier(Service s, Supplier supplier){
+        //Habría que llevar comportamiento al servicio
         Session session = sessionFactory.getCurrentSession();
         session.persist(s);
         supplier.getServices().add(s);
@@ -100,12 +93,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException{
         Optional<Supplier> s = findById(id, Supplier.class);
-        if(s.isEmpty()){
-            throw new ToursException("No existe un Supplier con id: "+id);
-        }
         Session session = sessionFactory.getCurrentSession();
         Optional<Service> result = session.createQuery(
                     "FROM Service WHERE name LIKE :name AND supplier.id = :supplierId", Service.class)
@@ -118,6 +107,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void createSupplier(Supplier s) throws ToursException{
+        //Debería ir comportamiento en el service
         Session session = sessionFactory.getCurrentSession();
             Optional<Supplier> result = session.createQuery(
                             "FROM Supplier WHERE authorizationNumber LIKE :authorizationNumber", Supplier.class)
@@ -130,7 +120,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         Session session = sessionFactory.getCurrentSession();
         List<Supplier> result = session.createQuery(
@@ -143,7 +132,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         Session session = sessionFactory.getCurrentSession();
         List<Purchase> result = session.createQuery(
@@ -156,6 +144,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void addItemToPurchase(ItemService item, float totalPrice, Purchase p){
+        //Deberíamos configurar los CASCADE para que SOlo haga uso de un metodo del repo y actualizar
+        //solo UNO de los dos objetos
         //revisar, si funciona ya lo del service borrar este
         Session session = sessionFactory.getCurrentSession();
         session.persist(item);
@@ -171,6 +161,8 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void createPurchase(Purchase p)throws ToursException{//REVISAR
+        //Deberíamos configurar los CASCADE para que SOlo haga uso de un metodo del repo y actualizar
+        //solo UNO de los dos objetos
         //ver cupos y ver except
         //purchases relacionadas a esa si 
         Session session = sessionFactory.getCurrentSession();
@@ -201,7 +193,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Long getMaxStopOfRoutes(){
         Session session = sessionFactory.getCurrentSession();
         Long result = session.createQuery(
@@ -213,7 +204,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Route> getRoutsNotSell(){
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
@@ -223,7 +213,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Route> getRoutesWithStop(Stop stop){
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
@@ -234,7 +223,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<User> getUserSpendingMoreThan(float mount) {
         Session session = sessionFactory.getCurrentSession();
         List<User> result = session.createQuery(
@@ -248,7 +236,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Route> getTop3RoutesWithMaxRating() {
         Session session = sessionFactory.getCurrentSession();
         List<Route> result = session.createQuery(
@@ -262,7 +249,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Service getMostDemandedService() {
         Session session = sessionFactory.getCurrentSession();
         Service result = session.createQuery(
@@ -276,7 +262,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<TourGuideUser> getTourGuidesWithRating1() {
         Session session = sessionFactory.getCurrentSession();
         List<TourGuideUser> result = session.createQuery(
@@ -290,6 +275,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void setDriverToRoute(DriverUser d, Route r){
+        //Hay que hacer un solo update
         update(r);
         update(d);
     }
@@ -297,6 +283,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void setTourGuideToRoute(TourGuideUser t, Route r){
+        //SAMEEE
         update(t);
         update(r);
     }
@@ -304,6 +291,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     @Override
     @Transactional
     public void createUser(User u) throws ToursException{
+        //Esta lógica debería ir en el servicio y hacerlo transaccional
         Session session = sessionFactory.getCurrentSession();
         Optional<User> us = findUserByUsername(u.getUsername());
         if (us.isPresent()){
@@ -315,7 +303,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional
     public List<User> getTop5UsersMorePurchases(){
         Session session = sessionFactory.getCurrentSession();
         List<User> result = session.createQuery(
@@ -329,7 +316,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional
     public long getCountOfPurchasesBetweenDates(Date start, Date end){
         Session session = sessionFactory.getCurrentSession();
         Long result = session.createQuery(
@@ -345,7 +331,6 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional
     public List<Service> getServiceNoAddedToPurchases(){
         Session session = sessionFactory.getCurrentSession();
         List<Service> result = session.createQuery(
