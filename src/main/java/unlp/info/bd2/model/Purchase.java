@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -19,22 +22,27 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    @Column(unique = true, updatable = false, nullable = false, length = 255)
     private String code;
 
+    @Column(nullable = false, precision = 2)
     private float totalPrice;
 
+    @Column(nullable = false)
     private Date date;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "route_id")
     private Route route;
 
-    @OneToOne(optional = true)
+    @OneToOne(optional = true, mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     private Review review;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchase")
+    @OneToMany(mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
     public Purchase() {
@@ -121,10 +129,8 @@ public class Purchase {
     }
 
     public Review addReview(int rating, String comment) {
-        this.review = new Review();
-        this.review.setPurchase(this);
-        this.review.setRating(rating);
-        this.review.setComment(comment);
-        return this.review;
+        Review r = new Review(rating, comment, this);
+        this.review = r;
+        return r;
     }
 }

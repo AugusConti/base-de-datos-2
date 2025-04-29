@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,15 +21,19 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, precision = 2)
     private float price;
 
+    @Column(nullable = false, precision = 4)
     private float totalKm;
 
+    @Column(nullable = false)
     private int maxNumberUsers;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "routes_stops",
             joinColumns = { @JoinColumn(name = "route_id") },
@@ -35,10 +41,10 @@ public class Route {
     )
     private List<Stop> stops;
 
-    @ManyToMany(mappedBy = "routes")
+    @ManyToMany(mappedBy = "routes", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<DriverUser> drivers;
 
-    @ManyToMany(mappedBy = "routes")
+    @ManyToMany(mappedBy = "routes", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<TourGuideUser> tourGuides;
 
     public Route() {

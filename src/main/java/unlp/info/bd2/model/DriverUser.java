@@ -7,11 +7,13 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
+@DiscriminatorValue("Driver")
 public class DriverUser extends User {
 
+    @Column(nullable = false, length = 255)
     private String expedient;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "drivers_routes",
             joinColumns = { @JoinColumn(name = "driver_id") },

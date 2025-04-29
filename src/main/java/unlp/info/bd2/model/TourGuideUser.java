@@ -8,11 +8,13 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
+@DiscriminatorValue("TourGuide")
 public class TourGuideUser extends User {
 
+    @Column(nullable = false, length = 255)
     private String education;
 
-    @ManyToMany()
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "tour_guides_routes",
             joinColumns = { @JoinColumn(name = "tour_guide_id") },

@@ -11,11 +11,13 @@ public class Stop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, length = 255)
     private String description;
 
-    @ManyToMany(mappedBy = "stops")
+    @ManyToMany(mappedBy = "stops", cascade = {}, fetch = FetchType.EAGER)
     private List<Route> routes;
 
     public Stop() {

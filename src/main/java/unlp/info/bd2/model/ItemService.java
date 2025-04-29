@@ -1,9 +1,12 @@
 package unlp.info.bd2.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -13,12 +16,15 @@ public class ItemService {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    @Column(nullable = false)
     private int quantity;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "service_id")
     private Service service;
 
     public ItemService() {
