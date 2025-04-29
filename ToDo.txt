@@ -14,7 +14,10 @@
 - Falta @Transactional en los métodos, lo pusieron en el repositorio.
 - Falta @override en los métodos.
 - Método createPurchase: falta verificar la disponibilidad de la ruta en la fecha.
+- Hacer borrado físico del usuario si este no tiene relación con nada.
 
 *REPOSITORIO*
 - Método addItemToPurchase: Hay lógica de aplicación, debería ir en el servicio.
 - Falta @override en los métodos.
+
+//CONSULTAR EL TEMA DE EL BORRADO FÍSICO DE LOS USUARIOS.
