@@ -20,6 +20,15 @@ public class TourGuideUser extends User {
     )
     private List<Route> routes;
 
+    public TourGuideUser() {
+    }
+
+    public TourGuideUser(String username, String password, String name, String email, Date birthdate,
+            String phoneNumber, String education) {
+        super(username, password, name, email, birthdate, phoneNumber);
+        this.education = education;
+        this.routes = List.of();
+    }
 
     public String getEducation() {
         return education;

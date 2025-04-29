@@ -22,6 +22,15 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier")
     private List<Service> services;
 
+    public Supplier() {
+    }
+
+    public Supplier(String businessName, String authorizationNumber) {
+        this.businessName = businessName;
+        this.authorizationNumber = authorizationNumber;
+        this.services = List.of();
+    }
+
     public Long getId() {
         return id;
     }

@@ -18,6 +18,15 @@ public class Stop {
     @ManyToMany(mappedBy = "stops")
     private List<Route> routes;
 
+    public Stop() {
+    }
+
+    public Stop(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.routes = List.of();
+    }
+
     public Long getId() {
         return id;
     }

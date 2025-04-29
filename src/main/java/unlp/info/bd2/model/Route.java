@@ -41,6 +41,19 @@ public class Route {
     @ManyToMany(mappedBy = "routes")
     private List<TourGuideUser> tourGuides;
 
+    public Route() {
+    }
+
+    public Route(String name, float price, float totalKm, int maxNumberUsers, List<Stop> stops) {
+        this.name = name;
+        this.price = price;
+        this.totalKm = totalKm;
+        this.maxNumberUsers = maxNumberUsers;
+        this.stops = stops;
+        this.drivers = List.of();
+        this.tourGuides = List.of();
+    }
+
     public Long getId() {
         return id;
     }

@@ -38,6 +38,20 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Purchase> purchases;
 
+    public User() {
+    }
+
+    public User(String username, String password, String name, String email, Date birthdate, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.phoneNumber = phoneNumber;
+        this.active = true;
+        this.purchases = List.of();
+    }
+
     public Long getId() {
         return id;
     }

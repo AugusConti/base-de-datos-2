@@ -20,6 +20,14 @@ public class Review {
     @OneToOne(optional = false)
     private Purchase purchase;
 
+    public Review() {
+    }
+
+    public Review(int rating, String comment, Purchase purchase) {
+        this.rating = rating;
+        this.comment = comment;
+        this.purchase = purchase;
+    }
 
     public Long getId() {
         return id;

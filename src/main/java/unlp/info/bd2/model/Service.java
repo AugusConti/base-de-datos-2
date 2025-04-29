@@ -29,6 +29,16 @@ public class Service {
     @ManyToOne(optional = false)
     private Supplier supplier;
 
+    public Service() {
+    }
+
+    public Service(String name, float price, String description, Supplier supplier) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.itemServices = List.of();
+        this.supplier = supplier;
+    }
 
     public Long getId() {
         return id;
