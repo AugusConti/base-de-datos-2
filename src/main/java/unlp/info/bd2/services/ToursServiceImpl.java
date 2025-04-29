@@ -26,6 +26,7 @@ public class ToursServiceImpl implements ToursService{
         this.repository = tr;
     }
 
+    @Override
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
         User u = new User();
         u.setUsername(username);
@@ -40,6 +41,7 @@ public class ToursServiceImpl implements ToursService{
         return u;
     }
 
+    @Override
     public DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate,
             String phoneNumber, String expedient) throws ToursException {
         try {
@@ -60,6 +62,7 @@ public class ToursServiceImpl implements ToursService{
         }
     }
 
+    @Override
     public TourGuideUser createTourGuideUser(String username, String password, String fullName, String email,
             Date birthdate, String phoneNumber, String education) throws ToursException {
         try {
@@ -80,6 +83,7 @@ public class ToursServiceImpl implements ToursService{
         }
     }
 
+    @Override
     public Optional<User> getUserById(Long id) throws ToursException {
         try {
             return this.repository.findById(id, User.class);
@@ -88,6 +92,7 @@ public class ToursServiceImpl implements ToursService{
         }
     }
 
+    @Override
     public Optional<User> getUserByUsername(String username) throws ToursException {
         try {
             return this.repository.findUserByUsername(username);
@@ -96,6 +101,7 @@ public class ToursServiceImpl implements ToursService{
         }
     }
 
+    @Override
     public User updateUser(User user) throws ToursException {
         try {
             this.repository.update(user);
@@ -104,6 +110,8 @@ public class ToursServiceImpl implements ToursService{
             throw new ToursException(e.getMessage());
         }
     }
+
+    @Override
     public Stop createStop(String name, String description) throws ToursException{
         Stop s = new Stop();
         s.setName(name);
@@ -112,10 +120,14 @@ public class ToursServiceImpl implements ToursService{
         this.repository.save(s);
         return s;
     }
+
+    @Override
     public List<Stop> getStopByNameStart(String name) {
         List<Stop> result = this.repository.findManyByAtribute(Stop.class,"name",name);
         return result;
     }
+
+    @Override
     public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException{
         Route r = new Route();
         r.setName(name);
@@ -128,12 +140,18 @@ public class ToursServiceImpl implements ToursService{
         this.repository.save(r);
         return r;
     }
+
+    @Override
     public Optional<Route> getRouteById(Long id){
         return this.repository.findById(id, Route.class);
     }
+    
+    @Override
     public List<Route> getRoutesBelowPrice(float price){
         return this.repository.getRoutesBelowPrice(price);
     }
+
+    @Override
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException{
         Supplier s = new Supplier();
         s.setBusinessName(businessName);
@@ -142,6 +160,8 @@ public class ToursServiceImpl implements ToursService{
         this.repository.createSupplier(s);
         return s;
     }
+
+    @Override
     public Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException{
         Service s = new Service();
         s.setName(name);
@@ -152,15 +172,23 @@ public class ToursServiceImpl implements ToursService{
         this.repository.addServiceToSupplier(s, supplier);
         return s;
     }
+
+    @Override
     public Optional<Supplier> getSupplierById(Long id){
         return this.repository.findById(id, Supplier.class);
     }
+
+    @Override
     public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber){
         return this.repository.findOneByAtribute(Supplier.class, "authorizationNumber", authorizationNumber);
     }
+
+    @Override
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException{
         return this.repository.getServiceByNameAndSupplierId(name, id);
     }
+
+    @Override
     public Service updateServicePriceById(Long id, float newPrice) throws ToursException{
         Optional<Service> s = this.repository.findById(id,Service.class);
         if(s.isEmpty()){
@@ -173,26 +201,37 @@ public class ToursServiceImpl implements ToursService{
         return s.get();
     }
 
+    @Override
     public List<Supplier> getTopNSuppliersInPurchases(int n){
         return this.repository.getTopNSuppliersInPurchases(n);
     }
+
+    @Override
     public List<User> getUserSpendingMoreThan(float mount) {
         return this.repository.getUserSpendingMoreThan(mount);
     }
+
+    @Override
     public List<Route> getTop3RoutesWithMaxRating() {
         return this.repository.getTop3RoutesWithMaxRating();
     }
+
+    @Override
     public Service getMostDemandedService() {
         return this.repository.getMostDemandedService();
     }
+
+    @Override
     public List<TourGuideUser> getTourGuidesWithRating1() {
         return this.repository.getTourGuidesWithRating1();
     }
+
+    @Override
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         return this.repository.getTop10MoreExpensivePurchasesInServices();
     } 
  //
-
+    @Override
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
         Optional<User> u = this.repository.findById(user.getId(),User.class); 
         if(u.isEmpty()){//necesario?
@@ -217,11 +256,13 @@ public class ToursServiceImpl implements ToursService{
          return p; 
     }
 
+    @Override
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
         Purchase p = createPurchase(code,  new Date() ,route, user);
         return p; 
     } 
-    
+
+    @Override
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
         Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
         if(p.isEmpty()){//necesario?
@@ -238,12 +279,13 @@ public class ToursServiceImpl implements ToursService{
         }
     }
      
-        
+    @Override
     public Optional<Purchase> getPurchaseByCode(String code){//revisar si no existe ninguno
         return this.repository.findOneByAtribute(Purchase.class, "code", code);
 
     }
 
+    @Override
     @Transactional //aca o en service 
     public void deletePurchase(Purchase purchase) throws ToursException{//Revisar
         //borra la compra y ver que se borre de la lista de compras del usuario 
@@ -260,6 +302,7 @@ public class ToursServiceImpl implements ToursService{
         }
     }
 
+    @Override
     @Transactional //aca o en repo?
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException{
         Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
@@ -278,16 +321,22 @@ public class ToursServiceImpl implements ToursService{
 
     }
 
+    @Override
     public Long getMaxStopOfRoutes(){
         return this.repository.getMaxStopOfRoutes();
     }
+
+    @Override
     public List<Route> getRoutsNotSell(){
         return this.repository.getRoutsNotSell();
     }
+
+    @Override
     public List<Route> getRoutesWithStop(Stop stop){
         return this.repository.getRoutesWithStop(stop);
     }
 
+    @Override
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
         Optional<Route> r = this.repository.findById(idRoute, Route.class);
         if (r.isEmpty()) {
@@ -302,6 +351,8 @@ public class ToursServiceImpl implements ToursService{
         d.getRoutes().add(r.get());
         this.repository.setDriverToRoute(d,r.get());
     }
+
+    @Override
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException{
         Optional<Route> r = this.repository.findById(idRoute, Route.class);
         if (r.isEmpty()) {
@@ -316,6 +367,8 @@ public class ToursServiceImpl implements ToursService{
         t.getRoutes().add(r.get());
         this.repository.setTourGuideToRoute(t,r.get());
     }
+
+    @Override
     public void deleteUser(User user) throws ToursException{
         if(!user.isActive()){
             throw new ToursException("Ese usuario ya fue borrado");
@@ -334,20 +387,23 @@ public class ToursServiceImpl implements ToursService{
         }
     }
 
-
+    @Override
     public List<Purchase> getAllPurchasesOfUsername(String username){
         return this.repository.findUserByUsername(username).get().getPurchaseList();
     }
-    
+
+    @Override
     public  List<User> getTop5UsersMorePurchases(){
         return this.repository.getTop5UsersMorePurchases();
     }
 
+    @Override
     public long getCountOfPurchasesBetweenDates(Date start, Date end){
         return this.repository.getCountOfPurchasesBetweenDates(start, end);
 
     }
-
+    
+    @Override
     public List<Service> getServiceNoAddedToPurchases(){
         return this.repository.getServiceNoAddedToPurchases();
     }
