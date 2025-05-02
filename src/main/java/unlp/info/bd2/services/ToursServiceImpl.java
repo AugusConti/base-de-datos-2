@@ -234,26 +234,22 @@ public class ToursServiceImpl implements ToursService{
     @Override
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
         Optional<User> u = this.repository.findById(user.getId(),User.class); 
-        if(u.isEmpty()){//necesario?
+        if(u.isEmpty()){ 
             throw new ToursException("No existe un usuario con ID: " + user.getId());
         }
         Optional<Route> r = this.repository.findById(route.getId(),Route.class);
-        if(r.isEmpty()  ){//necesario?
+        if(r.isEmpty()){
             throw new ToursException("No existe una ruta con ID: " + route.getId());
         } 
         if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
             throw new ToursException("Ya existe una compra con code: " + code);
         }
-        
-        Purchase p = new Purchase();//revisar
-         p.setCode(code);
-         p.setDate(date);
-         p.setRoute(route);
-         p.setUser(user); 
-         p.setItemServiceList((new ArrayList<ItemService>())); 
-         p.setTotalPrice(route.getPrice());  
-         this.repository.createPurchase(p);
-         return p; 
+        // falta verificar la disponibilidad de la ruta en la fecha.    
+        Purchase p = new Purchase(code, date, user, route);
+        p.setItemServiceList((new ArrayList<ItemService>())); 
+        p.setTotalPrice(route.getPrice());  
+        this.repository.createPurchase(p);
+        return p; 
     }
 
     @Override
@@ -263,20 +259,15 @@ public class ToursServiceImpl implements ToursService{
     } 
 
     @Override
+    @Transactional
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
-        Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
-        if(p.isEmpty()){//necesario?
-            throw new ToursException("No existe una compra con ID: " + purchase.getId());
-        }
-        else{
-            ItemService i= new ItemService();//revisar la exception 
-            i.setPurchase(purchase);
-            i.setQuantity(quantity);
-            i.setService(service); 
-            float totalPrice= p.get().getTotalPrice() + i.getQuantity()* i.getService().getPrice();
-            this.repository.addItemToPurchase(i, totalPrice, purchase);
-            return i;
-        }
+        ItemService i= new ItemService(quantity, purchase, service); 
+        Purchase p= purchase;
+        float price = quantity * service.getPrice();
+        p.addItem(i, price);  
+        this.repository.update(p);
+       // this.repository.addItemToPurchase(i, purchase);
+        return i;
     }
      
     @Override
@@ -286,39 +277,20 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
-    @Transactional //aca o en service 
-    public void deletePurchase(Purchase purchase) throws ToursException{//Revisar
-        //borra la compra y ver que se borre de la lista de compras del usuario 
-        Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
-        if(p.isEmpty()){//es necesaio?
-            throw new ToursException("No existe una compra con ID: " + purchase.getId());
-        }else{
-            User u= purchase.getUser();
-            u.getPurchaseList().remove(purchase);//modificar una collection ajena?
-            this.repository.update(u);
-            this.repository.delete(purchase);//delete purchase y en la lista
-            // o se le agrega el orphan en user las purchases
-            //yse borra de la lista 
-        }
+    @Transactional 
+    public void deletePurchase(Purchase purchase) throws ToursException{
+        //borra la compra y ver que se borre de la lista de compras del usuario
+        // ya con la cascada se sabe que se borra del usuario ?
+        this.repository.delete(purchase);
     }
 
     @Override
-    @Transactional //aca o en repo?
+    @Transactional 
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException{
-        Optional<Purchase> p = this.repository.findById(purchase.getId(),Purchase.class);
-        if(p.isEmpty()){
-            throw new ToursException("No existe una compra con ID: " + purchase.getId());
-        }
-        else{
-        Review r= new Review();//revisar que el purchase exista?
-        r.setPurchase(purchase);
-        r.setComment(comment);
-        r.setRating(rating);
+        Review r=  purchase.addReview(rating,comment);
         this.repository.save(r);
-        this.repository.addReviewToPurchase(r);
+        this.repository.update(purchase);
         return r;
-        }
-
     }
 
     @Override

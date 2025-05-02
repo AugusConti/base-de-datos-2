@@ -140,57 +140,38 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
-//
+/* 
     @Override
     @Transactional
-    public void addItemToPurchase(ItemService item, float totalPrice, Purchase p){
-        //Deberíamos configurar los CASCADE para que SOlo haga uso de un metodo del repo y actualizar
-        //solo UNO de los dos objetos
-        //revisar, si funciona ya lo del service borrar este
+    public void addItemToPurchase(ItemService item, Purchase p){
         Session session = sessionFactory.getCurrentSession();
-        session.persist(item);
-        p.getItemServiceList().add(item);
-        //actualiza el precio del purchase con el item nuevo
-        p.setTotalPrice(totalPrice);
+        session.persist(item);//necesario? o lo hace la cascada
         update(p);
         Service s = item.getService();
         s.addItem(item);
         update(s);
-    }  
+    }  */
 
     @Override
     @Transactional
-    public void createPurchase(Purchase p)throws ToursException{//REVISAR
-        //Deberíamos configurar los CASCADE para que SOlo haga uso de un metodo del repo y actualizar
-        //solo UNO de los dos objetos
-        //ver cupos y ver except
-        //purchases relacionadas a esa si 
+    public void createPurchase(Purchase p)throws ToursException{//REVISAR   
         Session session = sessionFactory.getCurrentSession();
-        String hql= "FROM Purchase p WHERE p.route = :ruta";
+        String hql= "FROM Purchase p WHERE p.route = :ruta and p.date = :date";
         List<Purchase> result = session.createQuery(hql, Purchase.class)
                 .setParameter("ruta", p.getRoute())
+                .setParameter("date", p.getDate())
                 .getResultList();
         if (result.size() >= p.getRoute().getMaxNumberUsers()) {
             throw new ToursException("No hay mas cupos para la ruta con ID "+ p.getRoute().getId());
         }
         Long id= p.getUser().getId();
         User u= session.get(User.class, id); 
-        save(p);
+        // lo hace la cascada? save(p);
         u.addPurchase(p);
         update(u);
 
     }
-    
-    @Override
-    @Transactional
-    public  void addReviewToPurchase(Review review){ //Revisar
-         //ver si solo add al purchase o si hacer todo junto aca, porque hace save en service de review, uno u otro
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(review);
-        Purchase p =review.getPurchase();
-        p.setReview(review);
-        update(p);
-    }
+
 
     @Override
     public Long getMaxStopOfRoutes(){
