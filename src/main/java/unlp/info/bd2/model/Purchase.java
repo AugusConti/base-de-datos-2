@@ -31,7 +31,7 @@ public class Purchase {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
