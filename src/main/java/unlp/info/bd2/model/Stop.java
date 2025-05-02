@@ -17,7 +17,7 @@ public class Stop {
     @Column(nullable = false, length = 255)
     private String description;
 
-    @ManyToMany(mappedBy = "stops", cascade = {}, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "stops", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<Route> routes;
 
     public Stop() {

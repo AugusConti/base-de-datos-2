@@ -32,7 +32,7 @@ public class Service {
     @OneToMany(mappedBy = "service", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<ItemService> itemServices;
 
-    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     private Supplier supplier;
 
     public Service() {
