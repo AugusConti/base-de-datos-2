@@ -86,6 +86,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public User updateUser(User user) throws ToursException {
         try {
             this.repository.update(user);
@@ -96,6 +97,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public Stop createStop(String name, String description) throws ToursException{
         Stop s = new Stop(name, description);
         this.repository.save(s);
@@ -109,6 +111,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException{
         if (price < 0 || totalKm < 0 || maxNumberOfUsers < 0){
             throw new ToursException("El valor del precio, los kilómetros o la cantidad máxima de usuarios no puede ser negativos");
@@ -144,6 +147,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException{
         Service s = new Service(name, price, description, supplier);
         supplier.addService(s);
@@ -235,6 +239,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
         Purchase p = createPurchase(code, new Date(), route, user);
         return p; 
@@ -315,6 +320,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public void deleteUser(User user) throws ToursException{
         if(!user.isActive()){
             throw new ToursException("Ese usuario ya fue borrado");
