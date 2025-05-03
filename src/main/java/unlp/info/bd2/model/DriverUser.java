@@ -1,6 +1,7 @@
 package unlp.info.bd2.model;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import jakarta.persistence.*;
 @DiscriminatorValue("Driver")
 public class DriverUser extends User {
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private String expedient;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
@@ -28,7 +29,7 @@ public class DriverUser extends User {
             String expedient) {
         super(username, password, name, email, birthdate, phoneNumber);
         this.expedient = expedient;
-        this.routes = List.of();
+        this.routes = new ArrayList<>();
     }
 
     public String getExpedient() {

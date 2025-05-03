@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @DiscriminatorValue("TourGuide")
 public class TourGuideUser extends User {
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private String education;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
@@ -29,7 +29,7 @@ public class TourGuideUser extends User {
             String phoneNumber, String education) {
         super(username, password, name, email, birthdate, phoneNumber);
         this.education = education;
-        this.routes = List.of();
+        this.routes = new ArrayList<>();
     }
 
     public String getEducation() {

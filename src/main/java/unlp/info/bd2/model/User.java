@@ -63,7 +63,7 @@ public class User {
         this.birthdate = birthdate;
         this.phoneNumber = phoneNumber;
         this.active = true;
-        this.purchases = List.of();
+        this.purchases = new ArrayList<>();
     }
 
     public Long getId() {

@@ -1,5 +1,6 @@
 package unlp.info.bd2.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class Purchase {
         this.user = user;
         this.route = route;
         this.review = null;
-        this.itemServiceList = List.of();
+        this.itemServiceList = new ArrayList<>();
     }
 
     public Long getId() {

@@ -19,7 +19,6 @@ public interface ToursRepository {
     List<Route> getRoutesBelowPrice(float price);
     void addServiceToSupplier(Service s, Supplier supplier);
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
-    void createSupplier(Supplier s) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<User> getUserSpendingMoreThan(float mount);
     List<Route> getTop3RoutesWithMaxRating();
@@ -27,15 +26,15 @@ public interface ToursRepository {
     List<TourGuideUser> getTourGuidesWithRating1();
     List<Purchase> getTop10MoreExpensivePurchasesInServices(); 
     //void addItemToPurchase(ItemService i,Purchase p);
-    void createPurchase(Purchase p)throws ToursException;
+    boolean canCreatePurchase(Purchase p)throws ToursException;
     //void addReviewToPurchase(Review r);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
     List<Route> getRoutesWithStop(Stop stop);
     void setDriverToRoute(DriverUser d, Route r);
     void setTourGuideToRoute(TourGuideUser t, Route r);
-    void createUser(User u) throws ToursException;
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Service> getServiceNoAddedToPurchases();
+    public boolean existeSupplier(String authNumber);
 }

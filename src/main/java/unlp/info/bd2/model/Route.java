@@ -56,8 +56,8 @@ public class Route {
         this.totalKm = totalKm;
         this.maxNumberUsers = maxNumberUsers;
         this.stops = stops;
-        this.drivers = List.of();
-        this.tourGuides = List.of();
+        this.drivers = new ArrayList<>();
+        this.tourGuides = new ArrayList<>();
     }
 
     public Long getId() {

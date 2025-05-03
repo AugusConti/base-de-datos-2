@@ -2,6 +2,7 @@ package unlp.info.bd2.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,7 @@ public class Stop {
     public Stop(String name, String description) {
         this.name = name;
         this.description = description;
-        this.routes = List.of();
+        this.routes = new ArrayList<>();
     }
 
     public Long getId() {

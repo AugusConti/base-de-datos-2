@@ -42,7 +42,7 @@ public class Service {
         this.name = name;
         this.price = price;
         this.description = description;
-        this.itemServices = List.of();
+        this.itemServices = new ArrayList<>();
         this.supplier = supplier;
     }
 

@@ -105,18 +105,13 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    @Transactional
-    public void createSupplier(Supplier s) throws ToursException{
-        //Debería ir comportamiento en el service
+    public boolean existeSupplier(String authNumber){
         Session session = sessionFactory.getCurrentSession();
-            Optional<Supplier> result = session.createQuery(
-                            "FROM Supplier WHERE authorizationNumber LIKE :authorizationNumber", Supplier.class)
-                    .setParameter("authorizationNumber", s.getAuthorizationNumber())
-                    .uniqueResultOptional();
-            if (result.isPresent()) {
-                throw new ToursException("Ya existe un Supplier con authorizationNumber: " + s.getAuthorizationNumber());
-            }
-            save(s);
+        Optional<Supplier> result = session.createQuery(
+                        "FROM Supplier WHERE authorizationNumber LIKE :authorizationNumber", Supplier.class)
+                .setParameter("authorizationNumber", authNumber)
+                .uniqueResultOptional();
+        return result.isPresent();
     }
 
     @Override
@@ -153,8 +148,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     }  */
 
     @Override
-    @Transactional
-    public void createPurchase(Purchase p)throws ToursException{//REVISAR   
+    public boolean canCreatePurchase(Purchase p)throws ToursException{//REVISAR
         Session session = sessionFactory.getCurrentSession();
         String hql= "FROM Purchase p WHERE p.route = :ruta and p.date = :date";
         List<Purchase> result = session.createQuery(hql, Purchase.class)
@@ -162,14 +156,11 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .setParameter("date", p.getDate())
                 .getResultList();
         if (result.size() >= p.getRoute().getMaxNumberUsers()) {
-            throw new ToursException("No hay mas cupos para la ruta con ID "+ p.getRoute().getId());
+            return false;
         }
-        Long id= p.getUser().getId();
-        User u= session.get(User.class, id); 
-        // lo hace la cascada? save(p);
-        u.addPurchase(p);
-        update(u);
-
+        else{
+            return true;
+        }
     }
 
 
@@ -267,20 +258,6 @@ public class ToursRepositoryImpl implements ToursRepository {
         //SAMEEE
         update(t);
         update(r);
-    }
-    
-    @Override
-    @Transactional
-    public void createUser(User u) throws ToursException{
-        //Esta lógica debería ir en el servicio y hacerlo transaccional
-        Session session = sessionFactory.getCurrentSession();
-        Optional<User> us = findUserByUsername(u.getUsername());
-        if (us.isPresent()){
-            throw new ToursException("Ya existe un usuario con ese username");
-        }
-        else{
-            save(u);
-        }
     }
 
     @Override

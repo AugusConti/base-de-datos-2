@@ -28,17 +28,14 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
-        User u = new User();
-        u.setUsername(username);
-        u.setPassword(password);
-        u.setName(fullName);
-        u.setEmail(email);
-        u.setBirthdate(birthdate);
-        u.setPhoneNumber(phoneNumber);
-        u.setPurchases(new ArrayList<Purchase>());
-        u.setActive(true);
-        this.repository.createUser(u);
-        return u;
+        if (this.repository.findUserByUsername(username).isPresent()){
+            throw new ToursException("Ya existe un usuario con ese nombre, por favor ingrese otro");
+        }
+        else{
+            User u = new User(username, password, fullName, email, birthdate, phoneNumber);
+            this.repository.save(u);
+            return u;
+        }
     }
 
     @Override
@@ -113,10 +110,7 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public Stop createStop(String name, String description) throws ToursException{
-        Stop s = new Stop();
-        s.setName(name);
-        s.setDescription(description);
-        s.setRoutes(new ArrayList<Route>());
+        Stop s = new Stop(name, description);
         this.repository.save(s);
         return s;
     }
@@ -152,13 +146,16 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException{
-        Supplier s = new Supplier();
-        s.setBusinessName(businessName);
-        s.setAuthorizationNumber(authorizationNumber);
-        s.setServices(new ArrayList<Service>());
-        this.repository.createSupplier(s);
-        return s;
+        if(this.repository.existeSupplier(authorizationNumber)){
+            throw new ToursException("Ya existe un supplier con authorization number: " + authorizationNumber);
+        }
+        else{
+            Supplier s = new Supplier(businessName,authorizationNumber);
+            this.repository.save(s);
+            return s;
+        }
     }
 
     @Override
@@ -232,8 +229,9 @@ public class ToursServiceImpl implements ToursService{
     } 
  //
     @Override
+    @Transactional
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
-        Optional<User> u = this.repository.findById(user.getId(),User.class); 
+        Optional<User> u = this.repository.findById(user.getId(),User.class);
         if(u.isEmpty()){ 
             throw new ToursException("No existe un usuario con ID: " + user.getId());
         }
@@ -244,12 +242,14 @@ public class ToursServiceImpl implements ToursService{
         if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
             throw new ToursException("Ya existe una compra con code: " + code);
         }
-        // falta verificar la disponibilidad de la ruta en la fecha.    
+        // falta verificar la disponibilidad de la ruta en la fecha.
         Purchase p = new Purchase(code, date, user, route);
-        p.setItemServiceList((new ArrayList<ItemService>())); 
-        p.setTotalPrice(route.getPrice());  
-        this.repository.createPurchase(p);
-        return p; 
+        if(!this.repository.canCreatePurchase(p)){
+            throw new ToursException("No hay mas cupos para la ruta con ID "+ p.getRoute().getId());
+        }
+        user.addPurchase(p);
+        this.repository.save(p);
+        return p;
     }
 
     @Override

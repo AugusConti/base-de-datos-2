@@ -1,5 +1,6 @@
 package unlp.info.bd2.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -33,7 +34,7 @@ public class Supplier {
     public Supplier(String businessName, String authorizationNumber) {
         this.businessName = businessName;
         this.authorizationNumber = authorizationNumber;
-        this.services = List.of();
+        this.services = new ArrayList<>();
     }
 
     public Long getId() {
