@@ -14,10 +14,11 @@ public interface ToursRepository {
     void delete(Object o);
 
     Optional<User> findUserByUsername(String username);
+    Optional<TourGuideUser> findTourGuideByUsername(String username);
+    Optional<DriverUser> findDriverByUsername(String username);
     <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue);
     <T> Optional<T> findOneByAtribute(Class<T> resultClass, String atributeName, String atributeValue);
     List<Route> getRoutesBelowPrice(float price);
-    void addServiceToSupplier(Service s, Supplier supplier);
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<User> getUserSpendingMoreThan(float mount);
@@ -31,8 +32,6 @@ public interface ToursRepository {
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
     List<Route> getRoutesWithStop(Stop stop);
-    void setDriverToRoute(DriverUser d, Route r);
-    void setTourGuideToRoute(TourGuideUser t, Route r);
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Service> getServiceNoAddedToPurchases();

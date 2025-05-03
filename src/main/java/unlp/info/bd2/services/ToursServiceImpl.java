@@ -27,6 +27,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException {
         if (this.repository.findUserByUsername(username).isPresent()){
             throw new ToursException("Ya existe un usuario con ese nombre, por favor ingrese otro");
@@ -39,44 +40,30 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate,
             String phoneNumber, String expedient) throws ToursException {
-        try {
-            DriverUser du = new DriverUser();
-            du.setUsername(username);
-            du.setPassword(password);
-            du.setName(fullName);
-            du.setEmail(email);
-            du.setBirthdate(birthdate);
-            du.setPhoneNumber(phoneNumber);
-            du.setExpedient(expedient);
-            du.setRoutes(new ArrayList<Route>());
-            du.setActive(true);
-            this.repository.save(du);
-            return du;
-        } catch (Exception e) {
-            throw new ToursException(e.getMessage());
+        if (this.repository.findUserByUsername(username).isPresent()){
+            throw new ToursException("Ya existe un usuario con ese nombre, por favor ingrese otro");
+        }
+        else{
+            DriverUser d = new DriverUser(username, password, fullName, email, birthdate, phoneNumber, expedient);
+            this.repository.save(d);
+            return d;
         }
     }
 
     @Override
+    @Transactional
     public TourGuideUser createTourGuideUser(String username, String password, String fullName, String email,
             Date birthdate, String phoneNumber, String education) throws ToursException {
-        try {
-            TourGuideUser tgu = new TourGuideUser();
-            tgu.setUsername(username);
-            tgu.setPassword(password);
-            tgu.setName(fullName);
-            tgu.setEmail(email);
-            tgu.setBirthdate(birthdate);
-            tgu.setPhoneNumber(phoneNumber);
-            tgu.setEducation(education);
-            tgu.setRoutes(new ArrayList<Route>());
-            this.repository.save(tgu);
-            tgu.setActive(true);
-            return tgu;
-        } catch (Exception e) {
-            throw new ToursException(e.getMessage());
+        if (this.repository.findUserByUsername(username).isPresent()){
+            throw new ToursException("Ya existe un usuario con ese nombre, por favor ingrese otro");
+        }
+        else{
+            TourGuideUser t = new TourGuideUser(username, password, fullName, email, birthdate, phoneNumber, education);
+            this.repository.save(t);
+            return t;
         }
     }
 
@@ -123,16 +110,14 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException{
-        Route r = new Route();
-        r.setName(name);
-        r.setPrice(price);
-        r.setTotalKm(totalKm);
-        r.setMaxNumberUsers(maxNumberOfUsers);
-        r.setStops(stops);
-        r.setDrivers(new ArrayList<DriverUser>());
-        r.setTourGuides(new ArrayList<TourGuideUser>());
-        this.repository.save(r);
-        return r;
+        if (price < 0 || totalKm < 0 || maxNumberOfUsers < 0){
+            throw new ToursException("El valor del precio, los kilómetros o la cantidad máxima de usuarios no puede ser negativos");
+        }
+        else{
+            Route r = new Route(name, price, totalKm, maxNumberOfUsers, stops);
+            this.repository.save(r);
+            return r;
+        }
     }
 
     @Override
@@ -160,13 +145,9 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException{
-        Service s = new Service();
-        s.setName(name);
-        s.setPrice(price);
-        s.setDescription(description);
-        s.setSupplier(supplier);
-        s.setItemServices(new ArrayList<ItemService>());
-        this.repository.addServiceToSupplier(s, supplier);
+        Service s = new Service(name, price, description, supplier);
+        supplier.addService(s);
+        this.repository.save(s);
         return s;
     }
 
@@ -186,6 +167,7 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public Service updateServicePriceById(Long id, float newPrice) throws ToursException{
         Optional<Service> s = this.repository.findById(id,Service.class);
         if(s.isEmpty()){
@@ -254,26 +236,24 @@ public class ToursServiceImpl implements ToursService{
 
     @Override
     public Purchase createPurchase(String code,Route route,User user)throws ToursException{
-        Purchase p = createPurchase(code,  new Date() ,route, user);
+        Purchase p = createPurchase(code, new Date(), route, user);
         return p; 
     } 
 
     @Override
     @Transactional
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
-        ItemService i= new ItemService(quantity, purchase, service); 
+        ItemService i = new ItemService(quantity, purchase, service);
         Purchase p= purchase;
         float price = quantity * service.getPrice();
         p.addItem(i, price);  
         this.repository.update(p);
-       // this.repository.addItemToPurchase(i, purchase);
         return i;
     }
      
     @Override
     public Optional<Purchase> getPurchaseByCode(String code){//revisar si no existe ninguno
         return this.repository.findOneByAtribute(Purchase.class, "code", code);
-
     }
 
     @Override
@@ -287,9 +267,8 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional 
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException{
-        Review r=  purchase.addReview(rating,comment);
+        Review r = purchase.addReview(rating,comment);
         this.repository.save(r);
-        this.repository.update(purchase);
         return r;
     }
 
@@ -309,36 +288,32 @@ public class ToursServiceImpl implements ToursService{
     }
 
     @Override
+    @Transactional
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
-        //Consultar esto
         try{
-            Optional<Route> ro = this.repository.findById(idRoute, Route.class);
-            Optional<User> u = this.repository.findUserByUsername(username);
-            DriverUser d = (DriverUser) u.get();
-            Route r = ro.get();
+            Route r = this.repository.findById(idRoute, Route.class).get();
+            DriverUser d = this.repository.findDriverByUsername(username).get();
             r.addDriver(d);
             d.addRoute(r);
-            this.repository.setDriverToRoute(d,r);
+            this.repository.save(d);
         }
         catch (Exception e){
-            throw new ToursException(e.getMessage());
+            throw new ToursException("No se encontró el driver o la ruta");
         }
     }
 
     @Override
+    @Transactional
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException{
-        //Consultar PUEDO HACER DOS UPDATES Y PONERLE TRANSACTIONAL?
         try{
-            Optional<Route> ro = this.repository.findById(idRoute, Route.class);
-            Optional<User> u = this.repository.findUserByUsername(username);
-            TourGuideUser t = (TourGuideUser) u.get();
-            Route r = ro.get();
+            Route r = this.repository.findById(idRoute, Route.class).get();
+            TourGuideUser t = this.repository.findTourGuideByUsername(username).get();
             r.addTourGuide(t);
             t.addRoute(r);
-            this.repository.setTourGuideToRoute(t,r);
+            this.repository.save(t);
         }
         catch (Exception e){
-            throw new ToursException(e.getMessage());
+            throw new ToursException("No se encontró el tour guide o la ruta");
         }
     }
 
