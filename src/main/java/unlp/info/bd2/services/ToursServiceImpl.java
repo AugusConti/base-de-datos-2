@@ -262,11 +262,7 @@ public class ToursServiceImpl implements ToursService{
     @Transactional
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException{
         ItemService i= new ItemService(quantity, purchase, service); 
-        Purchase p= purchase;
-        float price = quantity * service.getPrice();
-        p.addItem(i, price);  
-        this.repository.update(p);
-       // this.repository.addItemToPurchase(i, purchase);
+        this.repository.save(i);
         return i;
     }
      

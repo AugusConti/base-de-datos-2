@@ -35,6 +35,8 @@ public class ItemService {
         this.quantity = quantity;
         this.purchase = purchase;
         this.service = service;
+        purchase.addItem(this, quantity * service.getPrice());
+        service.addItem(this);
     }
 
     public Long getId() {
