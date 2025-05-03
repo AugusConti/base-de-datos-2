@@ -54,6 +54,26 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
+    public Optional<TourGuideUser> findTourGuideByUsername(String username) {
+        Session session = sessionFactory.getCurrentSession();
+        Optional<TourGuideUser> user = session
+                .createQuery(String.format("select distinct u from User u left join u.purchases p " +
+                        "where u.username = '%s'", username), TourGuideUser.class)
+                .uniqueResultOptional();
+        return user;
+    }
+
+    @Override
+    public Optional<DriverUser> findDriverByUsername(String username) {
+        Session session = sessionFactory.getCurrentSession();
+        Optional<DriverUser> user = session
+                .createQuery(String.format("select distinct u from User u left join u.purchases p " +
+                        "where u.username = '%s'", username), DriverUser.class)
+                .uniqueResultOptional();
+        return user;
+    }
+
+    @Override
     public <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue){
         Session session = sessionFactory.getCurrentSession();
         List<T> result = session.createQuery(
@@ -80,16 +100,6 @@ public class ToursRepositoryImpl implements ToursRepository {
                         String.format("FROM %s WHERE price < %f", Route.class.getSimpleName(), price), Route.class)
                 .getResultList();
         return result;
-    }
-
-    @Override
-    @Transactional
-    public void addServiceToSupplier(Service s, Supplier supplier){
-        //Habría que llevar comportamiento al servicio
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(s);
-        supplier.getServices().add(s);
-        update(s);
     }
 
     @Override
@@ -135,17 +145,6 @@ public class ToursRepositoryImpl implements ToursRepository {
                 .getResultList();
         return result;
     }
-/* 
-    @Override
-    @Transactional
-    public void addItemToPurchase(ItemService item, Purchase p){
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(item);//necesario? o lo hace la cascada
-        update(p);
-        Service s = item.getService();
-        s.addItem(item);
-        update(s);
-    }  */
 
     @Override
     public boolean canCreatePurchase(Purchase p)throws ToursException{//REVISAR
@@ -169,7 +168,6 @@ public class ToursRepositoryImpl implements ToursRepository {
         Session session = sessionFactory.getCurrentSession();
         Long result = session.createQuery(
                         "SELECT COUNT(s) FROM Route r JOIN r.stops s GROUP BY r.id ORDER BY COUNT(s) DESC", Long.class)
-
                     .setMaxResults(1)
                     .getSingleResult();
         return result;
@@ -242,22 +240,6 @@ public class ToursRepositoryImpl implements ToursRepository {
             TourGuideUser.class)
                 .getResultList();
         return result;
-    }
-
-    @Override
-    @Transactional
-    public void setDriverToRoute(DriverUser d, Route r){
-        //Hay que hacer un solo update
-        update(r);
-        update(d);
-    }
-
-    @Override
-    @Transactional
-    public void setTourGuideToRoute(TourGuideUser t, Route r){
-        //SAMEEE
-        update(t);
-        update(r);
     }
 
     @Override
