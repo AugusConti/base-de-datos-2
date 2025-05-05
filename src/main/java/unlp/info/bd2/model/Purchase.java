@@ -1,5 +1,6 @@
 package unlp.info.bd2.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,24 +13,41 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    @Column(unique = true, updatable = false, nullable = false, length = 255)
     private String code;
 
+    @Column(nullable = false, precision = 2)
     private float totalPrice;
 
+    @Column(nullable = false)
     private Date date;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "route_id")
     private Route route;
 
-    @OneToOne(optional = true)
+    @OneToOne(optional = true, mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     private Review review;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchase")
+    @OneToMany(mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
+    public Purchase() {
+    }
+
+    public Purchase(String code, Date date, User user, Route route) {
+        this.code = code;
+        this.totalPrice = route.getPrice();
+        this.date = date;
+        this.user = user;
+        this.route = route;
+        this.review = null;
+        this.itemServiceList = new ArrayList<>();
+    }
 
 
     public Long getId() {
@@ -103,10 +121,8 @@ public class Purchase {
     }
 
     public Review addReview(int rating, String comment) {
-        this.review = new Review();
-        this.review.setPurchase(this);
-        this.review.setRating(rating);
-        this.review.setComment(comment);
-        return this.review;
+        Review r = new Review(rating, comment, this);
+        this.review = r;
+        return r;
     }
 }

@@ -1,5 +1,6 @@
 package unlp.info.bd2.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -11,12 +12,23 @@ public class Stop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, length = 255)
     private String description;
 
-    @ManyToMany(mappedBy = "stops")
+    @ManyToMany(mappedBy = "stops", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<Route> routes;
+
+    public Stop() {
+    }
+
+    public Stop(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.routes = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;

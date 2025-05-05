@@ -12,15 +12,19 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, precision = 2)
     private float price;
 
+    @Column(nullable = false, precision = 4)
     private float totalKm;
 
+    @Column(nullable = false)
     private int maxNumberUsers;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "routes_stops", 
             joinColumns = {@JoinColumn(name = "route_id") }, 
@@ -28,11 +32,24 @@ public class Route {
     )
     private List<Stop> stops;
 
-    @ManyToMany(mappedBy = "routes")
+    @ManyToMany(mappedBy = "routes", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<DriverUser> driverList;
 
-    @ManyToMany(mappedBy = "routes")
+    @ManyToMany(mappedBy = "routes", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     private List<TourGuideUser> tourGuideList;
+
+    public Route() {
+    }
+
+    public Route(String name, float price, float totalKm, int maxNumberUsers, List<Stop> stops) {
+        this.name = name;
+        this.price = price;
+        this.totalKm = totalKm;
+        this.maxNumberUsers = maxNumberUsers;
+        this.stops = stops;
+        this.driverList = new ArrayList<>();
+        this.tourGuideList = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;

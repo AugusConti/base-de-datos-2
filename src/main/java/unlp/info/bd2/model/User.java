@@ -8,30 +8,51 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 15)
+@DiscriminatorValue("User")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, updatable = false)
+    @Column(unique = true, updatable = false, nullable = false, length = 255)
     private String username;
 
+    @Column(nullable = false, length = 255)
     private String password;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, length = 255)
     private String email;
 
+    @Column(nullable = false)
     private Date birthdate;
 
+    @Column(nullable = false, length = 255)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private boolean active;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<Purchase> purchaseList;
 
+    public User() {
+    }
+
+    public User(String username, String password, String name, String email, Date birthdate, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.phoneNumber = phoneNumber;
+        this.active = true;
+        this.purchaseList = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -110,6 +131,9 @@ public class User {
     }
 
     public boolean canBeDesactive() {
+        return true;
+    }
+    public boolean canBeDeleted() {
         return this.purchaseList.isEmpty();
     }
 }

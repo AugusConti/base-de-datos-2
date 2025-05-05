@@ -9,13 +9,27 @@ public class ItemService {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    @Column(nullable = false)
     private int quantity;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "service_id")
     private Service service;
+
+    public ItemService() {
+    }
+
+    public ItemService(int quantity, Purchase purchase, Service service) {
+        this.quantity = quantity;
+        this.purchase = purchase;
+        this.service = service;
+        purchase.addItem(this, quantity * service.getPrice());
+        service.addItem(this);
+    }
 
     public Long getId() {
         return id;

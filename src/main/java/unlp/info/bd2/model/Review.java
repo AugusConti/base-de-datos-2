@@ -9,13 +9,24 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private int rating;
 
+    @Column(nullable = false, length = 255)
     private String comment;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
+    public Review() {
+    }
+
+    public Review(int rating, String comment, Purchase purchase) {
+        this.rating = rating;
+        this.comment = comment;
+        this.purchase = purchase;
+    }
 
     public Long getId() {
         return id;

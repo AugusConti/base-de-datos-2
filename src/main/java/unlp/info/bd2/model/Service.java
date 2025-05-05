@@ -12,18 +12,31 @@ public class Service {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, precision = 2)
     private float price;
 
+    @Column(nullable = false, length = 255)
     private String description;
 
-    @OneToMany(mappedBy = "service")
+    @OneToMany(mappedBy = "service", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     private Supplier supplier;
 
+    public Service() {
+    }
+
+    public Service(String name, float price, String description, Supplier supplier) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.itemServiceList = new ArrayList<>();
+        this.supplier = supplier;
+    }
 
     public Long getId() {
         return id;
