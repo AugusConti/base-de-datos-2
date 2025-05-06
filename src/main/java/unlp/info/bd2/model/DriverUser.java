@@ -14,7 +14,7 @@ public class DriverUser extends User {
     @Column(nullable = true, length = 255)
     private String expedient;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "drivers_routes",
             joinColumns = { @JoinColumn(name = "driver_id") },

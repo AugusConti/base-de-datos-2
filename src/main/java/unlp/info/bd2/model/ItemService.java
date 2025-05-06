@@ -1,6 +1,5 @@
 package unlp.info.bd2.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,11 +19,11 @@ public class ItemService {
     @Column(nullable = false)
     private int quantity;
 
-    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
-    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     @JoinColumn(name = "service_id")
     private Service service;
 

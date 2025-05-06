@@ -32,15 +32,15 @@ public class Purchase {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     @JoinColumn(name = "route_id")
     private Route route;
 
-    @OneToOne(optional = true, mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+    @OneToOne(optional = true, mappedBy = "purchase", cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     private Review review;
 
     @OneToMany(mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
