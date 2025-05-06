@@ -208,20 +208,13 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
-        try{
-            Optional<User> u = this.repository.findById(user.getId(),User.class);
-            Optional<Route> r = this.repository.findById(route.getId(),Route.class);
-            if(!this.repository.canCreatePurchase(date, route)){
-                throw new ToursException("No hay mas cupos para la ruta con ID "+ route.getId());
-            }
-            Purchase p = new Purchase(code, date, user, route);
-            user.addPurchase(p);
-            this.repository.save(p);
-            return p;
+        if(!this.repository.canCreatePurchase(date, route)){
+            throw new ToursException("No hay mas cupos para la ruta con ID "+ route.getId());
         }
-        catch (Exception e){
-            throw new ToursException(e.getMessage());
-        }
+        Purchase p = new Purchase(code, date, user, route);
+        user.addPurchase(p);
+        this.repository.save(p);
+        return p;
     }
 
     @Override
