@@ -223,10 +223,11 @@ public class ToursServiceImpl implements ToursService{
             throw new ToursException("Ya existe una compra con code: " + code);
         }
         // falta verificar la disponibilidad de la ruta en la fecha.
-        Purchase p = new Purchase(code, date, user, route);
+        
         if(!this.repository.canCreatePurchase(date, route)){
-            throw new ToursException("No hay mas cupos para la ruta con ID "+ p.getRoute().getId());
+            throw new ToursException("No hay mas cupos para la ruta con ID "+ route.getId());
         }
+        Purchase p = new Purchase(code, date, user, route);
         user.addPurchase(p);
         this.repository.save(p);
         return p;
