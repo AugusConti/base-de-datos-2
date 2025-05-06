@@ -21,10 +21,10 @@ public class Service {
     @Column(nullable = false, length = 255)
     private String description;
 
-    @OneToMany(mappedBy = "service", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "service", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
-    @ManyToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     private Supplier supplier;
 
     public Service() {

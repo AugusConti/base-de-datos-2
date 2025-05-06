@@ -24,7 +24,7 @@ public class Route {
     @Column(nullable = false)
     private int maxNumberUsers;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "routes_stops", 
             joinColumns = {@JoinColumn(name = "route_id") }, 
@@ -32,10 +32,10 @@ public class Route {
     )
     private List<Stop> stops;
 
-    @ManyToMany(mappedBy = "routes", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "routes", cascade = {}, fetch = FetchType.EAGER)
     private List<DriverUser> driverList;
 
-    @ManyToMany(mappedBy = "routes", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "routes", cascade = {}, fetch = FetchType.EAGER)
     private List<TourGuideUser> tourGuideList;
 
     public Route() {

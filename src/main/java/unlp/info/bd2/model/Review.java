@@ -15,7 +15,7 @@ public class Review {
     @Column(nullable = false, length = 255)
     private String comment;
 
-    @OneToOne(optional = false, cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @OneToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 

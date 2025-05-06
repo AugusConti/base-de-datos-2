@@ -14,7 +14,7 @@ public class TourGuideUser extends User {
     @Column(nullable = true, length = 255)
     private String education;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "tour_guides_routes",
             joinColumns = { @JoinColumn(name = "tour_guide_id") },
