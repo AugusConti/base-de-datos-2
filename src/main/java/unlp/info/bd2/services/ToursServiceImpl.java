@@ -122,15 +122,10 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException{
-        // exception de bd, por unique, no va
-        if(this.repository.existeSupplier(authorizationNumber)){
-            throw new ToursException("Ya existe un supplier con authorization number: " + authorizationNumber);
-        }
-        else{
-            Supplier s = new Supplier(businessName,authorizationNumber);
-            this.repository.save(s);
-            return s;
-        }
+        Supplier s = new Supplier(businessName,authorizationNumber);
+        this.repository.save(s);
+        return s;
+        
     }
 
     @Override
@@ -222,12 +217,7 @@ public class ToursServiceImpl implements ToursService{
         if(r.isEmpty()){
             throw new ToursException("No existe una ruta con ID: " + route.getId());
         }
-        //ESTO DEBERÍA FALLAR EN EL REPO Y SIMPLEMENTE PROGRAMAR LA EXCEPCIÓN
-        if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
-            throw new ToursException("Ya existe una compra con code: " + code);
-        }
-        // falta verificar la disponibilidad de la ruta en la fecha.
-        
+          
         if(!this.repository.canCreatePurchase(date, route)){
             throw new ToursException("No hay mas cupos para la ruta con ID "+ route.getId());
         }

@@ -20,9 +20,9 @@ public class Supplier {
     private Long id;
 
     @Column(nullable = false, length = 255)
-    private String businessName;
-
-    @Column(nullable = false, length = 255)
+    private String businessName; 
+    
+    @Column(unique = true, updatable = false, nullable = false, length = 255)
     private String authorizationNumber;
 
     @OneToMany(mappedBy = "supplier", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
