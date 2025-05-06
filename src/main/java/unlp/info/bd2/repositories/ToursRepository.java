@@ -8,10 +8,10 @@ import unlp.info.bd2.model.*;
 import unlp.info.bd2.utils.ToursException;
 
 public interface ToursRepository {
-    void save(Object o);
+    void save(Object o) throws ToursException;
     <T> Optional<T> findById(long id, Class<T> _class);
-    void update(Object o);
-    void delete(Object o);
+    <T> T update(T o) throws ToursException;
+    void delete(Object o) throws ToursException;
 
     Optional<User> findUserByUsername(String username);
     Optional<TourGuideUser> findTourGuideByUsername(String username);
@@ -19,7 +19,7 @@ public interface ToursRepository {
     <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue);
     <T> Optional<T> findOneByAtribute(Class<T> resultClass, String atributeName, String atributeValue);
     List<Route> getRoutesBelowPrice(float price);
-    Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
+    Optional<Service> getServiceByNameAndSupplierId(String name, Long id);
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<User> getUserSpendingMoreThan(float mount);
     List<Route> getTop3RoutesWithMaxRating();
@@ -27,7 +27,7 @@ public interface ToursRepository {
     List<TourGuideUser> getTourGuidesWithRating1();
     List<Purchase> getTop10MoreExpensivePurchasesInServices(); 
     //void addItemToPurchase(ItemService i,Purchase p);
-    boolean canCreatePurchase(Purchase p)throws ToursException;
+    boolean canCreatePurchase(Date date, Route route);
     //void addReviewToPurchase(Review r);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();

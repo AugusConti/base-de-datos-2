@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
@@ -20,27 +21,47 @@ public class ToursRepositoryImpl implements ToursRepository {
     private org.hibernate.SessionFactory sessionFactory;
 
     @Override
-    public void save(Object o) {
-        sessionFactory.getCurrentSession().persist(o);
+    public void save(Object o) throws ToursException {
+        try {
+            // TODO CONSULTAR: ¿Está bien hacer un flush?
+            sessionFactory.getCurrentSession().persist(o);
+            sessionFactory.getCurrentSession().flush();
+        } catch (ConstraintViolationException e) {
+            throw new ToursException("Constraint Violation");
+        }
+        catch (Exception e) {
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
     public <T> Optional<T> findById(long id, Class<T> resultClass) {
-        Session session = sessionFactory.getCurrentSession();
-        Optional<T> object = session.createQuery(
-                String.format("from %s where id = %d", resultClass.getName(), id), resultClass)
-                .uniqueResultOptional();
-        return object;
+        return Optional.ofNullable(sessionFactory.getCurrentSession().find(resultClass, id));
     }
 
     @Override
-    public void update(Object o) {
-        sessionFactory.getCurrentSession().merge(o);
+    public <T> T update(T o) throws ToursException {
+        try{
+            return sessionFactory.getCurrentSession().merge(o);
+        }
+        catch (ConstraintViolationException e){
+            throw new ToursException("Constraint Violation");
+        }
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
-    public void delete(Object o) {
-        sessionFactory.getCurrentSession().remove(o);
+    public void delete(Object o) throws ToursException {
+        try {
+            sessionFactory.getCurrentSession().remove(o);
+        } catch (ConstraintViolationException e) {
+            throw new ToursException("Constraint Violation");
+        }
+        catch (Exception e) {
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
@@ -103,8 +124,7 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException{
-        Optional<Supplier> s = findById(id, Supplier.class);
+    public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) {
         Session session = sessionFactory.getCurrentSession();
         Optional<Service> result = session.createQuery(
                     "FROM Service WHERE name LIKE :name AND supplier.id = :supplierId", Service.class)
@@ -147,14 +167,14 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    public boolean canCreatePurchase(Purchase p)throws ToursException{//REVISAR
+    public boolean canCreatePurchase(Date date, Route route) {//REVISAR
         Session session = sessionFactory.getCurrentSession();
         String hql= "FROM Purchase p WHERE p.route = :ruta and p.date = :date";
         List<Purchase> result = session.createQuery(hql, Purchase.class)
-                .setParameter("ruta", p.getRoute())
-                .setParameter("date", p.getDate())
+                .setParameter("ruta", route)
+                .setParameter("date", date)
                 .getResultList();
-        if (result.size() >= p.getRoute().getMaxNumberUsers()) {
+        if (result.size() >= route.getMaxNumberUsers()) {
             return false;
         }
         else{
