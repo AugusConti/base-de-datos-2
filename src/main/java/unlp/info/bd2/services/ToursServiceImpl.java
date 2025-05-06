@@ -163,13 +163,16 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional
     public Service updateServicePriceById(Long id, float newPrice) throws ToursException{
-        Optional<Service> s = this.repository.findById(id,Service.class);
-        if(s.isEmpty())
-            throw new ToursException("No existe un servicio con ID: " + id);
-        Service service = s.get();
-        service.setPrice(newPrice);
-        this.repository.update(service);
-        return service;
+        try{
+            Optional<Service> s = this.repository.findById(id,Service.class);
+            Service service = s.get();
+            service.setPrice(newPrice);
+            this.repository.update(service);
+            return service;
+        }
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
@@ -206,11 +209,11 @@ public class ToursServiceImpl implements ToursService{
     @Transactional(readOnly = true)
     public List<Purchase> getTop10MoreExpensivePurchasesInServices(){
         return this.repository.getTop10MoreExpensivePurchasesInServices();
-    } 
- //
+    }
     @Override
     @Transactional
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
+        //CAMBIAR ESTO, NO TIRAR LAS EXCEPCIONES ACÁ, QUE SALTEN EN UN TRY CATCH
         Optional<User> u = this.repository.findById(user.getId(),User.class);
         if(u.isEmpty()){ 
             throw new ToursException("No existe un usuario con ID: " + user.getId());
@@ -218,7 +221,8 @@ public class ToursServiceImpl implements ToursService{
         Optional<Route> r = this.repository.findById(route.getId(),Route.class);
         if(r.isEmpty()){
             throw new ToursException("No existe una ruta con ID: " + route.getId());
-        } 
+        }
+        //ESTO DEBERÍA FALLAR EN EL REPO Y SIMPLEMENTE PROGRAMAR LA EXCEPCIÓN
         if (!this.repository.findManyByAtribute( Purchase.class,"code",code).isEmpty()) {
             throw new ToursException("Ya existe una compra con code: " + code);
         }
