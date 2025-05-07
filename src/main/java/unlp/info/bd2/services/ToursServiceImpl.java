@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +18,25 @@ import unlp.info.bd2.model.Stop;
 import unlp.info.bd2.model.Supplier;
 import unlp.info.bd2.model.TourGuideUser;
 import unlp.info.bd2.model.User;
+import unlp.info.bd2.repositories.RouteRepository;
+import unlp.info.bd2.repositories.StopRepository;
 import unlp.info.bd2.repositories.UserRepository;
 import unlp.info.bd2.utils.ToursException;
 
 public class ToursServiceImpl implements ToursService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private StopRepository stopRepository;
+
+    @Autowired
+    private RouteRepository routeRepository;
 
     // TODO CONSULTAR: ¿Por qué no se verifica al guardar el usuario?
     private void assertUniqueUsername(String username) throws ToursException {
-        if (userRepository.existsByUsername(username))
+        if (this.userRepository.existsByUsername(username))
             throw new ToursException("Username already assigned");
     }
 
@@ -38,7 +47,7 @@ public class ToursServiceImpl implements ToursService {
         try {
             this.assertUniqueUsername(username);
             User user = new User(username, password, fullName, email, birthdate, phoneNumber);
-            return userRepository.save(user);
+            return this.userRepository.save(user);
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
         }
@@ -51,7 +60,7 @@ public class ToursServiceImpl implements ToursService {
         try {
             this.assertUniqueUsername(username);
             DriverUser driverUser = new DriverUser(username, password, fullName, email, birthdate, phoneNumber, expedient);
-            return userRepository.save(driverUser);
+            return this.userRepository.save(driverUser);
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
         }
@@ -64,7 +73,7 @@ public class ToursServiceImpl implements ToursService {
         try {
             this.assertUniqueUsername(username);
             TourGuideUser tourGuideUser = new TourGuideUser(username, password, fullName, email, birthdate, phoneNumber, education);
-            return userRepository.save(tourGuideUser);
+            return this.userRepository.save(tourGuideUser);
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
         }
@@ -72,12 +81,12 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Optional<User> getUserById(Long id) throws ToursException {
-        return userRepository.findById(id);
+        return this.userRepository.findById(id);
     }
 
     @Override
     public Optional<User> getUserByUsername(String username) throws ToursException {
-        return userRepository.findByUsername(username);
+        return this.userRepository.findByUsername(username);
     }
 
     @Override
@@ -93,34 +102,38 @@ public class ToursServiceImpl implements ToursService {
     }
 
     @Override
+    @Transactional
     public Stop createStop(String name, String description) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createStop'");
+        //TODO CONSULTAR TEMA DE LAS EXCEPCIONES
+        Stop s = new Stop(name, description);
+        this.stopRepository.save(s);
+        return s;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Stop> getStopByNameStart(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStopByNameStart'");
+        return this.stopRepository.findByNameStartingWith(name);
     }
 
     @Override
-    public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops)
-            throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createRoute'");
+    @Transactional
+    public Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException {
+        Route r = new Route(name, price, totalKm, maxNumberOfUsers, stops);
+        this.routeRepository.save(r);
+        return r;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Route> getRouteById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRouteById'");
+        return this.routeRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Route> getRoutesBelowPrice(float price) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRoutesBelowPrice'");
+        return this.routeRepository.findByPriceLessThan(price);
     }
 
     @Override
