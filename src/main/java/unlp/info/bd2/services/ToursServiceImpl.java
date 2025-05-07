@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import unlp.info.bd2.model.DriverUser;
@@ -17,10 +18,16 @@ import unlp.info.bd2.model.Stop;
 import unlp.info.bd2.model.Supplier;
 import unlp.info.bd2.model.TourGuideUser;
 import unlp.info.bd2.model.User;
-import unlp.info.bd2.repositories.UserRepository;
+import unlp.info.bd2.repositories.*;
 import unlp.info.bd2.utils.ToursException;
 
 public class ToursServiceImpl implements ToursService {
+
+    @Autowired
+    RouteRepository routeRepository;
+    
+    @Autowired
+    ServiceRepository serviceRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -82,14 +89,12 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public User updateUser(User user) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+        return userRepository.save(user);
     }
 
     @Override
     public void deleteUser(User user) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+        userRepository.delete(user);
     }
 
     @Override
@@ -216,14 +221,12 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<User> getUserSpendingMoreThan(float mount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUserSpendingMoreThan'");
+        return userRepository.findByMountSpendingGreaterThan(mount);
     }
 
     @Override
     public List<User> getUsersWithNumberOfPurchases(int number) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUsersWithNumberOfPurchases'");
+        return userRepository.findByPurchaseCountGreaterThan(number);
     }
 
     @Override
@@ -246,8 +249,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<User> getTop5UsersMorePurchases() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTop5UsersMorePurchases'");
+        return userRepository.findAllSortByPurchaseCountDesc(PageRequest.ofSize(5));
     }
 
     @Override
@@ -294,8 +296,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<Route> getTop3RoutesWithMaxAverageRating() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTop3RoutesWithMaxAverageRating'");
+        return routeRepository.findAllSortByAverageRatingDesc(PageRequest.ofSize(3));
     }
 
     @Override
@@ -306,8 +307,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Service getMostDemandedService() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMostDemandedService'");
+        return serviceRepository.findAllSortByItemQuantitySumDesc(PageRequest.ofSize(1)).getFirst();
     }
 
     @Override
@@ -324,13 +324,11 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<TourGuideUser> getTourGuidesWithRating1() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTourGuidesWithRating1'");
+        return userRepository.findTourGuidesByRating(1);
     }
 
     @Override
     public DriverUser getDriverUserWithMoreRoutes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDriverUserWithMoreRoutes'");
+        return userRepository.findDriversSortByRouteCountDesc(PageRequest.ofSize(1)).getFirst();
     }
 }
