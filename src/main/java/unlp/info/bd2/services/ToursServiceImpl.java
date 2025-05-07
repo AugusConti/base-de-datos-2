@@ -181,8 +181,14 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Service updateServicePriceById(Long id, float newPrice) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateServicePriceById'");
+        try {
+            Service s = this.serviceRepository.findById(id).get();
+            s.setPrice(newPrice);
+            this.serviceRepository.save(s);
+            return s;
+        } catch (Exception e) {
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
