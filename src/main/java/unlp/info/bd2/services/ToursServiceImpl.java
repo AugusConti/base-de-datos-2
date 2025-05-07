@@ -127,15 +127,30 @@ public class ToursServiceImpl implements ToursService {
     }
 
     @Override
+    @Transactional
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'assignDriverByUsername'");
+        try{
+            DriverUser d = this.userRepository.findDriverByUsername(username).get();
+            Route r = this.routeRepository.findById(idRoute).get();
+            d.addRoute(r);
+            r.addDriver(d);
+            this.userRepository.save(d);
+        }catch (Exception e){
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'assignTourGuideByUsername'");
+        try{
+            TourGuideUser t = this.userRepository.findTourGuideByUsername(username).get();
+            Route r = this.routeRepository.findById(idRoute).get();
+            t.addRoute(r);
+            r.addTourGuide(t);
+            this.userRepository.save(t);
+        } catch (Exception e){
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
