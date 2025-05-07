@@ -1,6 +1,7 @@
 package unlp.info.bd2.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +15,7 @@ public interface ServiceRepository extends CrudRepository<Service, Long> {
 
     @Query("FROM Service s JOIN s.itemServiceList item ORDER BY SUM(item.quantity) DESC")
     List<Service> findAllSortByItemQuantitySumDesc(Pageable pageable);
+
+    Optional<Service> findByNameAndSupplierId(String name, Long supplierId);
 
 }

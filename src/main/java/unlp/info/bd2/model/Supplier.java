@@ -20,7 +20,6 @@ public class Supplier {
 
     @OneToMany(mappedBy = "supplier", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     private List<Service> services;
-
     public Supplier() {
     }
 
@@ -60,6 +59,10 @@ public class Supplier {
 
     public void setServices(List<Service> services) {
         this.services = services;
+    }
+
+    public void addService(Service s){
+        this.services.add(s);
     }
 
 }

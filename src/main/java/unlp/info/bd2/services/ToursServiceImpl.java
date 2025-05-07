@@ -1,6 +1,7 @@
 package unlp.info.bd2.services;
 
 import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,9 @@ public class ToursServiceImpl implements ToursService {
 
     @Autowired
     private StopRepository stopRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
 
     // TODO CONSULTAR: ¿Por qué no se verifica al guardar el usuario?
     private void assertUniqueUsername(String username) throws ToursException {
@@ -154,16 +158,25 @@ public class ToursServiceImpl implements ToursService {
     }
 
     @Override
+    @Transactional
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createSupplier'");
+        try{
+            Supplier s = new Supplier(businessName, authorizationNumber);
+            this.supplierRepository.saveAndFlush(s);
+            return s;
+        }
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
-    public Service addServiceToSupplier(String name, float price, String description, Supplier supplier)
-            throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addServiceToSupplier'");
+    @Transactional
+    public Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException {
+        Service s = new Service(name, price, description, supplier);
+        supplier.addService(s);
+        this.serviceRepository.save(s);
+        return s;
     }
 
     @Override
@@ -174,20 +187,17 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Optional<Supplier> getSupplierById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSupplierById'");
+        return this.supplierRepository.findById(id);
     }
 
     @Override
     public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSupplierByAuthorizationNumber'");
+        return this.supplierRepository.findByAuthorizationNumber(authorizationNumber);
     }
 
     @Override
     public Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getServiceByNameAndSupplierId'");
+        return this.serviceRepository.findByNameAndSupplierId(name, id);
     }
 
     @Override
@@ -320,7 +330,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Service getMostDemandedService() {
-        return serviceRepository.findAllSortByItemQuantitySumDesc(PageRequest.ofSize(1)).getFirst();
+        return serviceRepository.findAllSortByItemQuantitySumDesc(PageRequest.ofSize(1)).get(0);
     }
 
     @Override
@@ -342,6 +352,6 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public DriverUser getDriverUserWithMoreRoutes() {
-        return userRepository.findDriversSortByRouteCountDesc(PageRequest.ofSize(1)).getFirst();
+        return userRepository.findDriversSortByRouteCountDesc(PageRequest.ofSize(1)).get(0);
     }
 }
