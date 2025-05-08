@@ -113,7 +113,14 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public void deleteUser(User user) throws ToursException {
-        userRepository.delete(user);
+        if (!user.canBeDesactive())
+            throw new ToursException("No se puede desactivar el usuario");
+        if (!user.isActive())
+            throw new ToursException("El usuario ya fue desactivado");
+        if (user.canBeDeleted())
+            this.userRepository.delete(user);
+        else
+            user.setActive(false);
     }
 
     @Override
