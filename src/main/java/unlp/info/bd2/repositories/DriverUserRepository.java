@@ -9,7 +9,7 @@ import unlp.info.bd2.model.DriverUser;
 
 public interface DriverUserRepository extends BaseUserRepository<DriverUser> {
 
-    @Query("FROM DriverUser du ORDER BY COUNT(du.routes) DESC")
+    @Query("FROM DriverUser du JOIN du.routes r GROUP BY du.id ORDER BY COUNT(r) DESC")
     List<DriverUser> findAllSortByRouteCountDesc(Pageable pageable);
 
 }

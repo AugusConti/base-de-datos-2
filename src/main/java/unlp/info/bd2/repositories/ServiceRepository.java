@@ -13,7 +13,7 @@ import unlp.info.bd2.model.Service;
 @Repository
 public interface ServiceRepository extends CrudRepository<Service, Long> {
 
-    @Query("FROM Service s JOIN s.itemServiceList item ORDER BY SUM(item.quantity) DESC")
+    @Query("FROM Service s JOIN s.itemServiceList item GROUP BY s.id ORDER BY SUM(item.quantity) DESC")
     List<Service> findAllSortByItemQuantitySumDesc(Pageable pageable);
 
     Optional<Service> findByNameAndSupplierId(String name, Long supplierId);

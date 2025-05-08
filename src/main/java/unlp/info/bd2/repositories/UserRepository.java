@@ -14,9 +14,10 @@ public interface UserRepository extends BaseUserRepository<User> {
     @Query("SELECT DISTINCT u FROM User u JOIN u.purchaseList p WHERE p.totalPrice >= :mount")
     List<User> findByMountSpendingGreaterThan(@Param("mount") float mount);
 
-    @Query("SELECT u FROM User u WHERE COUNT(u.purchaseList) >= :number")
+    // TODO CONUSLTAR Formato de queries (de otra forma tira error)
+    @Query("SELECT u FROM User u JOIN u.purchaseList p GROUP BY u.id HAVING COUNT(p) >= :number")
     List<User> findByPurchaseCountGreaterThan(@Param("number") int number);
 
-    @Query("SELECT u FROM User u ORDER BY COUNT(u.purchaseList) DESC")
+    @Query("SELECT u FROM User u JOIN u.purchaseList p GROUP BY u.id ORDER BY COUNT(p) DESC")
     List<User> findAllSortByPurchaseCountDesc(Pageable pageable);
 }
