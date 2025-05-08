@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,9 @@ import unlp.info.bd2.repositories.*;
 import unlp.info.bd2.utils.ToursException;
 
 public class ToursServiceImpl implements ToursService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private RouteRepository routeRepository;
@@ -162,7 +167,8 @@ public class ToursServiceImpl implements ToursService {
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException {
         try{
             Supplier s = new Supplier(businessName, authorizationNumber);
-            this.supplierRepository.saveAndFlush(s);
+            this.supplierRepository.save(s);
+            this.entityManager.flush();
             return s;
         }
         catch (Exception e){
