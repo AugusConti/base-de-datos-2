@@ -136,4 +136,8 @@ public class User {
     public boolean canBeDeleted() {
         return this.purchaseList.isEmpty();
     }
+
+    public void removePurchase (Purchase p){
+        this.purchaseList.remove(p);
+    }
 }

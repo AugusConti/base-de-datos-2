@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,15 @@ public class ToursServiceImpl implements ToursService {
 
     @Autowired
     private SupplierRepository supplierRepository;
+
+    @Autowired
+    private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private ItemServiceRepository itemServiceRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     // TODO CONSULTAR: ¿Por qué no se verifica al guardar el usuario?
     private void assertUniqueUsername(String username) throws ToursException {
@@ -207,39 +217,62 @@ public class ToursServiceImpl implements ToursService {
     }
 
     @Override
+    @Transactional
     public Purchase createPurchase(String code, Route route, User user) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createPurchase'");
+        Purchase p = createPurchase(code, new Date() , route, user);
+        return p; 
     }
 
     @Override
+    @Transactional
     public Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createPurchase'");
+        long cant=this.purchaseRepository.countByRouteAndDate(route, date);
+        if(cant >= route.getMaxNumberUsers()){
+            throw new ToursException("No hay mas cupos para la ruta con ID "+ route.getId());
+        }
+
+        if (this.purchaseRepository.findByCode(code).isPresent()) {
+           throw new ToursException("El code "+ code+" ya es utilizado para una purchase");
+        }
+         
+        try{
+            Purchase p = new Purchase(code, date, user, route);
+            user.addPurchase(p);
+            this.purchaseRepository.save(p);            
+            return p;
+        
+        }  
+        catch (Exception e){
+            throw new ToursException(e.getMessage());
+        }
     }
 
     @Override
+    @Transactional
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addItemToPurchase'");
+        ItemService i= new ItemService(quantity, purchase, service);  
+        this.itemServiceRepository.save(i);
+        return i;
     }
 
     @Override
-    public Optional<Purchase> getPurchaseByCode(String code) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPurchaseByCode'");
+    public Optional<Purchase> getPurchaseByCode(String code) { 
+        return this.purchaseRepository.findByCode(code);
     }
 
     @Override
+    @Transactional
     public void deletePurchase(Purchase purchase) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletePurchase'");
+        purchase.getUser().removePurchase(purchase);
+        this.purchaseRepository.delete(purchase);    
     }
 
     @Override
+    @Transactional
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addReviewToPurchase'");
+        Review r = purchase.addReview(rating,comment);
+        this.reviewRepository.save(r);
+        return r;
     }
 
     @Override
