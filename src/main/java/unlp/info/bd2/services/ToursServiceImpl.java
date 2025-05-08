@@ -312,8 +312,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<Supplier> getTopNSuppliersInPurchases(int n) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTopNSuppliersInPurchases'");
+        return this.supplierRepository.findTopNSuppliersInPurchases(PageRequest.ofSize(n));
     }
 
     @Override
