@@ -30,6 +30,12 @@ public class ToursServiceImpl implements ToursService {
     private UserRepository userRepository;
 
     @Autowired
+    private DriverUserRepository driverUserRepository;
+
+    @Autowired
+    private TourGuideUserRepository tourGuideUserRepository;
+
+    @Autowired
     private StopRepository stopRepository;
 
     @Autowired
@@ -61,7 +67,7 @@ public class ToursServiceImpl implements ToursService {
         try {
             this.assertUniqueUsername(username);
             DriverUser driverUser = new DriverUser(username, password, fullName, email, birthdate, phoneNumber, expedient);
-            return this.userRepository.save(driverUser);
+            return this.driverUserRepository.save(driverUser);
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
         }
@@ -74,7 +80,7 @@ public class ToursServiceImpl implements ToursService {
         try {
             this.assertUniqueUsername(username);
             TourGuideUser tourGuideUser = new TourGuideUser(username, password, fullName, email, birthdate, phoneNumber, education);
-            return this.userRepository.save(tourGuideUser);
+            return this.tourGuideUserRepository.save(tourGuideUser);
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
         }
@@ -139,7 +145,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional
     public void assignDriverByUsername(String username, Long idRoute) throws ToursException {
         try{
-            DriverUser d = this.userRepository.findDriverByUsername(username).get();
+            DriverUser d = this.driverUserRepository.findByUsername(username).get();
             Route r = this.routeRepository.findById(idRoute).get();
             d.addRoute(r);
             r.addDriver(d);
@@ -152,7 +158,7 @@ public class ToursServiceImpl implements ToursService {
     @Override
     public void assignTourGuideByUsername(String username, Long idRoute) throws ToursException {
         try{
-            TourGuideUser t = this.userRepository.findTourGuideByUsername(username).get();
+            TourGuideUser t = this.tourGuideUserRepository.findByUsername(username).get();
             Route r = this.routeRepository.findById(idRoute).get();
             t.addRoute(r);
             r.addTourGuide(t);
@@ -359,11 +365,11 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<TourGuideUser> getTourGuidesWithRating1() {
-        return userRepository.findTourGuidesByRating(1);
+        return this.tourGuideUserRepository.findByRating(1);
     }
 
     @Override
     public DriverUser getDriverUserWithMoreRoutes() {
-        return userRepository.findDriversSortByRouteCountDesc(PageRequest.ofSize(1)).get(0);
+        return this.driverUserRepository.findAllSortByRouteCountDesc(PageRequest.ofSize(1)).get(0);
     }
 }
