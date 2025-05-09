@@ -314,7 +314,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<User> getUserSpendingMoreThan(float mount) {
-        return userRepository.findByMountSpendingGreaterThan(mount);
+        return userRepository.findByPurchaseListTotalPriceGreaterThanEqual(mount);
     }
 
     @Transactional(readOnly = true)

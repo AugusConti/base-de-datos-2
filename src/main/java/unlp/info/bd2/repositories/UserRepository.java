@@ -17,8 +17,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     boolean existsByUsername(String username);
 
-    @Query("SELECT DISTINCT u FROM User u JOIN u.purchaseList p WHERE p.totalPrice >= :mount")
-    List<User> findByMountSpendingGreaterThan(@Param("mount") float mount);
+    List<User> findByPurchaseListTotalPriceGreaterThanEqual(float mount);
 
     @Query("SELECT u FROM User u WHERE SIZE(u.purchaseList) >= :number")
     List<User> findByPurchaseCountGreaterThan(@Param("number") int number);
