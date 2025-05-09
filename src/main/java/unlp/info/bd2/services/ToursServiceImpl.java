@@ -364,7 +364,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<Route> getRoutesWithStop(Stop stop) {
-        return this.routeRepository.findRoutesWithStop(stop);
+        return this.routeRepository.findByStopsContaining(stop);
     }
 
     @Transactional(readOnly = true)
