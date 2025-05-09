@@ -24,7 +24,7 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
             "ORDER BY SUM(iser.quantity) DESC")
     List<Supplier> findTopNSuppliersItemsSold(Pageable pageable);
 
-    
-    
+    @Query("SELECT MAX(SIZE(s.services)) FROM Supplier s")
+    Long countMaxServices();
 
 }

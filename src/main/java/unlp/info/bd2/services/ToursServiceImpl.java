@@ -379,8 +379,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public Long getMaxServicesOfSupplier() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMaxServicesOfSupplier'");
+        return this.supplierRepository.countMaxServices();
     }
 
     @Transactional(readOnly = true)
