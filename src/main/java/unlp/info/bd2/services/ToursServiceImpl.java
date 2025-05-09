@@ -339,8 +339,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<Purchase> getTop10MoreExpensivePurchasesWithServices() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTop10MoreExpensivePurchasesWithServices'");
+        return this.purchaseRepository.findTop10MoreExpensivePurchasesWithServices(PageRequest.ofSize(10));
     }
 
     @Transactional(readOnly = true)
