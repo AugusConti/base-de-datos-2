@@ -16,24 +16,22 @@ public interface ToursRepository {
     Optional<User> findUserByUsername(String username);
     Optional<TourGuideUser> findTourGuideByUsername(String username);
     Optional<DriverUser> findDriverByUsername(String username);
-    <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue);
-    <T> Optional<T> findOneByAtribute(Class<T> resultClass, String atributeName, String atributeValue);
+    List<Stop> findStopsByNameStart(String name);
     List<Route> getRoutesBelowPrice(float price);
     Optional<Service> getServiceByNameAndSupplierId(String name, Long id);
+    Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber);
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<User> getUserSpendingMoreThan(float mount);
     List<Route> getTop3RoutesWithMaxRating();
     Service getMostDemandedService();
     List<TourGuideUser> getTourGuidesWithRating1();
     List<Purchase> getTop10MoreExpensivePurchasesInServices(); 
-    //void addItemToPurchase(ItemService i,Purchase p);
+    Optional<Purchase> getPurchaseByCode(String code);
     int countPurchasesByDateAndRoute(Date date, Route route);
-    //void addReviewToPurchase(Review r);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();
     List<Route> getRoutesWithStop(Stop stop);
     List<User> getTop5UsersMorePurchases();
     long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Service> getServiceNoAddedToPurchases();
-    public boolean existeSupplier(String authNumber);
 }

@@ -64,61 +64,46 @@ public class ToursRepositoryImpl implements ToursRepository {
         }
     }
 
-    @Override
-    public Optional<User> findUserByUsername(String username) {
+    private <T extends User> Optional<T> findUserOfTypeByUsername(Class<T> typeClass, String username) {
         Session session = sessionFactory.getCurrentSession();
-        Optional<User> user = session
+        Optional<T> user = session
                 .createQuery(String.format("select distinct u from User u left join u.purchases p " +
-                        "where u.username = '%s'", username), User.class)
+                        "where u.username = '%s'", username), typeClass)
                 .uniqueResultOptional();
         return user;
     }
 
     @Override
+    public Optional<User> findUserByUsername(String username) {
+        return this.findUserOfTypeByUsername(User.class, username);
+    }    
+
+    @Override
     public Optional<TourGuideUser> findTourGuideByUsername(String username) {
-        Session session = sessionFactory.getCurrentSession();
-        Optional<TourGuideUser> user = session
-                .createQuery(String.format("select distinct u from User u left join u.purchases p " +
-                        "where u.username = '%s'", username), TourGuideUser.class)
-                .uniqueResultOptional();
-        return user;
+        return this.findUserOfTypeByUsername(TourGuideUser.class, username);
     }
 
     @Override
     public Optional<DriverUser> findDriverByUsername(String username) {
-        Session session = sessionFactory.getCurrentSession();
-        Optional<DriverUser> user = session
-                .createQuery(String.format("select distinct u from User u left join u.purchases p " +
-                        "where u.username = '%s'", username), DriverUser.class)
-                .uniqueResultOptional();
-        return user;
+        return this.findUserOfTypeByUsername(DriverUser.class, username);
     }
 
     @Override
-    public <T> List<T> findManyByAtribute(Class<T> resultClass, String atributeName, String atributeValue){
+    public List<Stop> findStopsByNameStart(String name) {
         Session session = sessionFactory.getCurrentSession();
-        List<T> result = session.createQuery(
-                String.format("FROM %s WHERE %s LIKE :value", resultClass.getSimpleName(), atributeName), resultClass)
-                .setParameter("value", atributeValue + "%")
+        List<Stop> result = session
+                .createQuery("FROM Stop WHERE name LIKE :value", Stop.class)
+                .setParameter("value", name + "%")
                 .getResultList();
-        return result;
-    }
-
-    @Override
-    public <T> Optional<T> findOneByAtribute(Class<T> resultClass, String atributeName, String atributeValue){
-        Session session = sessionFactory.getCurrentSession();
-        Optional<T> result = session.createQuery(
-                        String.format("FROM %s WHERE %s LIKE :value", resultClass.getSimpleName(), atributeName), resultClass)
-                .setParameter("value", atributeValue + "%")
-                .uniqueResultOptional();
         return result;
     }
     
     @Override
     public List<Route> getRoutesBelowPrice(float price){
         Session session = sessionFactory.getCurrentSession();
-        List<Route> result = session.createQuery(
-                        String.format("FROM %s WHERE price < %f", Route.class.getSimpleName(), price), Route.class)
+        List<Route> result = session
+                .createQuery("FROM Route WHERE price < :price", Route.class)
+                .setParameter("price", price)
                 .getResultList();
         return result;
     }
@@ -135,13 +120,13 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    public boolean existeSupplier(String authNumber){
+    public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber) {
         Session session = sessionFactory.getCurrentSession();
-        Optional<Supplier> result = session.createQuery(
-                        "FROM Supplier WHERE authorizationNumber LIKE :authorizationNumber", Supplier.class)
-                .setParameter("authorizationNumber", authNumber)
+        Optional<Supplier> result = session
+                .createQuery("FROM Supplier WHERE authorizationNumber = :authNum", Supplier.class)
+                .setParameter("authNum", authorizationNumber)
                 .uniqueResultOptional();
-        return result.isPresent();
+        return result;
     }
 
     @Override
@@ -163,6 +148,15 @@ public class ToursRepositoryImpl implements ToursRepository {
                         "SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList is ORDER BY p.totalPrice DESC", Purchase.class)
                 .setMaxResults(10)
                 .getResultList();
+        return result;
+    }
+
+    @Override
+    public Optional<Purchase> getPurchaseByCode(String code) {
+        Session session = sessionFactory.getCurrentSession();
+        Optional<Purchase> result = session.createQuery("FROM Purchase WHERE code = :code", Purchase.class)
+                .setParameter("code", code)
+                .uniqueResultOptional();
         return result;
     }
 

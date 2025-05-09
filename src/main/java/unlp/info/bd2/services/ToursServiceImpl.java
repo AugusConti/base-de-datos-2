@@ -90,7 +90,7 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional(readOnly = true)
     public List<Stop> getStopByNameStart(String name) {
-        List<Stop> result = this.repository.findManyByAtribute(Stop.class,"name",name);
+        List<Stop> result = this.repository.findStopsByNameStart(name);
         return result;
     }
 
@@ -146,7 +146,7 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional(readOnly = true)
     public Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber){
-        return this.repository.findOneByAtribute(Supplier.class, "authorizationNumber", authorizationNumber);
+        return this.repository.getSupplierByAuthorizationNumber(authorizationNumber);
     }
 
     @Override
@@ -234,8 +234,8 @@ public class ToursServiceImpl implements ToursService{
      
     @Override
     @Transactional(readOnly = true)
-    public Optional<Purchase> getPurchaseByCode(String code){//revisar si no existe ninguno
-        return this.repository.findOneByAtribute(Purchase.class, "code", code);
+    public Optional<Purchase> getPurchaseByCode(String code){
+        return this.repository.getPurchaseByCode(code);
     }
 
     @Override
