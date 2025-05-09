@@ -19,4 +19,7 @@ public interface RouteRepository extends CrudRepository<Route, Long> {
 
     @Query("SELECT DISTINCT rte FROM Review rev JOIN rev.purchase p JOIN p.route rte WHERE rev.rating = 1")
     List<Route> findWithMinRating();
+
+    @Query("FROM Route r ORDER BY SIZE(r.stops) DESC")
+    List<Route> findTop3RoutesWithMoreStops(Pageable pageable);
 }

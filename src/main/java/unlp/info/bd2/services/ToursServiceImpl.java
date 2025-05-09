@@ -351,8 +351,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<Route> getTop3RoutesWithMoreStops() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTop3RoutesWithMoreStops'");
+        return this.routeRepository.findTop3RoutesWithMoreStops(PageRequest.ofSize(3));
     }
 
     @Transactional(readOnly = true)
