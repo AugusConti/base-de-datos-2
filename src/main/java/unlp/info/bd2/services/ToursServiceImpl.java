@@ -126,7 +126,6 @@ public class ToursServiceImpl implements ToursService {
     @Override
     @Transactional
     public Stop createStop(String name, String description) throws ToursException {
-        //TODO CONSULTAR TEMA DE LAS EXCEPCIONES
         Stop s = new Stop(name, description);
         this.stopRepository.save(s);
         return s;
