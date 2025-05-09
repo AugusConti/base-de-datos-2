@@ -17,4 +17,14 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
             "GROUP BY s " +
             "ORDER BY SUM(p.totalPrice) DESC")
     List<Supplier> findTopNSuppliersInPurchases(Pageable pageable);
+
+
+    @Query("SELECT s FROM Supplier s JOIN s.services ser JOIN ser.itemServiceList iser "+
+            "GROUP BY s.id " +
+            "ORDER BY SUM(iser.quantity) DESC")
+    List<Supplier> findTopNSuppliersItemsSold(Pageable pageable);
+
+    
+    
+
 }

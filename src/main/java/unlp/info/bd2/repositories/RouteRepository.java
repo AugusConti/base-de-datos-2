@@ -13,4 +13,7 @@ public interface RouteRepository extends CrudRepository<Route, Long> {
 
     @Query("SELECT rte FROM Review rev JOIN rev.purchase p JOIN p.route rte GROUP BY rte.id ORDER BY AVG(rev.rating) DESC")
     List<Route> findAllSortByAverageRatingDesc(Pageable pageable);
+
+    @Query("SELECT rte FROM Purchase p JOIN p.route rte GROUP BY rte.id ORDER BY COUNT(p) DESC")
+    List<Route> findMostPurchasedRoutes(Pageable pageable);
 }

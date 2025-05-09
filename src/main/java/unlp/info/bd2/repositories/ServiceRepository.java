@@ -18,4 +18,7 @@ public interface ServiceRepository extends CrudRepository<Service, Long> {
 
     Optional<Service> findByNameAndSupplierId(String name, Long supplierId);
 
+    @Query("SELECT s FROM Service s LEFT JOIN s.itemServiceList i WHERE i.id IS NULL")
+    List<Service> getServiceNoAddedToPurchases();
+
 }

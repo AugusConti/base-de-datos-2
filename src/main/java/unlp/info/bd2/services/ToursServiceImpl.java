@@ -296,8 +296,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<Purchase> getAllPurchasesOfUsername(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPurchasesOfUsername'");
+        return this.purchaseRepository.findAllByUserUsername(username);
     }
 
     @Override
@@ -317,8 +316,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<Supplier> getTopNSuppliersItemsSold(int n) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTopNSuppliersItemsSold'");
+       return this.supplierRepository.findTopNSuppliersItemsSold(PageRequest.ofSize(n));
     }
 
     @Override
@@ -340,8 +338,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Long getCountOfPurchasesBetweenDates(Date start, Date end) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCountOfPurchasesBetweenDates'");
+        return this.purchaseRepository.countByDateBetween(start, end);
     }
 
     @Override
@@ -352,8 +349,7 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public List<Purchase> getPurchaseWithService(Service service) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPurchaseWithService'");
+        return this.purchaseRepository.findAllByItemServiceListService(service); 
     }
 
     @Override
@@ -392,15 +388,13 @@ public class ToursServiceImpl implements ToursService {
 
     @Override
     public Route getMostBestSellingRoute() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMostBestSellingRoute'");
+        return this.routeRepository.findMostPurchasedRoutes(PageRequest.of(0, 1)).get(0);
     }
 
     @Override
     public List<Service> getServiceNoAddedToPurchases() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getServiceNoAddedToPurchases'");
-    }
+        return this.serviceRepository.getServiceNoAddedToPurchases();
+        }
 
     @Override
     public List<TourGuideUser> getTourGuidesWithRating1() {
