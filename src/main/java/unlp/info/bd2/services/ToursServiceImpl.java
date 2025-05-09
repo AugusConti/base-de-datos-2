@@ -394,8 +394,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<Route> getRoutsNotSell() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRoutsNotSell'");
+        return this.routeRepository.findNotSell();
     }
 
     @Transactional(readOnly = true)
@@ -407,8 +406,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<Route> getRoutesWithMinRating() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRoutesWithMinRating'");
+        return this.routeRepository.findWithMinRating();
     }
 
     @Transactional(readOnly = true)
