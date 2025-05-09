@@ -339,7 +339,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<Purchase> getTop10MoreExpensivePurchasesWithServices() {
-        return this.purchaseRepository.findTop10MoreExpensivePurchasesWithServices(PageRequest.ofSize(10));
+        return this.purchaseRepository.findByItemServiceListIsNotEmptyOrderByTotalPriceDesc(PageRequest.ofSize(10));
     }
 
     @Transactional(readOnly = true)

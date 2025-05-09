@@ -20,6 +20,7 @@ public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
     Optional<Purchase> findByCode(String code);
 
-    @Query("SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList iserv ORDER BY p.totalPrice DESC")
-    List<Purchase> findTop10MoreExpensivePurchasesWithServices(Pageable pageable);
+    //@Query("SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList iserv ORDER BY p.totalPrice DESC")
+    //List<Purchase> findTop10MoreExpensivePurchasesWithServices(Pageable pageable);
+    List<Purchase> findByItemServiceListIsNotEmptyOrderByTotalPriceDesc(Pageable pageable);
 }
