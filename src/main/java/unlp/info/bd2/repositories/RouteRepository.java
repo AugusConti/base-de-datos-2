@@ -4,7 +4,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import unlp.info.bd2.model.Route;
+import unlp.info.bd2.model.Stop;
 
 import java.util.List;
 
@@ -25,4 +27,7 @@ public interface RouteRepository extends CrudRepository<Route, Long> {
 
     @Query("SELECT MAX(SIZE(r.stops)) FROM Route r")
     Long findMaxStopOfRoutes();
+
+    @Query("FROM Route r JOIN r.stops s WHERE s = :stop")
+    List<Route> findRoutesWithStop(@Param("stop") Stop stop);
 }
