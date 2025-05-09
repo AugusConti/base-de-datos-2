@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -28,5 +29,7 @@ public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
     List<Purchase> findAllByItemServiceListService(@Param("service") Service service);
 
-    
+    //@Query("SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList iserv ORDER BY p.totalPrice DESC")
+    //List<Purchase> findTop10MoreExpensivePurchasesWithServices(Pageable pageable);
+    List<Purchase> findByItemServiceListIsNotEmptyOrderByTotalPriceDesc(Pageable pageable);
 }
