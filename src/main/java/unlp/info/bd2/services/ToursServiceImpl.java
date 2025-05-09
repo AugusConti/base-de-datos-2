@@ -378,8 +378,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public Long getMaxStopOfRoutes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMaxStopOfRoutes'");
+        return this.routeRepository.findMaxStopOfRoutes();
     }
 
     @Transactional(readOnly = true)

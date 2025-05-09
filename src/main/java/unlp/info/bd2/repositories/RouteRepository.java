@@ -22,4 +22,7 @@ public interface RouteRepository extends CrudRepository<Route, Long> {
 
     @Query("FROM Route r ORDER BY SIZE(r.stops) DESC")
     List<Route> findTop3RoutesWithMoreStops(Pageable pageable);
+
+    @Query("SELECT MAX(SIZE(r.stops)) FROM Route r")
+    Long findMaxStopOfRoutes();
 }
