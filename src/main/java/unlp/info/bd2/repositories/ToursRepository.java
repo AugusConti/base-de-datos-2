@@ -27,7 +27,7 @@ public interface ToursRepository {
     List<TourGuideUser> getTourGuidesWithRating1();
     List<Purchase> getTop10MoreExpensivePurchasesInServices(); 
     //void addItemToPurchase(ItemService i,Purchase p);
-    boolean canCreatePurchase(Date date, Route route);
+    int countPurchasesByDateAndRoute(Date date, Route route);
     //void addReviewToPurchase(Review r);
     Long getMaxStopOfRoutes();
     List<Route> getRoutsNotSell();

@@ -167,19 +167,14 @@ public class ToursRepositoryImpl implements ToursRepository {
     }
 
     @Override
-    public boolean canCreatePurchase(Date date, Route route) {//REVISAR
+    public int countPurchasesByDateAndRoute(Date date, Route route) {
         Session session = sessionFactory.getCurrentSession();
         String hql= "FROM Purchase p WHERE p.route = :ruta and p.date = :date";
-        List<Purchase> result = session.createQuery(hql, Purchase.class)
+        int result = session.createQuery(hql, Purchase.class)
                 .setParameter("ruta", route)
                 .setParameter("date", date)
-                .getResultList();
-        if (result.size() >= route.getMaxNumberUsers()) {
-            return false;
-        }
-        else{
-            return true;
-        }
+                .getResultList().size();
+        return result;
     }
 
 

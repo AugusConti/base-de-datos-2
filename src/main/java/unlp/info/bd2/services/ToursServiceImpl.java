@@ -208,7 +208,7 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional
     public Purchase createPurchase(String code, Date date, Route route,User user)throws ToursException{
-        if(!this.repository.canCreatePurchase(date, route)){
+        if(this.repository.countPurchasesByDateAndRoute(date, route) >= route.getMaxNumberUsers()){
             throw new ToursException("No hay mas cupos para la ruta con ID "+ route.getId());
         }
         Purchase p = new Purchase(code, date, user, route);
@@ -241,8 +241,6 @@ public class ToursServiceImpl implements ToursService{
     @Override
     @Transactional 
     public void deletePurchase(Purchase purchase) throws ToursException{
-        //borra la compra y ver que se borre de la lista de compras del usuario
-        // ya con la cascada se sabe que se borra del usuario ?
         this.repository.delete(purchase);
     }
 
