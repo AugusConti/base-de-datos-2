@@ -60,6 +60,7 @@ public class ToursServiceImpl implements ToursService{
             return this.repository.findById(id, User.class);
         } catch (Exception e) {
             throw new ToursException(e.getMessage());
+            //Está de más
         }
     }
 
