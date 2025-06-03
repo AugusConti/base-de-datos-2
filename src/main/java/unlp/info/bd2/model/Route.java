@@ -1,70 +1,33 @@
 package unlp.info.bd2.model;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-
-@Entity
 public class Route {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private ObjectId id;
 
-    @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false, precision = 2)
     private float price;
 
-    @Column(nullable = false, precision = 4)
     private float totalKm;
 
-    @Column(nullable = false)
     private int maxNumberUsers;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "routes_stops",
-            joinColumns = { @JoinColumn(name = "route_id") },
-            inverseJoinColumns = { @JoinColumn(name = "stop_id") }
-    )
     private List<Stop> stops;
 
-    @ManyToMany(mappedBy = "routes", cascade = {}, fetch = FetchType.EAGER)
-    private List<DriverUser> drivers;
+    private List<DriverUser> driverList;
 
-    @ManyToMany(mappedBy = "routes", cascade = {}, fetch = FetchType.EAGER)
-    private List<TourGuideUser> tourGuides;
+    private List<TourGuideUser> tourGuideList;
 
-    public Route() {
-    }
-
-    public Route(String name, float price, float totalKm, int maxNumberUsers, List<Stop> stops) {
-        this.name = name;
-        this.price = price;
-        this.totalKm = totalKm;
-        this.maxNumberUsers = maxNumberUsers;
-        this.stops = stops;
-        this.drivers = new ArrayList<>();
-        this.tourGuides = new ArrayList<>();
-    }
-
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -108,37 +71,20 @@ public class Route {
         this.stops = stops;
     }
 
-    public List<DriverUser> getDrivers() {
-        return drivers;
-    }
-
     public List<DriverUser> getDriverList() {
-        return drivers;
+        return driverList;
     }
 
-    public void setDrivers(List<DriverUser> drivers) {
-        this.drivers = drivers;
-    }
-
-    public List<TourGuideUser> getTourGuides() {
-        return tourGuides;
+    public void setDriverList(List<DriverUser> driverList) {
+        this.driverList = driverList;
     }
 
     public List<TourGuideUser> getTourGuideList() {
-        return tourGuides;
+        return tourGuideList;
     }
 
-    public void setTourGuides(List<TourGuideUser> tourGuides) {
-        this.tourGuides = tourGuides;
+    public void setTourGuideList(List<TourGuideUser> tourGuideList) {
+        this.tourGuideList = tourGuideList;
     }
 
-    public void addDriver(DriverUser d) {
-        this.drivers.add(d);
-        d.addRoute(this);
-    }
-
-    public void addTourGuide(TourGuideUser t) {
-        this.tourGuides.add(t);
-        t.addRoute(this);
-    }
 }

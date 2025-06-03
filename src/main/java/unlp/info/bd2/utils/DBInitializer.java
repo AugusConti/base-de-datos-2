@@ -41,6 +41,7 @@ public class DBInitializer {
         Service service7 = this.toursService.addServiceToSupplier("souvenir t-shirt", 10, "I love Argentina t-shirt", supplier1);
         Service service8 = this.toursService.addServiceToSupplier("souvenir photograph", 5, "Souvenir photo at tourist spot", supplier3);
         Service service9 = this.toursService.addServiceToSupplier("souvenir retrato", 5, "Another Souvenir", supplier3);
+        Service service10 = this.toursService.addServiceToSupplier("souvenir retrato 2", 5, "Another Souvenir 2", supplier3);
 
         // Stops
         Stop stop1 = this.toursService.createStop ("Diagonal Norte",	"Obelisco / Catedral Metropolitana / Casa Rosada / Museo del Bicentenario / Galería Güemes / Cabildo de Buenos Aires");
@@ -109,8 +110,9 @@ public class DBInitializer {
 
         List<Stop> stopsRoute4 = new ArrayList<Stop>(Arrays.asList(stop7, stop11, stop20));
         Route route4 = this.toursService.createRoute("Delta Tour", 800, 75,10, stopsRoute4);
+        route2.addDriver(driverUser2);
         route4.addDriver(driverUser4);
-        route4.addTourGuide(tourGuideUser1);
+        route4.addTourGuide(tourGuideUser3);
         route4.addTourGuide(tourGuideUser4);
 
         List<Stop> stopsRoute5 = new ArrayList<>(Arrays.asList(stop1, stop2));
@@ -118,7 +120,7 @@ public class DBInitializer {
 
         // Purchases
         Purchase purchase1 = this.toursService.createPurchase("P001", java.sql.Date.valueOf(today.minusDays(30)), route1, user1);
-        Purchase purchase2 = this.toursService.createPurchase("P002", java.sql.Date.valueOf(today.minusDays(30)), route2, user2);
+        Purchase purchase2 = this.toursService.createPurchase("P002", java.sql.Date.valueOf(today.minusDays(30)), route1, user2);
         Purchase purchase3 = this.toursService.createPurchase("P003", java.sql.Date.valueOf(today.minusDays(28)), route3, user3);
         Purchase purchase4 = this.toursService.createPurchase("P004", java.sql.Date.valueOf(today.minusDays(27)), route4, user4);
         Purchase purchase5 = this.toursService.createPurchase("P005", java.sql.Date.valueOf(today.minusDays(27)), route1, user1);

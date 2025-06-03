@@ -1,69 +1,35 @@
 package unlp.info.bd2.model;
 
-import java.util.ArrayList;
+import org.bson.types.ObjectId;
+
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-
-@Entity
 public class Purchase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    ObjectId id;
 
-    @Column(unique = true, updatable = false, nullable = false, length = 255)
     private String code;
 
-    @Column(nullable = false, precision = 2)
     private float totalPrice;
 
-    @Column(nullable = false)
     private Date date;
 
-    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "route_id")
     private Route route;
 
-    @OneToOne(optional = true, mappedBy = "purchase", cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
     private Review review;
 
-    @OneToMany(mappedBy = "purchase", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<ItemService> itemServiceList;
 
-    public Purchase() {
-    }
 
-    public Purchase(String code, Date date, User user, Route route) {
-        this.code = code;
-        this.totalPrice = route.getPrice();
-        this.date = date;
-        this.user = user;
-        this.route = route;
-        this.review = null;
-        this.itemServiceList = new ArrayList<>();
-    }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -121,17 +87,5 @@ public class Purchase {
 
     public void setItemServiceList(List<ItemService> itemServiceList) {
         this.itemServiceList = itemServiceList;
-    }
-
-    // El precio debería ser el del service
-    public void addItem(ItemService item, float price) {
-        this.itemServiceList.add(item);
-        this.totalPrice += price;
-    }
-
-    public Review addReview(int rating, String comment) {
-        Review r = new Review(rating, comment, this);
-        this.review = r;
-        return r;
     }
 }

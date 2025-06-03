@@ -1,31 +1,36 @@
 package unlp.info.bd2;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 import unlp.info.bd2.config.AppConfig;
-import unlp.info.bd2.config.HibernateConfiguration;
-import unlp.info.bd2.services.ToursService;
-import unlp.info.bd2.utils.ToursException;
 import unlp.info.bd2.model.*;
+import unlp.info.bd2.services.ToursService;
+import unlp.info.bd2.utils.DBInitializer;
+import unlp.info.bd2.utils.ToursException;
+
+import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-@ContextConfiguration(classes = {HibernateConfiguration.class, AppConfig.class}, loader = AnnotationConfigContextLoader.class)
 @ExtendWith(SpringExtension.class)
-@Transactional
-@Rollback(true)
 class ToursApplicationTests {
+
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Autowired
 	private ToursService toursService;
@@ -37,6 +42,7 @@ class ToursApplicationTests {
 
 	@BeforeEach
 	public void setUp(){
+		mongoTemplate.getDb().drop();
 		Calendar cal1 = Calendar.getInstance();
 		cal1.set(1980, Calendar.APRIL, 5);
 		this.dob1 = cal1.getTime();
@@ -47,13 +53,12 @@ class ToursApplicationTests {
 		cal1.set(2024,Calendar.MARCH, 20);
 		this.dyes = cal1.getTime();
 	}
-	//Tomi
+
+
 	@Test
 	void createAndGetUserTest()  throws ToursException {
-
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
 		assertNotNull(user1.getId());
-
 		assertEquals("user1", user1.getUsername());
 		assertEquals("Usuario Uno", user1.getName());
 		assertEquals("user1@gmail.com", user1.getEmail());
@@ -70,7 +75,7 @@ class ToursApplicationTests {
 		assertEquals("user1", user.getUsername());
 		assertEquals("Usuario Uno", user.getName());
 		assertEquals("user1@gmail.com", user.getEmail());
-		assertTrue(user.getPurchases().isEmpty());
+		assertTrue(user.getPurchaseList().isEmpty());
 
 		Optional<User> opUserFromDB2 = this.toursService.getUserByUsername("userD");
 		assertTrue(opUserFromDB2.isPresent());
@@ -80,7 +85,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.createUser("userD", "1234", "Otro usuario", "otromail@gmail.com", dob1, "000111222999"), "Constraint Violation");
 	}
-	//Tomi
+
 	@Test
 	void updateUserTest()  throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -97,18 +102,8 @@ class ToursApplicationTests {
 		driverUser = (DriverUser) this.toursService.updateUser(driverUser);
 		assertNotEquals("exp...", driverUser.getExpedient());
 		assertEquals("nuevo expediente", driverUser.getExpedient());
-
-		user1.setUsername("user2");
-		this.toursService.updateUser(user1);
-		Optional<User> opUserFromDB = this.toursService.getUserByUsername("user2");
-		assertTrue(opUserFromDB.isEmpty());
-		Optional<User> opUnmodifiedUserFromDB = this.toursService.getUserByUsername("user1");
-		assertTrue(opUnmodifiedUserFromDB.isPresent());
-		User unmodifiedUserFromDB = opUnmodifiedUserFromDB.get();
-		assertEquals(unmodifiedUserFromDB.getId(), user1.getId());
 	}
 
-	//Augusto
 	@Test
 	void createAndGetRoutesAndStopsTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
@@ -142,17 +137,18 @@ class ToursApplicationTests {
 		Route routeFromList = listRoutes2.get(0);
 		assertEquals("Estadios 2", routeFromList.getName());
 	}
-	//Augusto
+
 	@Test
 	void assignWorkersToRoutesTest() throws ToursException {
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
 		Stop stop2 = this.toursService.createStop("Estadio La Bombonera", "Estadio de Boca Junions");
 		Stop stop3 = this.toursService.createStop("Estadio Libertadores de America", "Estadio de Independiente");
-		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1, stop2, stop3));
+		List<Stop> stops1 = new ArrayList<Stop>(Arrays.asList(stop1,stop2, stop3));
 		Route route1 = this.toursService.createRoute("Estadios", 20000, 55.5f, 3, stops1);
 		DriverUser driverUser1 = this.toursService.createDriverUser("userD1", "1234", "Usuario Driver", "userd1@gmail.com", dob2, "000111222444", "exp...");
 		DriverUser driverUser2 = this.toursService.createDriverUser("userD2", "1234", "Usuario Driver", "userd2@gmail.com", dob2, "000111222444", "exp...");
 		TourGuideUser tourGuideUser1 = this.toursService.createTourGuideUser("userG1", "1234", "Usuario TourGuide", "userg1@gmail.com", dob2, "000111222555", "edu...");
+
 		this.toursService.assignDriverByUsername(driverUser1.getUsername(), route1.getId());
 		this.toursService.assignDriverByUsername(driverUser2.getUsername(), route1.getId());
 		this.toursService.assignTourGuideByUsername(tourGuideUser1.getUsername(), route1.getId());
@@ -164,9 +160,8 @@ class ToursApplicationTests {
 		assertEquals("userG1", route.getTourGuideList().get(0).getUsername());
 
 		assertThrows(ToursException.class, () -> this.toursService.assignTourGuideByUsername("user_no_existente", tourGuideUser1.getId()) , "No pudo realizarse la asignación");
-		assertThrows(ToursException.class, () -> this.toursService.assignDriverByUsername(driverUser1.getUsername(), 1000000L) , "No pudo realizarse la asignación");
+		assertThrows(ToursException.class, () -> this.toursService.assignDriverByUsername(driverUser1.getUsername(), new ObjectId("67777a377777777777777777")) , "No pudo realizarse la asignación");
 	}
-	//Augusto
 
 	@Test
 	void createAndGetSupplierAndService() throws ToursException {
@@ -201,7 +196,7 @@ class ToursApplicationTests {
 
 		assertThrows(ToursException.class, () -> this.toursService.createSupplier("Supplier2", "000111"), "Constraint Violation");
 	}
-	//Augusto
+
 	@Test
 	void updateServicePriceTest() throws ToursException {
 		Supplier supplier1 = this.toursService.createSupplier("Supplier1", "000111");
@@ -211,10 +206,9 @@ class ToursApplicationTests {
 		Service service2 = this.toursService.updateServicePriceById(service1.getId(), 600f);
 		assertEquals(600f, service2.getPrice());
 
-		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(100000L, 500f), "No existe el producto");
+		assertThrows(ToursException.class, () -> this.toursService.updateServicePriceById(new ObjectId("67777a377777777777777777"), 500f), "No existe el producto");
 	}
-	
-	//Sofi
+
 	@Test
 	void createAndGetPurchaseTest() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -235,7 +229,7 @@ class ToursApplicationTests {
 
 		ItemService itemService1 = this.toursService.addItemToPurchase(service1, 1, purchase1);
 		assertNotNull(itemService1.getId());
-		assertEquals(supplier1.getId(), itemService1.getService().getId());
+		assertEquals(service1.getId(), itemService1.getService().getId());
 		assertEquals(purchase1.getId(), itemService1.getPurchase().getId());
 		ItemService itemService2 = this.toursService.addItemToPurchase(service2, 2, purchase1);
 
@@ -248,10 +242,11 @@ class ToursApplicationTests {
 		assertEquals(22500, purchase3.getTotalPrice());
 
 		this.toursService.createPurchase("101", dyes, route1, user1);
+
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("200", dyes, route1, user1), "No puede realizarse la compra");
 		assertThrows(ToursException.class, () -> this.toursService.createPurchase("100", route1, user1), "Constraint Violation");
 	}
-	//Sofi
+
 	@Test
 	void removePurchaseAndItems() throws ToursException {
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
@@ -272,7 +267,6 @@ class ToursApplicationTests {
 		Optional<Purchase> purchase = this.toursService.getPurchaseByCode("100");
 		assertFalse(purchase.isPresent());
 	}
-	//Sofi
 
 	@Test
 	void addReviewToPurchaseTest() throws ToursException {
@@ -288,11 +282,10 @@ class ToursApplicationTests {
 		Optional<Purchase> optionalPurchase = this.toursService.getPurchaseByCode("100");
 		assertTrue(optionalPurchase.isPresent());
 		Purchase purchase = optionalPurchase.get();
-		assertNotNull(review.getId());
+		assertNull(review.getId());
 		assertNotNull(purchase.getReview());
 		assertEquals(purchase.getId(), review.getPurchase().getId());
 	}
-	//Tomi
 
 	@Test
 	void deleteUserTest() throws ToursException {
@@ -323,4 +316,5 @@ class ToursApplicationTests {
 		assertTrue(tourGuideUser.isActive());
 		assertThrows(ToursException.class, () -> this.toursService.deleteUser(tourGuideUser), "El usuario no puede ser desactivado");
 	}
+
 }

@@ -1,56 +1,30 @@
 package unlp.info.bd2.model;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-
-@Entity
 public class Service {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private ObjectId id;
 
-    @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false, precision = 2)
     private float price;
 
-    @Column(nullable = false, length = 255)
     private String description;
 
-    @OneToMany(mappedBy = "service", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
-    private List<ItemService> itemServices;
+    private List<ItemService> itemServiceList;
 
-    @ManyToOne(optional = false, cascade = {}, fetch = FetchType.EAGER)
     private Supplier supplier;
 
-    public Service() {
-    }
 
-    public Service(String name, float price, String description, Supplier supplier) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.itemServices = new ArrayList<>();
-        this.supplier = supplier;
-    }
-
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -79,11 +53,11 @@ public class Service {
     }
 
     public List<ItemService> getItemServiceList() {
-        return itemServices;
+        return itemServiceList;
     }
 
-    public void setItemServices(List<ItemService> itemServices) {
-        this.itemServices = itemServices;
+    public void setItemServiceList(List<ItemService> itemServiceList) {
+        this.itemServiceList = itemServiceList;
     }
 
     public Supplier getSupplier() {
@@ -92,9 +66,5 @@ public class Service {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
-    }
-
-    public void addItem(ItemService item) {
-        this.itemServices.add(item);
     }
 }

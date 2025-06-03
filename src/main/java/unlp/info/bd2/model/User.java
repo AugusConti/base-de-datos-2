@@ -1,76 +1,37 @@
 package unlp.info.bd2.model;
 
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
-
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 15)
-@DiscriminatorValue("User")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private ObjectId id;
 
-    @Column(unique = true, updatable = false, nullable = false, length = 255)
     private String username;
 
-    @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false)
     private Date birthdate;
 
-    @Column(nullable = false, length = 255)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private boolean active;
 
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
-    private List<Purchase> purchases;
+    private List<Purchase> purchaseList;
 
-    public User() {
-    }
 
-    public User(String username, String password, String name, String email, Date birthdate, String phoneNumber) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.birthdate = birthdate;
-        this.phoneNumber = phoneNumber;
-        this.active = true;
-        this.purchases = new ArrayList<>();
-    }
-
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -122,16 +83,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Purchase> getPurchaseList(){
-        return purchases;
+    public List<Purchase> getPurchaseList() {
+        return purchaseList;
     }
 
-    public List<Purchase> getPurchases(){
-        return purchases;
-    }
-
-    public void setPurchases(List<Purchase> purchases) {
-        this.purchases = purchases;
+    public void setPurchaseList(List<Purchase> purchaseList) {
+        this.purchaseList = purchaseList;
     }
 
     public boolean isActive() {
@@ -140,16 +97,5 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public void addPurchase(Purchase p) {
-        this.purchases.add(p);
-    }
-
-    public boolean canBeDesactive() {
-        return true;
-    }
-    public boolean canBeDeleted() {
-        return this.getPurchases().isEmpty();
     }
 }

@@ -1,4 +1,5 @@
 package unlp.info.bd2.services;
+import org.bson.types.ObjectId;
 import unlp.info.bd2.model.*;
 import unlp.info.bd2.utils.ToursException;
 
@@ -11,24 +12,23 @@ public interface ToursService {
     User createUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber) throws ToursException;
     DriverUser createDriverUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String expedient) throws ToursException;
     TourGuideUser createTourGuideUser(String username, String password, String fullName, String email, Date birthdate, String phoneNumber, String education) throws ToursException;
-    Optional<User> getUserById(Long id) throws ToursException;
+    Optional<User> getUserById(ObjectId id) throws ToursException;
     Optional<User> getUserByUsername(String username) throws ToursException;
     User updateUser(User user) throws ToursException;
     void deleteUser(User user) throws ToursException;
     Stop createStop(String name, String description) throws ToursException;
     List<Stop> getStopByNameStart(String name);
     Route createRoute(String name, float price, float totalKm, int maxNumberOfUsers, List<Stop> stops) throws ToursException;
-    Optional<Route> getRouteById(Long id);
+    Optional<Route> getRouteById(ObjectId id);
     List<Route> getRoutesBelowPrice(float price);
-    void assignDriverByUsername(String username, Long idRoute) throws ToursException;
-    void assignTourGuideByUsername(String username, Long idRoute) throws ToursException;
+    void assignDriverByUsername(String username, ObjectId idRoute) throws ToursException;
+    void assignTourGuideByUsername(String username, ObjectId idRoute) throws ToursException;
     Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException;
     Service addServiceToSupplier(String name, float price, String description, Supplier supplier) throws ToursException;
-    Service updateServicePriceById(Long id, float newPrice) throws ToursException;
-    Optional<Supplier> getSupplierById(Long id);
+    Service updateServicePriceById(ObjectId id, float newPrice) throws ToursException;
+    Optional<Supplier> getSupplierById(ObjectId id);
     Optional<Supplier> getSupplierByAuthorizationNumber(String authorizationNumber);
-    Optional<Service> getServiceByNameAndSupplierId(String name, Long id) throws ToursException;
-    
+    Optional<Service> getServiceByNameAndSupplierId(String name, ObjectId id) throws ToursException;
     Purchase createPurchase(String code, Route route, User user) throws ToursException;
     Purchase createPurchase(String code, Date date, Route route, User user) throws ToursException;
     ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException;
@@ -39,18 +39,24 @@ public interface ToursService {
     // CONSULTAS HQL
     List<Purchase> getAllPurchasesOfUsername(String username);
     List<User> getUserSpendingMoreThan(float mount);
+    List<User> getUsersWithNumberOfPurchases(int number);
     List<Supplier> getTopNSuppliersInPurchases(int n);
-    List<Purchase> getTop10MoreExpensivePurchasesInServices();
-   
+    List<Supplier> getTopNSuppliersItemsSold(int n);
+    List<Purchase> getTop10MoreExpensivePurchasesWithServices();
     List<User> getTop5UsersMorePurchases();
-    long getCountOfPurchasesBetweenDates(Date start, Date end);
+    List<Route> getTop3RoutesWithMoreStops();
+    Long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Route> getRoutesWithStop(Stop stop);
+    List<Purchase> getPurchaseWithService(Service service);
     Long getMaxStopOfRoutes();
+    Long getMaxServicesOfSupplier();
     List<Route> getRoutsNotSell();
-    List<Route> getTop3RoutesWithMaxRating();
+    List<Route> getTop3RoutesWithMaxAverageRating();
+    List<Route> getRoutesWithMinRating();
     Service getMostDemandedService();
-    /**/
+    Route getMostBestSellingRoute();
     List<Service> getServiceNoAddedToPurchases();
-    
     List<TourGuideUser> getTourGuidesWithRating1();
+    DriverUser getDriverUserWithMoreRoutes();
+
 }

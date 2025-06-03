@@ -1,47 +1,24 @@
 package unlp.info.bd2.model;
 
-import java.util.ArrayList;
+import org.bson.types.ObjectId;
+
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-@Entity
 public class Supplier {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private ObjectId id;
 
-    @Column(nullable = false, length = 255)
-    private String businessName; 
-    
-    @Column(unique = true, updatable = false, nullable = false, length = 255)
+    private String businessName;
+
     private String authorizationNumber;
 
-    @OneToMany(mappedBy = "supplier", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     private List<Service> services;
 
-    public Supplier() {
-    }
-
-    public Supplier(String businessName, String authorizationNumber) {
-        this.businessName = businessName;
-        this.authorizationNumber = authorizationNumber;
-        this.services = new ArrayList<>();
-    }
-
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -67,10 +44,6 @@ public class Supplier {
 
     public void setServices(List<Service> services) {
         this.services = services;
-    }
-
-    public void addService(Service s) {
-        this.services.add(s);
     }
 
 }
