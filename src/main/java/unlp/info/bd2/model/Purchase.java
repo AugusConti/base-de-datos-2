@@ -2,6 +2,7 @@ package unlp.info.bd2.model;
 
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,18 @@ public class Purchase {
 
     private List<ItemService> itemServiceList;
 
+    public Purchase() {
+    }
 
+    public Purchase(String code, Date date, User user, Route route) {
+        this.code = code;
+        this.totalPrice = route.getPrice();
+        this.date = date;
+        this.user = user;
+        this.route = route;
+        this.review = null;
+        this.itemServiceList = new ArrayList<>();
+    }
 
     public ObjectId getId() {
         return id;
@@ -87,5 +99,16 @@ public class Purchase {
 
     public void setItemServiceList(List<ItemService> itemServiceList) {
         this.itemServiceList = itemServiceList;
+    }
+
+    public void addItem(ItemService item, float price) {
+        this.itemServiceList.add(item);
+        this.totalPrice += price;
+    }
+
+    public Review addReview(int rating, String comment) {
+        Review r = new Review(rating, comment, this);
+        this.review = r;
+        return r;
     }
 }

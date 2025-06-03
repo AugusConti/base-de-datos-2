@@ -13,6 +13,14 @@ public class Review {
 
     private Purchase purchase;
 
+    public Review() {
+    }
+
+    public Review(int rating, String comment, Purchase purchase) {
+        this.rating = rating;
+        this.comment = comment;
+        this.purchase = purchase;
+    }
 
     public ObjectId getId() {
         return id;

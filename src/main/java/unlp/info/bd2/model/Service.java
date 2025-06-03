@@ -19,6 +19,16 @@ public class Service {
 
     private Supplier supplier;
 
+    public Service() {
+    }
+
+    public Service(String name, float price, String description, Supplier supplier) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.itemServiceList = new ArrayList<>();
+        this.supplier = supplier;
+    }
 
     public ObjectId getId() {
         return id;
@@ -66,5 +76,9 @@ public class Service {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public void addItem(ItemService item) {
+        this.itemServiceList.add(item);
     }
 }

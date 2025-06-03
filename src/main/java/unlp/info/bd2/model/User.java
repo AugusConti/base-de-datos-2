@@ -26,6 +26,19 @@ public class User {
 
     private List<Purchase> purchaseList;
 
+    public User() {
+    }
+
+    public User(String username, String password, String name, String email, Date birthdate, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.birthdate = birthdate;
+        this.phoneNumber = phoneNumber;
+        this.active = true;
+        this.purchaseList = new ArrayList<>();
+    }
 
     public ObjectId getId() {
         return id;
@@ -98,4 +111,18 @@ public class User {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public void addPurchase(Purchase p) {
+        this.purchaseList.add(p);
+    }
+
+    public boolean canBeDesactive() {
+        return true;
+    }
+
+    public boolean canBeDeleted() {
+        return this.purchaseList.isEmpty();
+    }
+
+    // TODO Chequear si hace falta removePurchase
 }

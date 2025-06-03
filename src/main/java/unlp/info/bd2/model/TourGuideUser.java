@@ -11,6 +11,15 @@ public class TourGuideUser extends User {
 
     private List<Route> routes;
 
+    public TourGuideUser() {
+    }
+
+    public TourGuideUser(String username, String password, String name, String email, Date birthdate,
+            String phoneNumber, String education) {
+        super(username, password, name, email, birthdate, phoneNumber);
+        this.education = education;
+        this.routes = new ArrayList<>();
+    }
 
     public String getEducation() {
         return education;
@@ -26,6 +35,15 @@ public class TourGuideUser extends User {
 
     public void setRoutes(List<Route> routes) {
         this.routes = routes;
+    }
+
+    public void addRoute(Route r) {
+        this.routes.add(r);
+    }
+
+    @Override
+    public boolean canBeDesactive() {
+        return this.routes.isEmpty();
     }
 
 }

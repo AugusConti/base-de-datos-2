@@ -23,6 +23,19 @@ public class Route {
 
     private List<TourGuideUser> tourGuideList;
 
+    public Route() {
+    }
+
+    public Route(String name, float price, float totalKm, int maxNumberUsers) {
+        this.name = name;
+        this.price = price;
+        this.totalKm = totalKm;
+        this.maxNumberUsers = maxNumberUsers;
+        this.stops = new ArrayList<>();
+        this.driverList = new ArrayList<>();
+        this.tourGuideList = new ArrayList<>();
+    }
+
     public ObjectId getId() {
         return id;
     }
@@ -85,6 +98,16 @@ public class Route {
 
     public void setTourGuideList(List<TourGuideUser> tourGuideList) {
         this.tourGuideList = tourGuideList;
+    }
+
+    public void addDriver(DriverUser d) {
+        this.driverList.add(d);
+        d.addRoute(this);
+    }
+
+    public void addTourGuide(TourGuideUser t) {
+        this.tourGuideList.add(t);
+        t.addRoute(this);
     }
 
 }
