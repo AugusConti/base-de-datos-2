@@ -2,15 +2,25 @@ package unlp.info.bd2.model;
 
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
+@Document
 public class Review {
 
+    @MongoId(FieldType.OBJECT_ID)
     private ObjectId id;
 
+    @Field
     private int rating;
 
+    @Field
     private String comment;
 
+    @DBRef(lazy = false)
     private Purchase purchase;
 
     public Review() {

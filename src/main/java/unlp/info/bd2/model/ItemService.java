@@ -2,15 +2,25 @@ package unlp.info.bd2.model;
 
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
+@Document
 public class ItemService {
 
+    @MongoId(FieldType.OBJECT_ID)
     ObjectId id;
 
+    @Field
     private int quantity;
 
+    @DBRef(lazy = false)
     private Purchase purchase;
 
+    @DBRef(lazy = false)
     private Service service;
 
     public ObjectId getId() {

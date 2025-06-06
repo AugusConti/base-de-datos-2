@@ -2,13 +2,21 @@ package unlp.info.bd2.model;
 
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
+@Document
 public class Stop {
 
+    @MongoId(FieldType.OBJECT_ID)
     private ObjectId id;
 
+    @Field
     private String name;
 
+    @Field
     private String description;
 
     public Stop() {

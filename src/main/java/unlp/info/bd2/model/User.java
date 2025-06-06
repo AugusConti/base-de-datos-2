@@ -1,29 +1,45 @@
 package unlp.info.bd2.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Document
 public class User {
 
+    @MongoId(FieldType.OBJECT_ID)
     private ObjectId id;
 
+    @Indexed(unique = true)
     private String username;
 
+    @Field
     private String password;
 
+    @Field
     private String name;
 
+    @Field
     private String email;
 
+    @Field
     private Date birthdate;
 
+    @Field
     private String phoneNumber;
 
+    @Field
     private boolean active;
 
+    @DBRef(lazy = true)
     private List<Purchase> purchaseList;
 
     public User() {

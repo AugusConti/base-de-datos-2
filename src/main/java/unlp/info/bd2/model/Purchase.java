@@ -1,27 +1,42 @@
 package unlp.info.bd2.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Document
 public class Purchase {
 
+    @MongoId(FieldType.OBJECT_ID)
     ObjectId id;
 
+    @Indexed(unique = true)
     private String code;
 
+    @Field
     private float totalPrice;
 
+    @Field
     private Date date;
 
+    @DBRef(lazy = true)
     private User user;
 
+    @DBRef(lazy = true)
     private Route route;
 
+    @DBRef(lazy = true)
     private Review review;
 
+    @DBRef(lazy = true)
     private List<ItemService> itemServiceList;
 
     public Purchase() {

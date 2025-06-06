@@ -1,18 +1,28 @@
 package unlp.info.bd2.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Document
 public class Supplier {
 
+    @MongoId(FieldType.OBJECT_ID)
     private ObjectId id;
 
+    @Field
     private String businessName;
 
+    @Indexed(unique = true)
     private String authorizationNumber;
 
+    @Field
     private List<Service> services;
 
     public Supplier() {
