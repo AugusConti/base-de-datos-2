@@ -116,7 +116,7 @@ public class ToursQuerysTests {
         this.assertListEquality(suppliers2.stream().map(Supplier::getAuthorizationNumber).collect(Collectors.toList()), Arrays.asList("12345"));
     }
 
-    //Augusto
+    //August
     //@Test
     //void getTop10MoreExpensivePurchasesInServicesTest() throws ToursException {
     //    List<Purchase> purchases = this.service.getTop10MoreExpensivePurchasesWithServices();
@@ -169,7 +169,7 @@ public class ToursQuerysTests {
         assertEquals(0, routes3.size());
     }
 
-    //Sofi
+    //Sof
     //@Test
     //void getPurchaseWithServiceTest() throws ToursException {
         // DELETE
@@ -194,7 +194,7 @@ public class ToursQuerysTests {
         assertEquals(4, maxServicesOfSupplier);
     }
 
-    //Augusto
+    //August
     //@Test
     //void getRoutsNotSellTest() throws ToursException {
         // DELETE
@@ -211,7 +211,7 @@ public class ToursQuerysTests {
         this.assertListEquality(routesWithMaxRating.stream().map(Route::getName).collect(Collectors.toList()), List.of("City Tour", "Historical Adventure", "Architectural Expedition"));
     }
 
-    //Augusto
+    //August
     //@Test
     //void getRoutesWithMinRatingTest() throws ToursException {
     //    List<Route> routesWithMinRating = this.service.getRoutesWithMinRating();
@@ -219,7 +219,7 @@ public class ToursQuerysTests {
     //    this.assertListEquality(routesWithMinRating.stream().map(Route::getName).collect(Collectors.toList()), List.of("Architectural Expedition", "Delta Tour"));
     //}
 
-    //Tomi
+    //Tom
     //@Test
     //void getMostDemandedServiceTest() throws ToursException {
     //    Service mostDemandedService = this.service.getMostDemandedService();
@@ -236,7 +236,7 @@ public class ToursQuerysTests {
         assertEquals("Diagonal Norte", mostBestSellingRoute.getStops().get(0).getName());
     }
 
-    //Sofi
+    //Sof
     //@Test
     //void getServiceNoAddedToPurchasesTest() throws ToursException {
     //    List<Service> serviceNoAddedToPurchases = this.service.getServiceNoAddedToPurchases();
@@ -244,7 +244,7 @@ public class ToursQuerysTests {
     //    this.assertListEquality(serviceNoAddedToPurchases.stream().map(Service::getName).collect(Collectors.toList()), List.of("Architectural Expedition Book", "souvenir retrato", "souvenir retrato 2"));
     //}
 
-    //Tomi
+    //Tom
     //@Test
     //void getTourGuidesWithRating1Test() throws ToursException {
     //    List<TourGuideUser> tourGuidesWithRating1 = this.service.getTourGuidesWithRating1();
@@ -252,7 +252,7 @@ public class ToursQuerysTests {
     //    this.assertListEquality(tourGuidesWithRating1.stream().map(TourGuideUser::getUsername).collect(Collectors.toList()), List.of("userG3", "userG4"));
     //}
 
-    //Tomi
+    //Tom
     //@Test
     //void getDriverUserWithMoreRoutesTest() throws ToursException {
     //    DriverUser driverUserWithMoreRoutes = this.service.getDriverUserWithMoreRoutes();
