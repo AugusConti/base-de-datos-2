@@ -73,7 +73,7 @@
 
 8. Tomando como referencia el modelo de los trabajos prácticos anteriores y suponiendo que este podría mapearse a una base de datos en MongoDB, proponga algunos casos donde la relación sería conveniente ser mapeada como referencia y otros como documentos embebidos. Justifique la elección.
 
-	**Route - Stop**: Estaría bueno que una Route conozca sus stops con documentos embebidos, ya que, muchas veces que se acceda a una Route vamos a querer usar sus stops, y la Ruta es la única que conoce a las stops, por lo que no es difícil mantener la consistencia (Solo hay que mantenerla entre las mismas rutas xq es una relación muchos a muchos). Además, cada ruta va a tener una cantidad no muy alta de stops, por lo que la lista sería bastante acotada y no va a ocupar muchísimo espacio.
+	**Route - Stop**: Estaría bueno que una Route conozca por referencia a sus stops, ya que al tratarse de una relación muchos a muchos, si se usaran documentos embebidos, una misma Stop aparecería en varias Routes, lo cual dificultaría la modificación de las Stops.
 	
 	**Purchase - Review**: Estaría bueno que la Purchase conozca por referencia a la review, ya que no se va a usar muy seguido la Review cuando se quiere usar una Purchase.
 	
@@ -81,9 +81,9 @@
 	
 	**TourGuide/Driver - Route**: Sería conveniente que la Route conozca por referencia tanto a los TourGuide como a los Driver, ya que no siempre son necesarios cuando se quiere usar una ruta.
 	
-	**Purchase - ItemService**: Sería conveniente que el ItemService conozca por referencia a la Purchase, ya que si bien el ItemService siempre utiliza la Purchase, esta última se va a usar de forma independiente, por lo que seríá conveniente que estén separadas, para no tener que mantener la consistencia a la hora de actualizar, por ejemplo.
+	**Purchase - ItemService**: Sería conveniente que el ItemService conozca por referencia a la Purchase, ya que si bien el ItemService siempre utiliza la Purchase, esta última se va a usar de forma independiente, por lo que seríá conveniente que estén separadas.
 	
-	**Service - ItemService**: Sería conveniente que el Service conozca sus ItemServices en documentos embebidos, ya que muchas veces que usamos un Service se quieren usar los Items. Además, como cada ItemService conoce un único Service, no hay problemas de consistencia y cómo ItemService (En principio) no se va a actualizar, no habría problema de update. El único problema es que un Service puede tener una cantidad muy grande de ItemServices, por lo que la lista ocuparía bastante espacio.
+	**Service - ItemService**: Sería conveniente que el Service conozca sus ItemServices en documentos embebidos, ya que muchas veces que usamos un Service se quieren usar los Items. Además, como cada ItemService conoce un único Service, no hay problemas de consistencia y cómo ItemService (en principio) no se va a actualizar, no habría problema de update.
 
 # Sección 2: Operaciones CRUD básicas
 
