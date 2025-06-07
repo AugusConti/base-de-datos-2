@@ -23,6 +23,17 @@ public class ItemService {
     @DBRef(lazy = false)
     private Service service;
 
+    public ItemService() {
+    }
+
+    public ItemService(int quantity, Purchase purchase, Service service) {
+        this.quantity = quantity;
+        this.purchase = purchase;
+        this.service = service;
+        purchase.addItem(this, quantity * service.getPrice());
+        service.addItem(this);
+    }
+
     public ObjectId getId() {
         return id;
     }

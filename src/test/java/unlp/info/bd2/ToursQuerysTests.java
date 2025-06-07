@@ -107,7 +107,7 @@ public class ToursQuerysTests {
 
     //Sofi
     @Test
-    void getTopNSuppliersItemsSoldTest() throws ToursException {
+    void getTopNSuppliersItemsSoldTest() throws ToursException {//ya pasa
         List<Supplier> suppliers1 = this.service.getTopNSuppliersItemsSold(3);
         assertEquals(3, suppliers1.size());
         this.assertListEquality(suppliers1.stream().map(Supplier::getAuthorizationNumber).collect(Collectors.toList()), Arrays.asList("12345", "54321", "67890"));
@@ -142,7 +142,7 @@ public class ToursQuerysTests {
 
     //Sofi
     @Test
-    void getCountOfPurchasesBetweenDatesTest() throws ToursException {
+    void getCountOfPurchasesBetweenDatesTest() throws ToursException {//ya pasa
         LocalDate today = LocalDate.now();
         long countOfPurchasesBetweenDates1 = this.service.getCountOfPurchasesBetweenDates(Date.valueOf(today.minusDays(25)), Date.valueOf(today.minusDays(15)));
         assertEquals(6, countOfPurchasesBetweenDates1);
@@ -154,7 +154,7 @@ public class ToursQuerysTests {
 
     //Augusto
     @Test
-    void getRoutesWithStopTest() throws ToursException {
+    void getRoutesWithStopTest() throws ToursException {//ya pasa
         Stop stop1 = this.service.getStopByNameStart("Diagonal Norte").get(0);
         Stop stop2 = this.service.getStopByNameStart("Teatro Colón").get(0);
         Stop stop3 = this.service.getStopByNameStart("La Boca").get(0);
@@ -229,7 +229,7 @@ public class ToursQuerysTests {
 
     //Sofi
     @Test
-    void getMostBestSellingRouteTest() throws ToursException {
+    void getMostBestSellingRouteTest() throws ToursException {//ya pasa
         Route mostBestSellingRoute = this.service.getMostBestSellingRoute();
         assertEquals("City Tour", mostBestSellingRoute.getName());
         assertEquals(9, mostBestSellingRoute.getStops().size());

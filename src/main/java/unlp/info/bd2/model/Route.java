@@ -40,12 +40,12 @@ public class Route {
     public Route() {
     }
 
-    public Route(String name, float price, float totalKm, int maxNumberUsers) {
+    public Route(String name, float price, float totalKm, int maxNumberUsers,List<Stop> stops) {
         this.name = name;
         this.price = price;
         this.totalKm = totalKm;
         this.maxNumberUsers = maxNumberUsers;
-        this.stops = new ArrayList<>();
+        this.stops = stops;
         this.driverList = new ArrayList<>();
         this.tourGuideList = new ArrayList<>();
     }

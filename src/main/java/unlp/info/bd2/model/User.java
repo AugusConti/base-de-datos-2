@@ -140,5 +140,7 @@ public class User {
         return this.purchaseList.isEmpty();
     }
 
-    // TODO Chequear si hace falta removePurchase
+    public void removePurchase (Purchase p){
+        this.purchaseList.remove(p);
+    }
 }
