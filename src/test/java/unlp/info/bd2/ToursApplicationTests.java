@@ -191,7 +191,8 @@ class ToursApplicationTests {
 		Optional<Supplier> optionalSupplier3 = this.toursService.getSupplierByAuthorizationNumber("001111");
 		assertFalse(optionalSupplier3.isPresent());
 
-		Optional<Service> optionalService1 = this.toursService.getServiceByNameAndSupplierId("Servicio1", supplier1.getId());
+		Optional<Service> optionalService1;
+		optionalService1 = this.toursService.getServiceByNameAndSupplierId("Servicio1", supplier1.getId());
 		assertTrue(optionalService1.isPresent());
 		Service service2 = optionalService1.get();
 		assertEquals(service1.getId(), service2.getId());

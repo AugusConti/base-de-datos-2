@@ -166,12 +166,14 @@ public class ToursServiceImpl implements ToursService {
     @Override
     @Transactional
     public void assignDriverByUsername(String username, ObjectId idRoute) throws ToursException {
+        //TODO CONSULTAR SI ESTÁ BIEN ACTUALIZAR EN AMBOS LADOS, Y CONSULTAR SI HACE FALTA EL TRY CATCH
         try{
             DriverUser d = this.driverUserRepository.findByUsername(username).get();
             Route r = this.routeRepository.findById(idRoute).get();
             d.addRoute(r);
             r.addDriver(d);
             this.userRepository.save(d);
+            this.routeRepository.save(r);
         }catch (Exception e){
             throw new ToursException(e.getMessage());
         }
@@ -180,12 +182,14 @@ public class ToursServiceImpl implements ToursService {
     @Transactional
     @Override
     public void assignTourGuideByUsername(String username, ObjectId idRoute) throws ToursException {
+        //TODO SAME AS ARRIBA
         try{
             TourGuideUser t = this.tourGuideUserRepository.findByUsername(username).get();
             Route r = this.routeRepository.findById(idRoute).get();
             t.addRoute(r);
             r.addTourGuide(t);
             this.userRepository.save(t);
+            this.routeRepository.save(r);
         } catch (Exception e){
             throw new ToursException(e.getMessage());
         }
@@ -194,15 +198,15 @@ public class ToursServiceImpl implements ToursService {
     @Override
     @Transactional
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException {
-        try{
-            Supplier s = new Supplier(businessName, authorizationNumber);
-            this.supplierRepository.save(s);
-            //this.entityManager.flush();
-            return s;
+        //TODO CONSULTAR SI ESTÁ BIEN, YA QUE POR MODELO NO PUEDP INDICAR CLAVE UNÍVOCA
+        //BOOOOOOOOCAAAAAAAA
+        Optional<Supplier> sup = this.supplierRepository.findByAuthorizationNumber(authorizationNumber);
+        if (sup.isPresent()){
+            throw new ToursException("Constraint Violation");
         }
-        catch (Exception e){
-            throw new ToursException(e.getMessage());
-        }
+        Supplier s = new Supplier(businessName, authorizationNumber);
+        this.supplierRepository.save(s);
+        return s;
     }
 
     @Override
