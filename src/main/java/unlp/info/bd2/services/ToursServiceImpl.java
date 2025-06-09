@@ -17,6 +17,8 @@ import unlp.info.bd2.model.*;
 import unlp.info.bd2.repositories.*;
 import unlp.info.bd2.utils.ToursException;
 
+//TODO HAY QUE SACAR LOS MÉTODOS DE LAS QUERIES QUE NO SON DE ESTE TP
+
 public class ToursServiceImpl implements ToursService {
 
     //@PersistenceContext
