@@ -287,6 +287,7 @@ public class ToursServiceImpl implements ToursService {
     public ItemService addItemToPurchase(Service service, int quantity, Purchase purchase) throws ToursException {
         ItemService i= new ItemService(quantity, purchase, service);  
         this.itemServiceRepository.save(i);
+        this.purchaseRepository.save(purchase);
         return i;
     }
 

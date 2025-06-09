@@ -96,7 +96,7 @@ public class ToursQuerysTests {
 
     //Augusto
     @Test
-    void getTopNSuppliersInPurchasesTest() throws ToursException {
+    void getTopNSuppliersInPurchasesTest() throws ToursException {//ya pasa
         List<Supplier> suppliers1 = this.service.getTopNSuppliersInPurchases(3);
         assertEquals(3, suppliers1.size());
         this.assertListEquality(suppliers1.stream().map(Supplier::getAuthorizationNumber).collect(Collectors.toList()), Arrays.asList("12345", "54321", "67890"));
@@ -134,7 +134,7 @@ public class ToursQuerysTests {
 
     //Augusto
     @Test
-    void getTop3RoutesWithMoreStopsTest() throws ToursException {
+    void getTop3RoutesWithMoreStopsTest() throws ToursException {//ya pasa
         List<Route> routesWithMoreStops = this.service.getTop3RoutesWithMoreStops();
         assertEquals(3, routesWithMoreStops.size());
         this.assertListEquality(routesWithMoreStops.stream().map(Route::getName).collect(Collectors.toList()), Arrays.asList("City Tour", "Historical Adventure", "Architectural Expedition"));
@@ -182,7 +182,7 @@ public class ToursQuerysTests {
 
     //Augusto
     @Test
-    void getMaxStopOfRoutesTest() throws ToursException {
+    void getMaxStopOfRoutesTest() throws ToursException {// ya pasa
         Long maxStopOfRoutes = this.service.getMaxStopOfRoutes();
         assertEquals(9, maxStopOfRoutes);
     }
