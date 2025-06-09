@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document
+@Document("user")
 public class User {
 
     @MongoId(FieldType.OBJECT_ID)
