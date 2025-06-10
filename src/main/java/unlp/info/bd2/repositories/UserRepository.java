@@ -21,8 +21,13 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     List<User> findByPurchaseListTotalPriceGreaterThanEqual(float mount);
 
-    @Query("SELECT u FROM User u WHERE SIZE(u.purchaseList) >= :number")
-    List<User> findByPurchaseCountGreaterThan(@Param("number") int number);
+    @Aggregation(pipeline = {"""
+        {$match: {
+            _class: 'unlp.info.bd2.model.User',
+            $expr: {$gte: [{$size: '$purchaseList'}, ?0]}
+        }}"""
+    })
+    List<User> findByPurchaseCountGreaterThan(int number);
 
     @Aggregation(pipeline = {
         "{$addFields: {purchaseCount: {$size: '$purchaseList'}}}",
