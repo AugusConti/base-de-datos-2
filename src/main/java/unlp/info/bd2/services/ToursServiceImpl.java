@@ -217,6 +217,7 @@ public class ToursServiceImpl implements ToursService {
         Service s = new Service(name, price, description, supplier);
         supplier.addService(s);
         this.serviceRepository.save(s);
+        this.supplierRepository.save(supplier);
         return s;
     }
 
