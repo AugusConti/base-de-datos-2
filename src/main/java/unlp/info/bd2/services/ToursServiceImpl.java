@@ -324,7 +324,11 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<User> getUserSpendingMoreThan(float mount) {
-        return userRepository.findByPurchaseListTotalPriceGreaterThanEqual(mount);
+        List<ObjectId> userIds = this.purchaseRepository.findByTotalPriceGreaterThanEqual(mount)
+                .map(p -> p.getUser().getId())
+                .distinct()
+                .toList();
+        return this.userRepository.findAllById(userIds);
     }
 
     @Transactional(readOnly = true)

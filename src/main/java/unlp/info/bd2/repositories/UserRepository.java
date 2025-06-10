@@ -19,8 +19,6 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     boolean existsByUsername(String username);
 
-    List<User> findByPurchaseListTotalPriceGreaterThanEqual(float mount);
-
     @Aggregation(pipeline = {"""
         {$match: {
             _class: 'unlp.info.bd2.model.User',

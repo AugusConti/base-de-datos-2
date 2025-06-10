@@ -4,6 +4,7 @@ package unlp.info.bd2.repositories;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
@@ -32,4 +33,6 @@ public interface PurchaseRepository extends MongoRepository<Purchase, ObjectId> 
     //@Query("SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList iserv ORDER BY p.totalPrice DESC")
     //List<Purchase> findTop10MoreExpensivePurchasesWithServices(Pageable pageable);
     List<Purchase> findByItemServiceListIsNotEmptyOrderByTotalPriceDesc(Pageable pageable);
+
+    Stream<Purchase> findByTotalPriceGreaterThanEqual(float mount);
 }
