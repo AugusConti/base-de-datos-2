@@ -22,7 +22,7 @@ import unlp.info.bd2.utils.ToursException;
 public class ToursServiceImpl implements ToursService {
 
     //@PersistenceContext
-   // private EntityManager entityManager;
+    // private EntityManager entityManager;
 
     @Autowired
     private RouteRepository routeRepository;
@@ -120,14 +120,17 @@ public class ToursServiceImpl implements ToursService {
     @Transactional
     @Override
     public void deleteUser(User user) throws ToursException {
-        if (!user.canBeDesactive())
+        User u = this.userRepository.findById(user.getId()).get();
+        if (!u.canBeDesactive())
             throw new ToursException("No se puede desactivar el usuario");
-        if (!user.isActive())
+        if (!u.isActive())
             throw new ToursException("El usuario ya fue desactivado");
-        if (user.canBeDeleted())
-            this.userRepository.delete(user);
-        else
-            user.setActive(false);
+        if (u.canBeDeleted())
+            this.userRepository.delete(u);
+        else{
+            u.setActive(false);
+            this.userRepository.save(u);
+        }
     }
 
     @Override
@@ -168,14 +171,13 @@ public class ToursServiceImpl implements ToursService {
     @Override
     @Transactional
     public void assignDriverByUsername(String username, ObjectId idRoute) throws ToursException {
-        //TODO CONSULTAR SI ESTÁ BIEN ACTUALIZAR EN AMBOS LADOS, Y CONSULTAR SI HACE FALTA EL TRY CATCH
         try{
             DriverUser d = this.driverUserRepository.findByUsername(username).get();
             Route r = this.routeRepository.findById(idRoute).get();
-            d.addRoute(r);
             r.addDriver(d);
-            this.userRepository.save(d);
             this.routeRepository.save(r);
+            d.addRoute(r);
+            this.userRepository.save(d);
         }catch (Exception e){
             throw new ToursException(e.getMessage());
         }
@@ -184,14 +186,13 @@ public class ToursServiceImpl implements ToursService {
     @Transactional
     @Override
     public void assignTourGuideByUsername(String username, ObjectId idRoute) throws ToursException {
-        //TODO SAME AS ARRIBA
         try{
             TourGuideUser t = this.tourGuideUserRepository.findByUsername(username).get();
             Route r = this.routeRepository.findById(idRoute).get();
-            t.addRoute(r);
             r.addTourGuide(t);
-            this.userRepository.save(t);
             this.routeRepository.save(r);
+            t.addRoute(r);
+            this.userRepository.save(t);
         } catch (Exception e){
             throw new ToursException(e.getMessage());
         }
@@ -200,7 +201,6 @@ public class ToursServiceImpl implements ToursService {
     @Override
     @Transactional
     public Supplier createSupplier(String businessName, String authorizationNumber) throws ToursException {
-        //TODO CONSULTAR SI ESTÁ BIEN, YA QUE POR MODELO NO PUEDP INDICAR CLAVE UNÍVOCA
         //BOOOOOOOOCAAAAAAAA
         Optional<Supplier> sup = this.supplierRepository.findByAuthorizationNumber(authorizationNumber);
         if (sup.isPresent()){
@@ -272,8 +272,9 @@ public class ToursServiceImpl implements ToursService {
          
         try{
             Purchase p = new Purchase(code, date, user, route);
-            user.addPurchase(p);
             this.purchaseRepository.save(p);            
+            user.addPurchase(p);
+            this.userRepository.save(user);
             return p;
         
         }  
@@ -308,7 +309,6 @@ public class ToursServiceImpl implements ToursService {
     @Transactional
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException {
         Review r = purchase.addReview(rating,comment);
-        this.reviewRepository.save(r);
         this.purchaseRepository.save(purchase);
         return r;
     }

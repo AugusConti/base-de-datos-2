@@ -33,7 +33,7 @@ public class Purchase {
     @DBRef(lazy = true)
     private Route route;
 
-    @DBRef(lazy = true)
+    @Field
     private Review review;
 
     @DBRef(lazy = true)
