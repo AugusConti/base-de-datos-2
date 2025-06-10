@@ -309,13 +309,15 @@ public class ToursServiceImpl implements ToursService {
     public Review addReviewToPurchase(int rating, String comment, Purchase purchase) throws ToursException {
         Review r = purchase.addReview(rating,comment);
         this.reviewRepository.save(r);
+        this.purchaseRepository.save(purchase);
         return r;
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Purchase> getAllPurchasesOfUsername(String username) {
-        return this.purchaseRepository.findAllByUserUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
+        return this.purchaseRepository.findAllByUserId(user.getId());
     }
 
     @Transactional(readOnly = true)

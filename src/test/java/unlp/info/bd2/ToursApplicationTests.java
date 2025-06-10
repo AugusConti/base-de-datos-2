@@ -218,7 +218,7 @@ class ToursApplicationTests {
 
 	//Sofi
 	@Test
-	void createAndGetPurchaseTest() throws ToursException {
+	void createAndGetPurchaseTest() throws ToursException {//ya pasa
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
 		Stop stop2 = this.toursService.createStop("Estadio La Bombonera", "Estadio de Boca Junions");
@@ -257,7 +257,7 @@ class ToursApplicationTests {
 
 	//Sofi
 	@Test
-	void removePurchaseAndItems() throws ToursException {
+	void removePurchaseAndItems() throws ToursException {//ya pasa
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
 		Stop stop2 = this.toursService.createStop("Estadio La Bombonera", "Estadio de Boca Junions");
@@ -279,7 +279,7 @@ class ToursApplicationTests {
 
 	//Sofi
 	@Test
-	void addReviewToPurchaseTest() throws ToursException {
+	void addReviewToPurchaseTest() throws ToursException {//preguntar por este metodo
 		User user1 = this.toursService.createUser("user1", "1234", "Usuario Uno", "user1@gmail.com", dob1, "000111222333");
 		Stop stop1 = this.toursService.createStop("Estadio Monumental", "Estadio de River Plate");
 		Stop stop2 = this.toursService.createStop("Estadio La Bombonera", "Estadio de Boca Junions");

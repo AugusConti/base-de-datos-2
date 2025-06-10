@@ -23,7 +23,7 @@ public interface PurchaseRepository extends MongoRepository<Purchase, ObjectId> 
 
     Optional<Purchase> findByCode(String code);
 
-    List<Purchase> findAllByUserUsername(String username);
+    List<Purchase> findAllByUserId(ObjectId userId);
 
     Long countByDateBetween(@Param("start") Date start, @Param("end") Date end);
 
