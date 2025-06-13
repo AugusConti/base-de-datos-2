@@ -15,7 +15,6 @@ import java.util.Optional;
 public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> {
     Optional<Supplier> findByAuthorizationNumber(String authorizationNumber);
 
-    //TODO SAME ACÁ, ANDA CON EL @QUERY, HACE FALTA USAR EL @AGGREGATION?
     @Query("SELECT s FROM Supplier s JOIN s.services ser JOIN ser.itemServiceList iserv JOIN iserv.purchase p " +
             "GROUP BY s " +
             "ORDER BY SUM(p.totalPrice) DESC")

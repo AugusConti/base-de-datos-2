@@ -42,21 +42,13 @@ public interface ToursService {
     List<User> getUsersWithNumberOfPurchases(int number);
     List<Supplier> getTopNSuppliersInPurchases(int n);
     List<Supplier> getTopNSuppliersItemsSold(int n);
-    //List<Purchase> getTop10MoreExpensivePurchasesWithServices();
     List<User> getTop5UsersMorePurchases();
     List<Route> getTop3RoutesWithMoreStops();
     Long getCountOfPurchasesBetweenDates(Date start, Date end);
     List<Route> getRoutesWithStop(Stop stop);
-    //List<Purchase> getPurchaseWithService(Service service);
     Long getMaxStopOfRoutes();
     Long getMaxServicesOfSupplier();
-    //List<Route> getRoutsNotSell();
     List<Route> getTop3RoutesWithMaxAverageRating();
-    //List<Route> getRoutesWithMinRating();
-   // Service getMostDemandedService();
     Route getMostBestSellingRoute();
-    //List<Service> getServiceNoAddedToPurchases();
-    //List<TourGuideUser> getTourGuidesWithRating1();
-    //DriverUser getDriverUserWithMoreRoutes();
 
 }

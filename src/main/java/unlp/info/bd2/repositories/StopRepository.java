@@ -7,5 +7,7 @@ import unlp.info.bd2.model.Stop;
 import java.util.List;
 
 public interface StopRepository extends MongoRepository<Stop, ObjectId>{
+
     List<Stop> findByNameStartingWith(String name);
+
 }

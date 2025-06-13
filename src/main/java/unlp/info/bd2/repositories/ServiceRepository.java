@@ -14,12 +14,6 @@ import unlp.info.bd2.model.Service;
 @Repository
 public interface ServiceRepository extends MongoRepository<Service, ObjectId> {
 
-    @Query("FROM Service s JOIN s.itemServiceList item GROUP BY s.id ORDER BY SUM(item.quantity) DESC")
-    List<Service> findAllSortByItemQuantitySumDesc(Pageable pageable);
-
     Optional<Service> findByNameAndSupplierId(String name, ObjectId supplierId);
-
-    @Query("SELECT s FROM Service s LEFT JOIN s.itemServiceList i WHERE i.id IS NULL")
-    List<Service> getServiceNoAddedToPurchases();
 
 }

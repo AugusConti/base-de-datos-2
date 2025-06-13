@@ -17,12 +17,7 @@ import unlp.info.bd2.model.*;
 import unlp.info.bd2.repositories.*;
 import unlp.info.bd2.utils.ToursException;
 
-//TODO HAY QUE SACAR LOS MÉTODOS DE LAS QUERIES QUE NO SON DE ESTE TP
-
 public class ToursServiceImpl implements ToursService {
-
-    //@PersistenceContext
-    // private EntityManager entityManager;
 
     @Autowired
     private RouteRepository routeRepository;
@@ -54,7 +49,6 @@ public class ToursServiceImpl implements ToursService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    // TODO CONSULTAR: ¿Por qué no se verifica al guardar el usuario?
     private void assertUniqueUsername(String username) throws ToursException {
         if (this.userRepository.existsByUsername(username))
             throw new ToursException("Username already assigned");
@@ -136,7 +130,6 @@ public class ToursServiceImpl implements ToursService {
     @Override
     @Transactional
     public Stop createStop(String name, String description) throws ToursException {
-        //TODO CONSULTAR TEMA DE LAS EXCEPCIONES
         Stop s = new Stop(name, description);
         this.stopRepository.save(s);
         return s;
@@ -324,11 +317,7 @@ public class ToursServiceImpl implements ToursService {
     @Transactional(readOnly = true)
     @Override
     public List<User> getUserSpendingMoreThan(float mount) {
-        List<ObjectId> userIds = this.purchaseRepository.findByTotalPriceGreaterThanEqual(mount)
-                .map(p -> p.getUser().getId())
-                .distinct()
-                .toList();
-        return this.userRepository.findAllById(userIds);
+        return this.userRepository.findUsersWithSinglePurchaseMoreThan(mount);
     }
 
     @Transactional(readOnly = true)
@@ -348,12 +337,6 @@ public class ToursServiceImpl implements ToursService {
     public List<Supplier> getTopNSuppliersItemsSold(int n) {
        return this.supplierRepository.findTopNSuppliersItemsSold(PageRequest.ofSize(n));
     }
-
-    /*@Transactional(readOnly = true)
-    @Override
-    public List<Purchase> getTop10MoreExpensivePurchasesWithServices() {
-        return this.purchaseRepository.findByItemServiceListIsNotEmptyOrderByTotalPriceDesc(PageRequest.ofSize(10));
-    }*/
 
     @Transactional(readOnly = true)
     @Override
@@ -379,12 +362,6 @@ public class ToursServiceImpl implements ToursService {
         return this.routeRepository.findByStopsContaining(stop);
     }
 
-    /*@Transactional(readOnly = true)
-    @Override
-    public List<Purchase> getPurchaseWithService(Service service) {
-        return this.purchaseRepository.findAllByItemServiceListService(service); 
-    }*/
-
     @Transactional(readOnly = true)
     @Override
     public Long getMaxStopOfRoutes() {
@@ -397,51 +374,16 @@ public class ToursServiceImpl implements ToursService {
         return this.supplierRepository.countMaxServices();
     }
 
-   /*@Transactional(readOnly = true)
-    @Override
-    public List<Route> getRoutsNotSell() {
-        return this.routeRepository.findNotSell();
-    }*/ 
-
     @Transactional(readOnly = true)
     @Override
     public List<Route> getTop3RoutesWithMaxAverageRating() {
         return routeRepository.findAllSortByAverageRatingDesc(PageRequest.ofSize(3));
     }
 
-    /*@Transactional(readOnly = true)
-    @Override
-    public List<Route> getRoutesWithMinRating() {
-        return this.routeRepository.findWithMinRating();
-    } 
-
-    @Transactional(readOnly = true)
-    @Override
-    public Service getMostDemandedService() {
-        return serviceRepository.findAllSortByItemQuantitySumDesc(PageRequest.ofSize(1)).get(0);
-    }*/
-
     @Transactional(readOnly = true)
     @Override
     public Route getMostBestSellingRoute() {
         return this.routeRepository.findMostPurchasedRoutes(PageRequest.of(0, 1)).get(0);
     }
-    /* 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Service> getServiceNoAddedToPurchases() {
-        return this.serviceRepository.getServiceNoAddedToPurchases();
-        }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<TourGuideUser> getTourGuidesWithRating1() {
-        return this.tourGuideUserRepository.findByRating(1);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public DriverUser getDriverUserWithMoreRoutes() {
-        return this.driverUserRepository.findAllSortByRouteCountDesc(PageRequest.ofSize(1)).get(0);
-    }*/
 }

@@ -28,11 +28,4 @@ public interface PurchaseRepository extends MongoRepository<Purchase, ObjectId> 
 
     Long countByDateBetween(@Param("start") Date start, @Param("end") Date end);
 
-    List<Purchase> findAllByItemServiceListService(@Param("service") Service service);
-
-    //@Query("SELECT DISTINCT p FROM Purchase p JOIN p.itemServiceList iserv ORDER BY p.totalPrice DESC")
-    //List<Purchase> findTop10MoreExpensivePurchasesWithServices(Pageable pageable);
-    List<Purchase> findByItemServiceListIsNotEmptyOrderByTotalPriceDesc(Pageable pageable);
-
-    Stream<Purchase> findByTotalPriceGreaterThanEqual(float mount);
 }

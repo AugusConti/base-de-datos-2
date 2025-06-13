@@ -33,4 +33,14 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
         "{$unset: 'purchaseCount'}"
     })
     List<User> findAllSortByPurchaseCountDesc(Pageable pageable);
+
+
+    //Esta query sabemos que se puede hacer solo con el nombre del método, pero no nos andaba, así que la hice con un solo @aggregation y anduvo. Ya no hacen falta dos queries
+    @Aggregation(pipeline = {
+            "{ $match: { '_class': 'unlp.info.bd2.model.User' } }",
+            "{ $lookup: { from: 'purchase', localField: '_id', foreignField: 'user.$id', as: 'purchases' } }",
+            "{ $match: { 'purchases.totalPrice': { $gte: ?0 } } }",
+            "{ $project: { purchases: 0 } }"
+    })
+    List<User> findUsersWithSinglePurchaseMoreThan(float mount);
 }

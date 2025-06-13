@@ -14,7 +14,4 @@ public interface TourGuideUserRepository extends MongoRepository<TourGuideUser, 
     
     Optional<TourGuideUser> findByUsername(String username);
 
-    @Query("SELECT DISTINCT tgu FROM Review rev JOIN rev.purchase p JOIN p.route rte JOIN rte.tourGuideList tgu WHERE rev.rating = :rating")
-    List<TourGuideUser> findByRating(@Param("rating") int rating);
-
 }

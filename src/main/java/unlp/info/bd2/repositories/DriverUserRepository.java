@@ -14,7 +14,4 @@ public interface DriverUserRepository extends MongoRepository<DriverUser, Object
     
     Optional<DriverUser> findByUsername(String username);
 
-    @Query("FROM DriverUser du ORDER BY SIZE(du.routes) DESC")
-    List<DriverUser> findAllSortByRouteCountDesc(Pageable pageable);
-
 }
