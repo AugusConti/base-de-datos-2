@@ -19,7 +19,7 @@ public class Supplier {
     @Field
     private String businessName;
 
-    @Indexed(unique = true)
+    @Field
     private String authorizationNumber;
 
     @Field

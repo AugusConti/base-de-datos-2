@@ -18,7 +18,7 @@ public class User {
     @MongoId(FieldType.OBJECT_ID)
     private ObjectId id;
 
-    @Indexed(unique = true)
+    @Field
     private String username;
 
     @Field

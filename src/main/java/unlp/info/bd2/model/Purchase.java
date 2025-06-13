@@ -18,7 +18,7 @@ public class Purchase {
     @MongoId(FieldType.OBJECT_ID)
     ObjectId id;
 
-    @Indexed(unique = true)
+    @Field
     private String code;
 
     @Field
