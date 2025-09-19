@@ -1,8 +1,6 @@
-# base-de-datos-2
-Trabajo práctico de la materia Base de Datos 2
+#Trabajo práctico desarrollado la materia Base de Datos 2
 
-
-Para crear la base de datos y el usuario:
+#Instrucciones para crear la base de datos y el usuario:
 
 
 CREATE USER 'bd2'@'localhost' IDENTIFIED BY 'asdasd';
